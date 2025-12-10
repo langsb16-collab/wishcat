@@ -1,21 +1,416 @@
-```txt
+# 🌐 FeeZero - 글로벌 프리랜서 매칭 플랫폼
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![Hono](https://img.shields.io/badge/Hono-4.10-orange)](https://hono.dev/)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020)](https://pages.cloudflare.com/)
+
+**FeeZero**는 전 세계 의뢰인과 개발자를 연결하는 저수수료 프리랜서 매칭 플랫폼입니다.
+크몽, 위시캣을 벤치마킹하여 4개국 언어를 지원하는 글로벌 플랫폼으로 제작되었습니다.
+
+## 📋 목차
+
+- [주요 특징](#-주요-특징)
+- [기술 스택](#-기술-스택)
+- [프로젝트 구조](#-프로젝트-구조)
+- [설치 및 실행](#-설치-및-실행)
+- [API 엔드포인트](#-api-엔드포인트)
+- [데이터베이스 스키마](#-데이터베이스-스키마)
+- [다국어 지원](#-다국어-지원)
+- [제3자 서비스 통합](#-제3자-서비스-통합)
+- [배포](#-배포)
+- [로드맵](#-로드맵)
+
+## ✨ 주요 특징
+
+### 💰 업계 최저 수수료
+- **의뢰인**: 2% 수수료
+- **개발자**: 0% 수수료 (업계 유일!)
+- **결제 방식**: USDT (테더) 암호화폐
+
+### 🌍 다국어 지원
+- 한국어 (Korean)
+- 영어 (English)
+- 중국어 (Chinese)
+- 일본어 (Japanese)
+
+### 📱 주요 기능
+- ✅ 프로젝트 등록 및 매칭
+- ✅ 프리랜서 프로필 및 포트폴리오
+- ✅ 카테고리별 전문가 분류
+- ✅ 입찰 및 제안 시스템
+- ✅ 계약 및 에스크로 시스템
+- ✅ 리뷰 및 평가 시스템
+- ✅ 무료/프리미엄 멤버십
+- 🔄 실시간 메시징 (제3자 서비스 통합 예정)
+- 🔄 음성/영상 통화 (제3자 서비스 통합 예정)
+
+## 🛠 기술 스택
+
+### Backend
+- **[Hono](https://hono.dev/)** - 초경량 웹 프레임워크
+- **[Cloudflare Workers](https://workers.cloudflare.com/)** - 엣지 컴퓨팅 플랫폼
+- **[Cloudflare D1](https://developers.cloudflare.com/d1/)** - 서버리스 SQLite 데이터베이스
+- **TypeScript** - 타입 안전성
+
+### Frontend
+- **TailwindCSS** - 유틸리티 우선 CSS 프레임워크
+- **Font Awesome** - 아이콘 라이브러리
+- **Vanilla JavaScript** - 순수 자바스크립트
+
+### DevOps
+- **Wrangler** - Cloudflare 개발 도구
+- **PM2** - 프로세스 매니저 (로컬 개발)
+- **Git** - 버전 관리
+
+## 📁 프로젝트 구조
+
+\`\`\`
+webapp/
+├── src/
+│   ├── index.tsx          # 메인 애플리케이션 엔트리
+│   ├── types.ts           # TypeScript 타입 정의
+│   ├── i18n.ts            # 다국어 번역
+│   ├── db.ts              # 데이터베이스 유틸리티
+│   └── renderer.tsx       # JSX 렌더러
+├── migrations/
+│   └── 0001_initial_schema.sql  # 데이터베이스 스키마
+├── public/
+│   └── static/            # 정적 파일
+├── dist/                  # 빌드 결과물
+├── .wrangler/             # Wrangler 로컬 데이터
+├── ecosystem.config.cjs   # PM2 설정
+├── wrangler.json          # Cloudflare 설정
+├── seed.sql               # 시드 데이터
+├── package.json           # 의존성 관리
+└── README.md              # 프로젝트 문서
+\`\`\`
+
+## 🚀 설치 및 실행
+
+### 사전 요구사항
+- Node.js 18+
+- npm 또는 yarn
+- PM2 (로컬 개발용)
+
+### 1. 프로젝트 클론
+\`\`\`bash
+git clone <repository-url>
+cd webapp
+\`\`\`
+
+### 2. 의존성 설치
+\`\`\`bash
 npm install
-npm run dev
-```
+\`\`\`
 
-```txt
-npm run deploy
-```
+### 3. 데이터베이스 초기화
+\`\`\`bash
+# 스키마 적용
+npm run db:migrate:local
 
-[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+# 시드 데이터 입력
+npm run db:seed
+\`\`\`
 
-```txt
-npm run cf-typegen
-```
+### 4. 프로젝트 빌드
+\`\`\`bash
+npm run build
+\`\`\`
 
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
+### 5. 개발 서버 시작
+\`\`\`bash
+# PM2로 시작
+pm2 start ecosystem.config.cjs
 
-```ts
-// src/index.ts
-const app = new Hono<{ Bindings: CloudflareBindings }>()
-```
+# 또는 직접 시작
+npm run dev:sandbox
+\`\`\`
+
+### 6. 서버 접속
+- **로컬**: http://localhost:3000
+- **샌드박스**: https://3000-iaz6hxe6dnh7awzc4b7fz-5634da27.sandbox.novita.ai
+
+## 🔌 API 엔드포인트
+
+### 공통
+- `GET /api/health` - 헬스 체크
+
+### 카테고리
+- `GET /api/categories?lang={ko|en|zh|ja}` - 모든 카테고리 조회
+- `GET /api/categories/:id?lang={ko|en|zh|ja}` - 특정 카테고리 조회
+
+### 프로젝트
+- `GET /api/projects?page=1&limit=20` - 프로젝트 목록
+- `GET /api/projects/:id` - 프로젝트 상세
+
+### 프리랜서
+- `GET /api/freelancers?page=1&limit=20` - 프리랜서 목록
+- `GET /api/freelancers/:id` - 프리랜서 상세 (포트폴리오 포함)
+
+### 예시 요청
+\`\`\`bash
+# 한국어로 카테고리 조회
+curl http://localhost:3000/api/categories?lang=ko
+
+# 영어로 프로젝트 목록 조회
+curl http://localhost:3000/api/projects?page=1&limit=10
+
+# 프리랜서 상세 정보
+curl http://localhost:3000/api/freelancers/1
+\`\`\`
+
+## 🗄 데이터베이스 스키마
+
+### 주요 테이블
+- **users** - 사용자 정보 (의뢰인/프리랜서)
+- **freelancer_profiles** - 프리랜서 프로필
+- **portfolio_items** - 포트폴리오 항목
+- **categories** - 카테고리
+- **category_translations** - 카테고리 번역
+- **projects** - 프로젝트
+- **project_bids** - 입찰/제안
+- **contracts** - 계약
+- **messages** - 메시지
+- **reviews** - 리뷰 및 평가
+- **payments** - 결제 내역
+- **skills** - 기술/스킬
+- **skill_translations** - 스킬 번역
+
+### 데이터베이스 명령어
+\`\`\`bash
+# 로컬 데이터베이스 초기화
+npm run db:migrate:local
+
+# 시드 데이터 입력
+npm run db:seed
+
+# 데이터베이스 리셋 (전체 삭제 후 재생성)
+npm run db:reset
+
+# 로컬 콘솔
+npm run db:console:local
+
+# 프로덕션 마이그레이션
+npm run db:migrate:prod
+\`\`\`
+
+## 🌐 다국어 지원
+
+### 지원 언어
+| 언어 코드 | 언어 이름 | Font Family |
+|---------|---------|-------------|
+| `ko` | 한국어 | Noto Sans KR |
+| `en` | English | System Default |
+| `zh` | 中文 | Noto Sans SC |
+| `ja` | 日本語 | Noto Sans JP |
+
+### 언어 전환
+URL 쿼리 파라미터 또는 Accept-Language 헤더를 통해 언어를 설정할 수 있습니다.
+
+\`\`\`bash
+# URL 쿼리 파라미터
+http://localhost:3000/?lang=en
+http://localhost:3000/api/categories?lang=zh
+
+# Accept-Language 헤더
+curl -H "Accept-Language: ja" http://localhost:3000/
+\`\`\`
+
+### 번역 파일
+모든 번역은 `src/i18n.ts` 파일에서 관리됩니다.
+
+## 🔗 제3자 서비스 통합
+
+### 현재 상태
+현재 FeeZero는 기본 웹 플랫폼 기능을 제공하며, 다음 고급 기능은 제3자 서비스 통합이 필요합니다:
+
+### 통합 예정 서비스
+
+#### 1. 실시간 메시징
+- **추천 서비스**: 
+  - [Stream Chat](https://getstream.io/chat/) - 엔터프라이즈급 채팅 API
+  - [SendBird](https://sendbird.com/) - 종합 메시징 플랫폼
+  - [PubNub](https://www.pubnub.com/) - 실시간 데이터 스트리밍
+- **기능**: 텍스트, 파일, 음성 메시지, 읽음 확인
+
+#### 2. 음성/영상 통화
+- **추천 서비스**:
+  - [Agora](https://www.agora.io/) - 실시간 음성/영상 통화
+  - [Twilio](https://www.twilio.com/) - 프로그래밍 가능한 통신
+  - [Daily.co](https://www.daily.co/) - 비디오 통화 임베딩
+- **기능**: 1:1 음성 통화, 영상 통화, 화면 공유
+
+#### 3. USDT 결제
+- **추천 서비스**:
+  - [NOWPayments](https://nowpayments.io/) - 암호화폐 결제 게이트웨이
+  - [Coinbase Commerce](https://commerce.coinbase.com/) - 암호화폐 결제
+  - [BitPay](https://bitpay.com/) - 블록체인 결제
+- **기능**: USDT 입출금, 에스크로, 트랜잭션 추적
+
+#### 4. 파일 저장소
+- **추천 서비스**:
+  - [Cloudflare R2](https://developers.cloudflare.com/r2/) - S3 호환 스토리지
+  - [AWS S3](https://aws.amazon.com/s3/) - 오브젝트 스토리지
+- **기능**: 포트폴리오 이미지, 프로젝트 파일, 문서
+
+### 통합 구조
+모든 제3자 서비스는 Hono API 라우트를 통해 통합되며, 클라이언트는 직접 제3자 서비스에 접근하지 않습니다.
+
+\`\`\`
+클라이언트 → Hono API → 제3자 서비스
+\`\`\`
+
+**보안**: 모든 API 키와 토큰은 Cloudflare Secrets에 저장되며, 클라이언트에 노출되지 않습니다.
+
+자세한 통합 가이드는 `INTEGRATION.md` 문서를 참조하세요.
+
+## 📦 배포
+
+### Cloudflare Pages 배포
+
+#### 1. Cloudflare D1 데이터베이스 생성
+\`\`\`bash
+# 프로덕션 데이터베이스 생성
+npx wrangler d1 create feezero-production
+
+# 출력된 database_id를 wrangler.json에 입력
+\`\`\`
+
+#### 2. wrangler.json 업데이트
+\`\`\`json
+{
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "feezero-production",
+      "database_id": "your-database-id-here"
+    }
+  ]
+}
+\`\`\`
+
+#### 3. 프로덕션 마이그레이션
+\`\`\`bash
+# 스키마 적용
+npm run db:migrate:prod
+
+# 시드 데이터 입력 (선택사항)
+npx wrangler d1 execute feezero-production --file=./seed.sql
+\`\`\`
+
+#### 4. Cloudflare Pages 프로젝트 생성
+\`\`\`bash
+npx wrangler pages project create feezero --production-branch main
+\`\`\`
+
+#### 5. 배포
+\`\`\`bash
+npm run deploy:prod
+\`\`\`
+
+### 환경 변수 설정
+\`\`\`bash
+# API 키 등록
+npx wrangler pages secret put API_KEY --project-name feezero
+
+# 시크릿 목록 확인
+npx wrangler pages secret list --project-name feezero
+\`\`\`
+
+## 🗺 로드맵
+
+### ✅ Phase 1 - MVP (완료)
+- [x] 프로젝트 초기 설정
+- [x] D1 데이터베이스 스키마
+- [x] 다국어 지원 (4개국)
+- [x] 카테고리 시스템
+- [x] 프로젝트 API
+- [x] 프리랜서 API
+- [x] 기본 프론트엔드
+
+### 🔄 Phase 2 - 인증 및 권한 (진행 중)
+- [ ] JWT 인증 시스템
+- [ ] 회원가입/로그인
+- [ ] OAuth 통합 (Google, GitHub)
+- [ ] 권한 관리 (RBAC)
+
+### 📅 Phase 3 - 핵심 기능
+- [ ] 프로젝트 등록 및 수정
+- [ ] 입찰 시스템
+- [ ] 계약 생성
+- [ ] 리뷰 및 평가
+
+### 📅 Phase 4 - 제3자 서비스 통합
+- [ ] 실시간 메시징 (Stream Chat)
+- [ ] 음성/영상 통화 (Agora)
+- [ ] USDT 결제 (NOWPayments)
+- [ ] 파일 스토리지 (Cloudflare R2)
+
+### 📅 Phase 5 - 고급 기능
+- [ ] AI 기반 매칭 추천
+- [ ] 자동 견적 시스템
+- [ ] 분쟁 해결 시스템
+- [ ] 대시보드 및 분석
+
+### 📅 Phase 6 - 최적화
+- [ ] 성능 최적화
+- [ ] SEO 최적화
+- [ ] PWA 지원
+- [ ] 모바일 앱 (React Native)
+
+## 📊 현재 완료 기능
+
+### ✅ 데이터베이스
+- 완전한 다중 테이블 스키마
+- 다국어 번역 테이블
+- 인덱스 최적화
+- 시드 데이터
+
+### ✅ API
+- RESTful API 설계
+- 카테고리 API (다국어)
+- 프로젝트 API (페이지네이션)
+- 프리랜서 API (포트폴리오 포함)
+- 헬스 체크
+
+### ✅ 프론트엔드
+- 반응형 디자인
+- 다국어 UI
+- 언어 전환 기능
+- TailwindCSS 스타일링
+- Font Awesome 아이콘
+
+### ✅ 개발 환경
+- TypeScript 설정
+- PM2 프로세스 관리
+- Git 버전 관리
+- 로컬 D1 데이터베이스
+
+## 🔐 보안
+
+- 모든 API 키는 환경 변수로 관리
+- Cloudflare Secrets 사용 권장
+- CORS 설정
+- XSS 방어
+- SQL Injection 방어 (Prepared Statements)
+
+## 📝 라이선스
+
+MIT License
+
+## 👥 기여
+
+기여를 환영합니다! Pull Request를 제출해주세요.
+
+## 📞 문의
+
+- **프로젝트**: FeeZero
+- **이메일**: dev@feezero.com
+- **웹사이트**: https://feezero.pages.dev (배포 후)
+
+---
+
+**Made with ❤️ by FeeZero Team**
+
+**Last Updated**: 2025-12-10

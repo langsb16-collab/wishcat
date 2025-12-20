@@ -11,8 +11,12 @@ import {
   calculateOffset,
   queryDatabase
 } from './db'
+import admin from './admin'
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+// Mount admin routes
+app.route('/admin', admin)
 
 // Enable CORS for API routes
 app.use('/api/*', cors())

@@ -354,7 +354,39 @@ app.get('/', (c) => {
           
           @media (max-width: 768px) {
             .feature-card {
-              padding: 24px;
+              padding: 20px;
+            }
+            
+            .hero-title {
+              font-size: 2rem !important;
+              line-height: 1.2 !important;
+            }
+            
+            .hero-subtitle {
+              font-size: 1rem !important;
+            }
+            
+            .hero-description {
+              font-size: 0.875rem !important;
+            }
+            
+            .hero-buttons {
+              flex-direction: column !important;
+              width: 100%;
+            }
+            
+            .hero-buttons button {
+              width: 100%;
+              font-size: 0.9rem !important;
+              padding: 0.75rem 1.5rem !important;
+            }
+            
+            h2 {
+              font-size: 1.75rem !important;
+            }
+            
+            .nav-link {
+              font-size: 14px;
             }
           }
         </style>
@@ -405,26 +437,28 @@ app.get('/', (c) => {
         </nav>
 
         <!-- Hero Section -->
-        <div class="hero-gradient text-white py-32">
+        <div class="hero-gradient text-white py-16 md:py-32">
             <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-                <h1 class="text-6xl md:text-7xl font-semibold mb-8 leading-tight tracking-tight">
-                    ${t('platform.tagline', lang)}
+                <h1 class="hero-title text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-semibold mb-6 md:mb-8 leading-tight tracking-tight">
+                    <span class="block sm:inline">${lang === 'ko' ? '수수료 제로, 프리랜서' : t('platform.tagline', lang).split(',')[0]}</span>
+                    <span class="block sm:inline">${lang === 'ko' ? ' 플랫폼의 새로운 기준' : t('platform.tagline', lang).split(',')[1] || ''}</span>
                 </h1>
-                <div class="inline-flex items-center space-x-3 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
-                    <i class="fab fa-bitcoin text-2xl"></i>
-                    <p class="text-xl font-medium">
+                <div class="inline-flex items-center space-x-2 md:space-x-3 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-4 md:px-6 py-2 md:py-3 mb-4 md:mb-6">
+                    <i class="fab fa-bitcoin text-lg md:text-2xl"></i>
+                    <p class="hero-subtitle text-sm md:text-xl font-medium">
                         ${lang === 'ko' ? '모든 거래는 테더 USDT' : lang === 'en' ? 'All Transactions in Tether USDT' : lang === 'zh' ? '所有交易均使用泰达币USDT' : lang === 'ja' ? 'すべての取引はテザーUSDT' : lang === 'vi' ? 'Tất cả giao dịch bằng Tether USDT' : lang === 'th' ? 'ธุรกรรมทั้งหมดด้วย Tether USDT' : lang === 'es' ? 'Todas las transacciones en Tether USDT' : 'Alle Transaktionen in Tether USDT'}
                     </p>
                 </div>
-                <p class="text-2xl mb-6 font-light opacity-95">${t('platform.fee_policy', lang)}</p>
-                <p class="text-lg mb-12 opacity-80 max-w-3xl mx-auto leading-relaxed">
-                    ${t('platform.global_description', lang)}
+                <p class="hero-subtitle text-base md:text-2xl mb-4 md:mb-6 font-light opacity-95">${t('platform.fee_policy', lang)}</p>
+                <p class="hero-description text-sm md:text-lg mb-8 md:mb-12 opacity-80 max-w-3xl mx-auto leading-relaxed">
+                    <span class="block sm:inline">${lang === 'ko' ? '전 세계 의뢰인과 개발자를 ' : t('platform.global_description', lang)}</span>
+                    <span class="block sm:inline">${lang === 'ko' ? '연결하는 글로벌 플랫폼' : ''}</span>
                 </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4 items-center">
-                    <button onclick="navigateToProjects()" class="btn-secondary px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform" style="min-height: 56px;">
+                <div class="hero-buttons flex flex-col sm:flex-row justify-center gap-3 md:gap-4 items-center max-w-md mx-auto sm:max-w-none">
+                    <button onclick="navigateToProjects()" class="btn-secondary w-full sm:w-auto px-6 md:px-10 py-3 md:py-4 rounded-full font-medium text-sm md:text-lg hover:scale-105 transition-transform" style="min-height: 44px;">
                         ${t('nav.find_projects', lang)}
                     </button>
-                    <button onclick="navigateToFreelancers()" class="bg-white text-gray-900 px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform shadow-lg" style="min-height: 56px;">
+                    <button onclick="navigateToFreelancers()" class="bg-white text-gray-900 w-full sm:w-auto px-6 md:px-10 py-3 md:py-4 rounded-full font-medium text-sm md:text-lg hover:scale-105 transition-transform shadow-lg" style="min-height: 44px;">
                         ${t('nav.find_experts', lang)}
                     </button>
                 </div>
@@ -432,47 +466,47 @@ app.get('/', (c) => {
         </div>
 
         <!-- Features Section -->
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-            <h2 class="text-5xl font-semibold text-center mb-4 text-luxury">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-24">
+            <h2 class="text-3xl md:text-5xl font-semibold text-center mb-3 md:mb-4 text-luxury">
                 ${t('footer.why_choose', lang)}
             </h2>
-            <p class="text-center text-sub text-lg mb-16 max-w-2xl mx-auto">
+            <p class="text-center text-sub text-sm md:text-lg mb-8 md:mb-16 max-w-2xl mx-auto">
                 ${lang === 'ko' ? '프리미엄 프리랜서 플랫폼의 새로운 기준' : lang === 'en' ? 'A new standard for premium freelance platforms' : lang === 'zh' ? '高级自由职业平台的新标准' : lang === 'ja' ? 'プレミアムフリーランスプラットフォームの新基準' : 'A new standard for premium freelance platforms'}
             </p>
             
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-4 md:gap-8">
                 <div class="feature-card text-center card-hover">
-                    <div class="text-5xl mb-6" style="color: var(--deep-navy);">
+                    <div class="text-3xl md:text-5xl mb-4 md:mb-6" style="color: var(--deep-navy);">
                         <i class="fas fa-percentage"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4 text-luxury">
+                    <h3 class="text-lg md:text-2xl font-semibold mb-3 md:mb-4 text-luxury">
                         ${t('feature.lowest_fees', lang)}
                     </h3>
-                    <p class="text-sub leading-relaxed">
+                    <p class="text-sub text-sm md:text-base leading-relaxed">
                         ${t('feature.lowest_fees_desc', lang)}
                     </p>
                 </div>
                 
                 <div class="feature-card text-center card-hover">
-                    <div class="text-5xl mb-6" style="color: #D4AF37;">
+                    <div class="text-3xl md:text-5xl mb-4 md:mb-6" style="color: #D4AF37;">
                         <i class="fab fa-bitcoin"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4 text-luxury">
+                    <h3 class="text-lg md:text-2xl font-semibold mb-3 md:mb-4 text-luxury">
                         ${t('feature.usdt_payment', lang)}
                     </h3>
-                    <p class="text-sub leading-relaxed">
+                    <p class="text-sub text-sm md:text-base leading-relaxed">
                         ${t('feature.usdt_payment_desc', lang)}
                     </p>
                 </div>
                 
                 <div class="feature-card text-center card-hover">
-                    <div class="text-5xl mb-6" style="color: var(--deep-navy);">
+                    <div class="text-3xl md:text-5xl mb-4 md:mb-6" style="color: var(--deep-navy);">
                         <i class="fas fa-globe"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4 text-luxury">
+                    <h3 class="text-lg md:text-2xl font-semibold mb-3 md:mb-4 text-luxury">
                         ${t('feature.global_network', lang)}
                     </h3>
-                    <p class="text-sub leading-relaxed">
+                    <p class="text-sub text-sm md:text-base leading-relaxed">
                         ${t('feature.global_network_desc', lang)}
                     </p>
                 </div>
@@ -480,9 +514,9 @@ app.get('/', (c) => {
         </div>
 
         <!-- Core Differentiators Section -->
-        <div class="py-24" style="background: linear-gradient(180deg, #FAFAF7 0%, #F5F5F2 100%);">
+        <div class="py-12 md:py-24" style="background: linear-gradient(180deg, #FAFAF7 0%, #F5F5F2 100%);">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <h2 class="text-5xl font-semibold text-center mb-4 text-luxury">
+                <h2 class="text-2xl md:text-5xl font-semibold text-center mb-3 md:mb-4 text-luxury">
                     ${lang === 'ko' ? '위시캣·프리모아 단점을 해결하는 핵심 기능' : 
                       lang === 'en' ? 'Core Features Solving Wishket·Freemoa Issues' :
                       lang === 'zh' ? '解决Wishket·Freemoa缺点的核心功能' :
@@ -492,7 +526,7 @@ app.get('/', (c) => {
                       lang === 'es' ? 'Características principales que resuelven problemas de Wishket·Freemoa' :
                       'Kernfunktionen zur Lösung von Wishket·Freemoa-Problemen'}
                 </h2>
-                <p class="text-center text-sub text-lg mb-16 max-w-3xl mx-auto leading-relaxed">
+                <p class="text-center text-sub text-xs md:text-lg mb-8 md:mb-16 max-w-3xl mx-auto leading-relaxed">
                     ${lang === 'ko' ? '기존 플랫폼은 "사람 중심 중개", FeeZero는 "시스템 중심 프로젝트 관리"' : 
                       lang === 'en' ? 'Existing platforms: "People-centered brokerage", FeeZero: "System-centered project management"' :
                       lang === 'zh' ? '现有平台："以人为中心的中介"，FeeZero："以系统为中心的项目管理"' :
@@ -503,14 +537,14 @@ app.get('/', (c) => {
                       'Bestehende Plattformen: "Personenzentrierte Vermittlung", FeeZero: "Systemzentriertes Projektmanagement"'}
                 </p>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     <!-- Feature 1: AI-based Standard Quotation -->
                     <div class="feature-card card-hover">
-                        <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
+                        <div class="flex items-center mb-3 md:mb-5">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-calculator"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? 'AI 기반 표준 견적' : 
                                   lang === 'en' ? 'AI-based Standard Quotation' :
                                   lang === 'zh' ? 'AI标准报价' :
@@ -536,10 +570,10 @@ app.get('/', (c) => {
                     <!-- Feature 2: Success Criteria Definition -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: #2D7A3E;">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: #2D7A3E;">
                                 <i class="fas fa-check-double"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '성공 기준 자동 정의' : 
                                   lang === 'en' ? 'Auto Success Criteria' :
                                   lang === 'zh' ? '自动成功标准' :
@@ -565,10 +599,10 @@ app.get('/', (c) => {
                     <!-- Feature 3: Milestone Escrow -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-lock"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '마일스톤 에스크로' : 
                                   lang === 'en' ? 'Milestone Escrow' :
                                   lang === 'zh' ? '里程碑托管' :
@@ -594,10 +628,10 @@ app.get('/', (c) => {
                     <!-- Feature 4: Trust Score System -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: #D4AF37;">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: #D4AF37;">
                                 <i class="fas fa-star"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '실전 검증 신뢰지수' : 
                                   lang === 'en' ? 'Verified Trust Score' :
                                   lang === 'zh' ? '实战验证信任指数' :
@@ -623,10 +657,10 @@ app.get('/', (c) => {
                     <!-- Feature 5: AI PM Assistant -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-robot"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? 'AI PM 보조 시스템' : 
                                   lang === 'en' ? 'AI PM Assistant' :
                                   lang === 'zh' ? 'AI项目经理助手' :
@@ -652,10 +686,10 @@ app.get('/', (c) => {
                     <!-- Feature 6: Intermediate Deliverables -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-code-branch"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '중간 결과물 제출' : 
                                   lang === 'en' ? 'Intermediate Deliverables' :
                                   lang === 'zh' ? '中间交付物' :
@@ -681,10 +715,10 @@ app.get('/', (c) => {
                     <!-- Feature 7: Delay Penalty System -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: #FF6B35;">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: #FF6B35;">
                                 <i class="fas fa-clock"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '일정 지연 패널티' : 
                                   lang === 'en' ? 'Delay Penalty System' :
                                   lang === 'zh' ? '延迟惩罚系统' :
@@ -710,10 +744,10 @@ app.get('/', (c) => {
                     <!-- Feature 8: Requirement Translator -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: #14B8A6;">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: #14B8A6;">
                                 <i class="fas fa-language"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '요구사항 자동 변환' : 
                                   lang === 'en' ? 'Requirement Translator' :
                                   lang === 'zh' ? '需求自动转换' :
@@ -739,10 +773,10 @@ app.get('/', (c) => {
                     <!-- Feature 9: Project Insurance -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: #EC4899;">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: #EC4899;">
                                 <i class="fas fa-shield-alt"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '프로젝트 성공 보증' : 
                                   lang === 'en' ? 'Project Success Guarantee' :
                                   lang === 'zh' ? '项目成功保证' :
@@ -768,10 +802,10 @@ app.get('/', (c) => {
                     <!-- Feature 10: Maintenance Transition -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-5">
-                            <div class="text-4xl mr-4" style="color: #06B6D4;">
+                            <div class="text-2xl md:text-4xl mr-3 md:mr-4" style="color: #06B6D4;">
                                 <i class="fas fa-tools"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-luxury">
+                            <h3 class="text-base md:text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '운영·유지보수 연계' : 
                                   lang === 'en' ? 'Maintenance Transition' :
                                   lang === 'zh' ? '运营维护衔接' :
@@ -833,39 +867,39 @@ app.get('/', (c) => {
         </div>
 
         <!-- Stats Section -->
-        <div class="py-24" style="background: var(--deep-navy);">
+        <div class="py-12 md:py-24" style="background: var(--deep-navy);">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="grid md:grid-cols-4 gap-12 text-center text-white">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 text-center text-white">
                     <div class="card-hover">
-                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">10,000+</div>
-                        <div class="text-lg opacity-80 font-light">${t('stats.freelancers', lang)}</div>
+                        <div class="text-3xl md:text-6xl font-semibold mb-2 md:mb-3" style="color: #D4AF37;">10,000+</div>
+                        <div class="text-xs md:text-lg opacity-80 font-light">${t('stats.freelancers', lang)}</div>
                     </div>
                     <div class="card-hover">
-                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">5,000+</div>
-                        <div class="text-lg opacity-80 font-light">${t('stats.completed_projects', lang)}</div>
+                        <div class="text-3xl md:text-6xl font-semibold mb-2 md:mb-3" style="color: #D4AF37;">5,000+</div>
+                        <div class="text-xs md:text-lg opacity-80 font-light">${t('stats.completed_projects', lang)}</div>
                     </div>
                     <div class="card-hover">
-                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">98%</div>
-                        <div class="text-lg opacity-80 font-light">${t('stats.client_satisfaction', lang)}</div>
+                        <div class="text-3xl md:text-6xl font-semibold mb-2 md:mb-3" style="color: #D4AF37;">98%</div>
+                        <div class="text-xs md:text-lg opacity-80 font-light">${t('stats.client_satisfaction', lang)}</div>
                     </div>
                     <div class="card-hover">
-                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">24/7</div>
-                        <div class="text-lg opacity-80 font-light">${lang === 'ko' ? '고객 지원' : lang === 'en' ? 'Customer Support' : lang === 'zh' ? '客户支持' : 'カスタマーサポート'}</div>
+                        <div class="text-3xl md:text-6xl font-semibold mb-2 md:mb-3" style="color: #D4AF37;">24/7</div>
+                        <div class="text-xs md:text-lg opacity-80 font-light">${lang === 'ko' ? '고객 지원' : lang === 'en' ? 'Customer Support' : lang === 'zh' ? '客户支持' : 'カスタマーサポート'}</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer class="py-16" style="background: var(--charcoal-black); color: white;">
+        <footer class="py-8 md:py-16" style="background: var(--charcoal-black); color: white;">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="grid md:grid-cols-4 gap-12">
-                    <div>
-                        <h4 class="text-2xl font-semibold mb-4">${t('platform.name', lang)}</h4>
-                        <p class="opacity-60 leading-relaxed">${t('platform.tagline', lang)}</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
+                    <div class="col-span-2 md:col-span-1">
+                        <h4 class="text-lg md:text-2xl font-semibold mb-3 md:mb-4">${t('platform.name', lang)}</h4>
+                        <p class="opacity-60 leading-relaxed text-sm md:text-base">${t('platform.tagline', lang)}</p>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4 text-lg">${lang === 'ko' ? '서비스' : lang === 'en' ? 'Services' : lang === 'zh' ? '服务' : 'サービス'}</h4>
+                        <h4 class="font-semibold mb-3 md:mb-4 text-sm md:text-lg">${lang === 'ko' ? '서비스' : lang === 'en' ? 'Services' : lang === 'zh' ? '服务' : 'サービス'}</h4>
                         <ul class="space-y-3 opacity-70">
                             <li><a href="javascript:void(0)" onclick="navigateToProjects()" class="hover:opacity-100 transition cursor-pointer">${t('nav.find_projects', lang)}</a></li>
                             <li><a href="javascript:void(0)" onclick="navigateToFreelancers()" class="hover:opacity-100 transition cursor-pointer">${t('nav.find_experts', lang)}</a></li>

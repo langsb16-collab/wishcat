@@ -292,11 +292,15 @@ app.get('/', (c) => {
                     </div>
                     
                     <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-2">
-                            <button onclick="changeLang('ko')" class="px-2 py-1 rounded ${lang === 'ko' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}">한</button>
-                            <button onclick="changeLang('en')" class="px-2 py-1 rounded ${lang === 'en' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}">EN</button>
-                            <button onclick="changeLang('zh')" class="px-2 py-1 rounded ${lang === 'zh' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}">中</button>
-                            <button onclick="changeLang('ja')" class="px-2 py-1 rounded ${lang === 'ja' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}">日</button>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="changeLang('ko')" class="px-2 py-1 text-sm rounded ${lang === 'ko' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="한국어">한</button>
+                            <button onclick="changeLang('en')" class="px-2 py-1 text-sm rounded ${lang === 'en' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="English">EN</button>
+                            <button onclick="changeLang('zh')" class="px-2 py-1 text-sm rounded ${lang === 'zh' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="中文">中</button>
+                            <button onclick="changeLang('ja')" class="px-2 py-1 text-sm rounded ${lang === 'ja' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="日本語">日</button>
+                            <button onclick="changeLang('vi')" class="px-2 py-1 text-sm rounded ${lang === 'vi' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Tiếng Việt">VI</button>
+                            <button onclick="changeLang('th')" class="px-2 py-1 text-sm rounded ${lang === 'th' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="ไทย">TH</button>
+                            <button onclick="changeLang('es')" class="px-2 py-1 text-sm rounded ${lang === 'es' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Español">ES</button>
+                            <button onclick="changeLang('de')" class="px-2 py-1 text-sm rounded ${lang === 'de' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Deutsch">DE</button>
                         </div>
                         <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
                             ${t('auth.login', lang)}
@@ -314,10 +318,7 @@ app.get('/', (c) => {
                 </h1>
                 <p class="text-xl mb-4">${t('platform.fee_policy', lang)}</p>
                 <p class="text-lg mb-8 opacity-90">
-                    ${lang === 'ko' ? '전 세계 의뢰인과 개발자를 연결하는 글로벌 플랫폼' : 
-                      lang === 'en' ? 'Global platform connecting clients and developers worldwide' :
-                      lang === 'zh' ? '连接全球委托人和开发者的全球平台' :
-                      '世界中の依頼者と開発者をつなぐグローバルプラットフォーム'}
+                    ${t('platform.global_description', lang)}
                 </p>
                 <div class="flex justify-center space-x-4">
                     <button class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
@@ -333,10 +334,7 @@ app.get('/', (c) => {
         <!-- Features Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
-                ${lang === 'ko' ? '왜 FeeZero를 선택해야 할까요?' : 
-                  lang === 'en' ? 'Why Choose FeeZero?' :
-                  lang === 'zh' ? '为什么选择 FeeZero?' :
-                  'なぜ FeeZero を選ぶべきか？'}
+                ${t('footer.why_choose', lang)}
             </h2>
             
             <div class="grid md:grid-cols-3 gap-8">
@@ -345,16 +343,10 @@ app.get('/', (c) => {
                         <i class="fas fa-percentage"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">
-                        ${lang === 'ko' ? '최저 수수료' : 
-                          lang === 'en' ? 'Lowest Fees' :
-                          lang === 'zh' ? '最低手续费' :
-                          '最低手数料'}
+                        ${t('feature.lowest_fees', lang)}
                     </h3>
                     <p class="text-gray-600">
-                        ${lang === 'ko' ? '의뢰인 2%, 개발자 0% - 업계 최저 수수료 정책' : 
-                          lang === 'en' ? 'Client 2%, Developer 0% - Industry lowest fee policy' :
-                          lang === 'zh' ? '委托人2%，开发者0% - 行业最低手续费政策' :
-                          '依頼者2%、開発者0% - 業界最低手数料ポリシー'}
+                        ${t('feature.lowest_fees_desc', lang)}
                     </p>
                 </div>
                 
@@ -363,16 +355,10 @@ app.get('/', (c) => {
                         <i class="fab fa-bitcoin"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">
-                        ${lang === 'ko' ? 'USDT 결제' : 
-                          lang === 'en' ? 'USDT Payment' :
-                          lang === 'zh' ? 'USDT支付' :
-                          'USDT決済'}
+                        ${t('feature.usdt_payment', lang)}
                     </h3>
                     <p class="text-gray-600">
-                        ${lang === 'ko' ? '안전하고 빠른 암호화폐 결제 시스템' : 
-                          lang === 'en' ? 'Secure and fast cryptocurrency payment system' :
-                          lang === 'zh' ? '安全快速的加密货币支付系统' :
-                          '安全で迅速な暗号通貨決済システム'}
+                        ${t('feature.usdt_payment_desc', lang)}
                     </p>
                 </div>
                 
@@ -381,16 +367,10 @@ app.get('/', (c) => {
                         <i class="fas fa-globe"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">
-                        ${lang === 'ko' ? '글로벌 네트워크' : 
-                          lang === 'en' ? 'Global Network' :
-                          lang === 'zh' ? '全球网络' :
-                          'グローバルネットワーク'}
+                        ${t('feature.global_network', lang)}
                     </h3>
                     <p class="text-gray-600">
-                        ${lang === 'ko' ? '한국어, 영어, 중국어, 일본어 지원' : 
-                          lang === 'en' ? 'Support for Korean, English, Chinese, Japanese' :
-                          lang === 'zh' ? '支持韩语、英语、中文、日语' :
-                          '韓国語、英語、中国語、日本語をサポート'}
+                        ${t('feature.global_network_desc', lang)}
                     </p>
                 </div>
             </div>
@@ -402,15 +382,15 @@ app.get('/', (c) => {
                 <div class="grid md:grid-cols-4 gap-8 text-center">
                     <div>
                         <div class="text-4xl font-bold mb-2">10,000+</div>
-                        <div class="text-purple-200">${lang === 'ko' ? '등록 프리랜서' : lang === 'en' ? 'Freelancers' : lang === 'zh' ? '注册自由职业者' : '登録フリーランサー'}</div>
+                        <div class="text-purple-200">${t('stats.freelancers', lang)}</div>
                     </div>
                     <div>
                         <div class="text-4xl font-bold mb-2">5,000+</div>
-                        <div class="text-purple-200">${lang === 'ko' ? '완료된 프로젝트' : lang === 'en' ? 'Completed Projects' : lang === 'zh' ? '已完成项目' : '完了プロジェクト'}</div>
+                        <div class="text-purple-200">${t('stats.completed_projects', lang)}</div>
                     </div>
                     <div>
                         <div class="text-4xl font-bold mb-2">98%</div>
-                        <div class="text-purple-200">${lang === 'ko' ? '고객 만족도' : lang === 'en' ? 'Client Satisfaction' : lang === 'zh' ? '客户满意度' : '顧客満足度'}</div>
+                        <div class="text-purple-200">${t('stats.client_satisfaction', lang)}</div>
                     </div>
                     <div>
                         <div class="text-4xl font-bold mb-2">24/7</div>

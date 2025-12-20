@@ -1,6 +1,6 @@
 // FeeZero Platform Type Definitions
 
-export type Language = 'ko' | 'en' | 'zh' | 'ja';
+export type Language = 'ko' | 'en' | 'zh' | 'ja' | 'vi' | 'th' | 'es' | 'de';
 export type UserType = 'client' | 'freelancer' | 'both';
 export type MembershipType = 'free' | 'premium';
 export type ProjectStatus = 'open' | 'in_progress' | 'completed' | 'cancelled' | 'disputed';

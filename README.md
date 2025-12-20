@@ -28,11 +28,15 @@
 - **개발자**: 0% 수수료 (업계 유일!)
 - **결제 방식**: USDT (테더) 암호화폐
 
-### 🌍 다국어 지원
-- 한국어 (Korean)
-- 영어 (English)
-- 중국어 (Chinese)
-- 일본어 (Japanese)
+### 🌍 다국어 지원 (8개 언어)
+- 🇰🇷 한국어 (Korean)
+- 🇺🇸 영어 (English)
+- 🇨🇳 중국어 (Chinese)
+- 🇯🇵 일본어 (Japanese)
+- 🇻🇳 베트남어 (Vietnamese) **NEW**
+- 🇹🇭 태국어 (Thai) **NEW**
+- 🇪🇸 스페인어 (Spanish) **NEW**
+- 🇩🇪 독일어 (German) **NEW**
 
 ### 📱 주요 기능
 - ✅ 프로젝트 등록 및 매칭
@@ -197,13 +201,17 @@ npm run db:migrate:prod
 
 ## 🌐 다국어 지원
 
-### 지원 언어
-| 언어 코드 | 언어 이름 | Font Family |
-|---------|---------|-------------|
-| `ko` | 한국어 | Noto Sans KR |
-| `en` | English | System Default |
-| `zh` | 中文 | Noto Sans SC |
-| `ja` | 日本語 | Noto Sans JP |
+### 지원 언어 (8개)
+| 언어 코드 | 언어 이름 | Flag | Font Family |
+|---------|---------|------|-------------|
+| `ko` | 한국어 | 🇰🇷 | Noto Sans KR |
+| `en` | English | 🇺🇸 | System Default |
+| `zh` | 中文 | 🇨🇳 | Noto Sans SC |
+| `ja` | 日本語 | 🇯🇵 | Noto Sans JP |
+| `vi` | Tiếng Việt | 🇻🇳 | System Default |
+| `th` | ไทย | 🇹🇭 | System Default |
+| `es` | Español | 🇪🇸 | System Default |
+| `de` | Deutsch | 🇩🇪 | System Default |
 
 ### 언어 전환
 URL 쿼리 파라미터 또는 Accept-Language 헤더를 통해 언어를 설정할 수 있습니다.
@@ -414,3 +422,15 @@ MIT License
 **Made with ❤️ by FeeZero Team**
 
 **Last Updated**: 2025-12-10
+
+## 🆕 최신 업데이트
+
+### v1.1.0 (2025-12-10)
+- ✅ **8개 언어 지원 추가**: 베트남어, 태국어, 스페인어, 독일어 추가
+- ✅ 모든 카테고리 및 스킬에 대한 완전한 다국어 번역
+- ✅ 프론트엔드 언어 전환 버튼 업데이트 (8개 언어)
+- ✅ 데이터베이스 스키마 확장 (언어 제약 해제)
+- ✅ i18n 번역 시스템 대폭 확장
+
+### 지원 언어 (8개)
+🇰🇷 한국어 | 🇺🇸 English | 🇨🇳 中文 | 🇯🇵 日本語 | 🇻🇳 Tiếng Việt | 🇹🇭 ไทย | 🇪🇸 Español | 🇩🇪 Deutsch

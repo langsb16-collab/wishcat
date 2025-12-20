@@ -593,9 +593,16 @@ admin.post('/api/users', async (c) => {
     const { email, nickname, phone, membership_type } = await c.req.json()
     
     const result = await DB.prepare(`
-      INSERT INTO users (email, nickname, phone, membership_type, user_type, country, is_active)
-      VALUES (?, ?, ?, ?, 'client', 'KR', 1)
-    `).bind(email, nickname, phone || null, membership_type || 'free').run()
+      INSERT INTO users (email, full_name, nickname, phone_number, membership_type, user_type, country, is_active, password_hash, is_admin)
+      VALUES (?, ?, ?, ?, ?, 'client', 'KR', 1, 'default123', ?)
+    `).bind(
+      email, 
+      nickname, // use nickname as full_name
+      nickname, 
+      phone || '000-0000-0000', 
+      membership_type || 'free',
+      membership_type === 'admin' ? 1 : 0
+    ).run()
     
     return c.json(createApiResponse(true, { id: result.meta.last_row_id }))
   } catch (error: any) {
@@ -612,9 +619,17 @@ admin.put('/api/users/:id', async (c) => {
     
     await DB.prepare(`
       UPDATE users 
-      SET email = ?, nickname = ?, phone = ?, membership_type = ?
+      SET email = ?, full_name = ?, nickname = ?, phone_number = ?, membership_type = ?, is_admin = ?
       WHERE id = ?
-    `).bind(email, nickname, phone || null, membership_type, id).run()
+    `).bind(
+      email, 
+      nickname, 
+      nickname, 
+      phone || '000-0000-0000', 
+      membership_type,
+      membership_type === 'admin' ? 1 : 0,
+      id
+    ).run()
     
     return c.json(createApiResponse(true, { id }))
   } catch (error: any) {

@@ -302,8 +302,15 @@ app.get('/', (c) => {
                             <button onclick="changeLang('es')" class="px-2 py-1 text-sm rounded ${lang === 'es' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Español">ES</button>
                             <button onclick="changeLang('de')" class="px-2 py-1 text-sm rounded ${lang === 'de' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Deutsch">DE</button>
                         </div>
-                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                            ${t('auth.login', lang)}
+                        <button onclick="showNotices()" class="text-gray-700 hover:text-purple-600">
+                            <i class="fas fa-bell mr-1"></i>
+                            ${lang === 'ko' ? '공지' : lang === 'en' ? 'Notice' : lang === 'zh' ? '公告' : lang === 'ja' ? 'お知らせ' : lang === 'vi' ? 'Thông báo' : lang === 'th' ? 'ประกาศ' : lang === 'es' ? 'Aviso' : 'Hinweis'}
+                        </button>
+                        <button onclick="showRegister()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                            <i class="fas fa-user-plus mr-1"></i>${t('auth.register', lang)}
+                        </button>
+                        <button onclick="showLogin()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                            <i class="fas fa-sign-in-alt mr-1"></i>${t('auth.login', lang)}
                         </button>
                     </div>
                 </div>
@@ -316,6 +323,12 @@ app.get('/', (c) => {
                 <h1 class="text-5xl font-bold mb-6">
                     ${t('platform.tagline', lang)}
                 </h1>
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <i class="fab fa-bitcoin text-3xl"></i>
+                    <p class="text-2xl font-bold">
+                        ${lang === 'ko' ? '모든 거래는 테더 USDT' : lang === 'en' ? 'All Transactions in Tether USDT' : lang === 'zh' ? '所有交易均使用泰达币USDT' : lang === 'ja' ? 'すべての取引はテザーUSDT' : lang === 'vi' ? 'Tất cả giao dịch bằng Tether USDT' : lang === 'th' ? 'ธุรกรรมทั้งหมดด้วย Tether USDT' : lang === 'es' ? 'Todas las transacciones en Tether USDT' : 'Alle Transaktionen in Tether USDT'}
+                    </p>
+                </div>
                 <p class="text-xl mb-4">${t('platform.fee_policy', lang)}</p>
                 <p class="text-lg mb-8 opacity-90">
                     ${t('platform.global_description', lang)}
@@ -372,6 +385,359 @@ app.get('/', (c) => {
                     <p class="text-gray-600">
                         ${t('feature.global_network_desc', lang)}
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Differentiators Section -->
+        <div class="bg-gray-50 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">
+                    ${lang === 'ko' ? '위시캣·프리모아 단점을 해결하는 핵심 기능' : 
+                      lang === 'en' ? 'Core Features Solving Wishket·Freemoa Issues' :
+                      lang === 'zh' ? '解决Wishket·Freemoa缺点的核心功能' :
+                      lang === 'ja' ? 'Wishket·Fremoaの欠点を解決する核心機能' :
+                      lang === 'vi' ? 'Tính năng cốt lõi giải quyết vấn đề Wishket·Freemoa' :
+                      lang === 'th' ? 'ฟีเจอร์หลักแก้ปัญหา Wishket·Freemoa' :
+                      lang === 'es' ? 'Características principales que resuelven problemas de Wishket·Freemoa' :
+                      'Kernfunktionen zur Lösung von Wishket·Freemoa-Problemen'}
+                </h2>
+                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+                    ${lang === 'ko' ? '기존 플랫폼은 "사람 중심 중개", FeeZero는 "시스템 중심 프로젝트 관리"' : 
+                      lang === 'en' ? 'Existing platforms: "People-centered brokerage", FeeZero: "System-centered project management"' :
+                      lang === 'zh' ? '现有平台："以人为中心的中介"，FeeZero："以系统为中心的项目管理"' :
+                      lang === 'ja' ? '既存プラットフォーム：「人中心の仲介」、FeeZero：「システム中心のプロジェクト管理」' :
+                      lang === 'vi' ? 'Nền tảng hiện có: "Môi giới tập trung vào con người", FeeZero: "Quản lý dự án tập trung vào hệ thống"' :
+                      lang === 'th' ? 'แพลตฟอร์มที่มีอยู่: "นายหน้าเน้นคน" FeeZero: "การจัดการโครงการเน้นระบบ"' :
+                      lang === 'es' ? 'Plataformas existentes: "Intermediación centrada en personas", FeeZero: "Gestión de proyectos centrada en el sistema"' :
+                      'Bestehende Plattformen: "Personenzentrierte Vermittlung", FeeZero: "Systemzentriertes Projektmanagement"'}
+                </p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Feature 1: AI-based Standard Quotation -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-blue-600 mr-3">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? 'AI 기반 표준 견적' : 
+                                  lang === 'en' ? 'AI-based Standard Quotation' :
+                                  lang === 'zh' ? 'AI标准报价' :
+                                  lang === 'ja' ? 'AI標準見積' :
+                                  lang === 'vi' ? 'Báo giá tiêu chuẩn AI' :
+                                  lang === 'th' ? 'ใบเสนอราคามาตรฐาน AI' :
+                                  lang === 'es' ? 'Cotización estándar basada en IA' :
+                                  'AI-basiertes Standardangebot'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '기능 수 자동 분해, 기술 스택별 난이도 점수화, 예상 개발 기간 자동 산출로 투명한 가격 책정' : 
+                              lang === 'en' ? 'Automatic feature breakdown, tech stack difficulty scoring, auto development timeline for transparent pricing' :
+                              lang === 'zh' ? '自动功能分解，技术栈难度评分，自动开发时间计算，透明定价' :
+                              lang === 'ja' ? '機能の自動分解、技術スタック難易度スコアリング、開発期間自動算出で透明な価格設定' :
+                              lang === 'vi' ? 'Phân tích tính năng tự động, chấm điểm độ khó công nghệ, tính thời gian phát triển tự động cho giá minh bạch' :
+                              lang === 'th' ? 'แยกฟีเจอร์อัตโนมัติ คะแนนความยากของเทคโนโลยี คำนวณระยะเวลาพัฒนาอัตโนมัติเพื่อราคาโปร่งใส' :
+                              lang === 'es' ? 'Desglose automático de características, puntuación de dificultad de stack tecnológico, cálculo automático de tiempo de desarrollo para precios transparentes' :
+                              'Automatische Funktionsaufschlüsselung, Tech-Stack-Schwierigkeitsbewertung, automatische Entwicklungszeit für transparente Preisgestaltung'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 2: Success Criteria Definition -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-green-600 mr-3">
+                                <i class="fas fa-check-double"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '성공 기준 자동 정의' : 
+                                  lang === 'en' ? 'Auto Success Criteria' :
+                                  lang === 'zh' ? '自动成功标准' :
+                                  lang === 'ja' ? '成功基準自動定義' :
+                                  lang === 'vi' ? 'Tiêu chí thành công tự động' :
+                                  lang === 'th' ? 'เกณฑ์ความสำเร็จอัตโนมัติ' :
+                                  lang === 'es' ? 'Criterios de éxito automáticos' :
+                                  'Automatische Erfolgskriterien'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '개발 완료 기준 자동 체크리스트, 기능별 완료 조건 명문화로 분쟁 70% 차단' : 
+                              lang === 'en' ? 'Auto completion checklist, documented completion conditions to prevent 70% of disputes' :
+                              lang === 'zh' ? '自动完成检查表，明确的完成条件可防止70%的纠纷' :
+                              lang === 'ja' ? '開発完了基準自動チェックリスト、機能別完了条件明文化で紛争70%防止' :
+                              lang === 'vi' ? 'Danh sách kiểm tra hoàn thành tự động, điều kiện hoàn thành được ghi chép để ngăn chặn 70% tranh chấp' :
+                              lang === 'th' ? 'รายการตรวจสอบการเสร็จสิ้นอัตโนมัติ เงื่อนไขการเสร็จสิ้นที่ระบุไว้เพื่อป้องกันข้อพิพาท 70%' :
+                              lang === 'es' ? 'Lista de verificación de finalización automática, condiciones de finalización documentadas para prevenir el 70% de disputas' :
+                              'Automatische Fertigstellungs-Checkliste, dokumentierte Fertigstellungsbedingungen zur Vermeidung von 70% der Streitigkeiten'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 3: Milestone Escrow -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-purple-600 mr-3">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '마일스톤 에스크로' : 
+                                  lang === 'en' ? 'Milestone Escrow' :
+                                  lang === 'zh' ? '里程碑托管' :
+                                  lang === 'ja' ? 'マイルストーンエスクロー' :
+                                  lang === 'vi' ? 'Ký quỹ theo mốc' :
+                                  lang === 'th' ? 'เอสโครว์ไมล์สโตน' :
+                                  lang === 'es' ? 'Depósito en garantía por hitos' :
+                                  'Meilenstein-Treuhand'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '단계별 분할 에스크로로 개발자·클라이언트 모두 리스크 감소, 미이행 시 자동 환불' : 
+                              lang === 'en' ? 'Phased escrow reduces risk for both parties, automatic refund on non-performance' :
+                              lang === 'zh' ? '分阶段托管降低双方风险，未履行时自动退款' :
+                              lang === 'ja' ? '段階別分割エスクローで開発者・クライアント双方のリスク削減、未履行時自動返金' :
+                              lang === 'vi' ? 'Ký quỹ theo giai đoạn giảm rủi ro cho cả hai bên, hoàn tiền tự động khi không thực hiện' :
+                              lang === 'th' ? 'เอสโครว์แบ่งระยะลดความเสี่ยงสำหรับทั้งสองฝ่าย คืนเงินอัตโนมัติเมื่อไม่ปฏิบัติตาม' :
+                              lang === 'es' ? 'El depósito en garantía por fases reduce el riesgo para ambas partes, reembolso automático en caso de incumplimiento' :
+                              'Phasenweise Treuhand reduziert Risiken für beide Parteien, automatische Rückerstattung bei Nichterfüllung'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 4: Trust Score System -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-yellow-600 mr-3">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '실전 검증 신뢰지수' : 
+                                  lang === 'en' ? 'Verified Trust Score' :
+                                  lang === 'zh' ? '实战验证信任指数' :
+                                  lang === 'ja' ? '実戦検証信頼指数' :
+                                  lang === 'vi' ? 'Chỉ số tin cậy đã xác minh' :
+                                  lang === 'th' ? 'คะแนนความน่าเชื่อถือที่ตรวจสอบแล้ว' :
+                                  lang === 'es' ? 'Índice de confianza verificado' :
+                                  'Verifizierter Vertrauens-Score'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '포트폴리오가 아닌 완료율, 일정 준수율, 재의뢰율 등 정량 지표로 실력 검증' : 
+                              lang === 'en' ? 'Skill verification through quantitative metrics like completion rate, schedule adherence, re-hire rate, not portfolios' :
+                              lang === 'zh' ? '通过完成率、时间表遵守率、重新雇佣率等定量指标验证技能，而非作品集' :
+                              lang === 'ja' ? 'ポートフォリオではなく完了率、スケジュール遵守率、再依頼率等の定量指標でスキル検証' :
+                              lang === 'vi' ? 'Xác minh kỹ năng thông qua các chỉ số định lượng như tỷ lệ hoàn thành, tuân thủ lịch trình, tỷ lệ thuê lại, không phải portfolio' :
+                              lang === 'th' ? 'การตรวจสอบทักษะผ่านตัวชี้วัดเชิงปริมาณเช่นอัตราการเสร็จสิ้น การปฏิบัติตามตารางเวลา อัตราการจ้างซ้ำ ไม่ใช่พอร์ตโฟลิโอ' :
+                              lang === 'es' ? 'Verificación de habilidades a través de métricas cuantitativas como tasa de finalización, cumplimiento de plazos, tasa de recontratación, no portafolios' :
+                              'Kompetenzverifizierung durch quantitative Metriken wie Abschlussrate, Zeitplaneinhaltung, Wiedereinstellungsrate, nicht Portfolios'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 5: AI PM Assistant -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-red-600 mr-3">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? 'AI PM 보조 시스템' : 
+                                  lang === 'en' ? 'AI PM Assistant' :
+                                  lang === 'zh' ? 'AI项目经理助手' :
+                                  lang === 'ja' ? 'AI PMアシスタント' :
+                                  lang === 'vi' ? 'Trợ lý PM AI' :
+                                  lang === 'th' ? 'ผู้ช่วย PM AI' :
+                                  lang === 'es' ? 'Asistente PM de IA' :
+                                  'KI-PM-Assistent'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '일정 지연 감지, 요구사항 변경 로그 자동 기록, 주간 리포트 자동 생성으로 품질 관리' : 
+                              lang === 'en' ? 'Schedule delay detection, auto requirement change log, weekly report generation for quality management' :
+                              lang === 'zh' ? '时间表延迟检测，自动需求变更日志，每周报告生成以进行质量管理' :
+                              lang === 'ja' ? 'スケジュール遅延検知、要求変更ログ自動記録、週次レポート自動生成で品質管理' :
+                              lang === 'vi' ? 'Phát hiện chậm trễ lịch trình, ghi nhật ký thay đổi yêu cầu tự động, tạo báo cáo hàng tuần để quản lý chất lượng' :
+                              lang === 'th' ? 'ตรวจจับความล่าช้าของกำหนดการ บันทึกการเปลี่ยนแปลงความต้องการอัตโนมัติ สร้างรายงานรายสัปดาห์เพื่อการจัดการคุณภาพ' :
+                              lang === 'es' ? 'Detección de retrasos en el cronograma, registro automático de cambios de requisitos, generación de informes semanales para gestión de calidad' :
+                              'Erkennung von Zeitplanverzögerungen, automatisches Anforderungsänderungsprotokoll, wöchentliche Berichtserstellung für Qualitätsmanagement'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 6: Intermediate Deliverables -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-indigo-600 mr-3">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '중간 결과물 제출' : 
+                                  lang === 'en' ? 'Intermediate Deliverables' :
+                                  lang === 'zh' ? '中间交付物' :
+                                  lang === 'ja' ? '中間成果物提出' :
+                                  lang === 'vi' ? 'Sản phẩm trung gian' :
+                                  lang === 'th' ? 'ผลงานระหว่างกาล' :
+                                  lang === 'es' ? 'Entregables intermedios' :
+                                  'Zwischenergebnisse'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? 'Git/배포 링크 제출 의무화, 테스트 서버 접속 권한 공유로 블랙박스 개발 방지' : 
+                              lang === 'en' ? 'Mandatory Git/deployment link submission, test server access sharing to prevent black-box development' :
+                              lang === 'zh' ? '强制提交Git/部署链接，共享测试服务器访问权限以防止黑箱开发' :
+                              lang === 'ja' ? 'Git/デプロイリンク提出義務化、テストサーバーアクセス権共有でブラックボックス開発防止' :
+                              lang === 'vi' ? 'Bắt buộc gửi liên kết Git/triển khai, chia sẻ quyền truy cập máy chủ thử nghiệm để ngăn chặn phát triển hộp đen' :
+                              lang === 'th' ? 'บังคับส่งลิงก์ Git/การปรับใช้ แบ่งปันการเข้าถึงเซิร์ฟเวอร์ทดสอบเพื่อป้องกันการพัฒนาแบบกล่องดำ' :
+                              lang === 'es' ? 'Envío obligatorio de enlaces Git/implementación, compartir acceso al servidor de prueba para prevenir desarrollo de caja negra' :
+                              'Verpflichtende Git/Deployment-Link-Einreichung, Testserver-Zugriff teilen um Black-Box-Entwicklung zu verhindern'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 7: Delay Penalty System -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-orange-600 mr-3">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '일정 지연 패널티' : 
+                                  lang === 'en' ? 'Delay Penalty System' :
+                                  lang === 'zh' ? '延迟惩罚系统' :
+                                  lang === 'ja' ? 'スケジュール遅延ペナルティ' :
+                                  lang === 'vi' ? 'Hệ thống phạt chậm trễ' :
+                                  lang === 'th' ? 'ระบบลงโทษความล่าช้า' :
+                                  lang === 'es' ? 'Sistema de penalización por retrasos' :
+                                  'Verzögerungs-Strafsystem'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '지연 일수 자동 계산, 수수료 차감 or 클라이언트 보상으로 일정 준수 유도' : 
+                              lang === 'en' ? 'Auto delay calculation, fee deduction or client compensation to encourage schedule adherence' :
+                              lang === 'zh' ? '自动计算延迟天数，扣除费用或补偿客户以鼓励遵守时间表' :
+                              lang === 'ja' ? '遅延日数自動計算、手数料差引またはクライアント補償でスケジュール遵守誘導' :
+                              lang === 'vi' ? 'Tính toán chậm trễ tự động, khấu trừ phí hoặc bồi thường khách hàng để khuyến khích tuân thủ lịch trình' :
+                              lang === 'th' ? 'คำนวณความล่าช้าอัตโนมัติ หักค่าธรรมเนียมหรือชดเชยลูกค้าเพื่อส่งเสริมการปฏิบัติตามตารางเวลา' :
+                              lang === 'es' ? 'Cálculo automático de retrasos, deducción de tarifas o compensación al cliente para fomentar el cumplimiento del cronograma' :
+                              'Automatische Verzögerungsberechnung, Gebührenabzug oder Kundenkompensation zur Förderung der Zeitplaneinhaltung'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 8: Requirement Translator -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-teal-600 mr-3">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '요구사항 자동 변환' : 
+                                  lang === 'en' ? 'Requirement Translator' :
+                                  lang === 'zh' ? '需求自动转换' :
+                                  lang === 'ja' ? '要求仕様自動変換' :
+                                  lang === 'vi' ? 'Dịch yêu cầu tự động' :
+                                  lang === 'th' ? 'แปลความต้องการอัตโนมัติ' :
+                                  lang === 'es' ? 'Traductor de requisitos' :
+                                  'Anforderungs-Übersetzer'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '자연어를 개발 요구사항으로 변환하는 AI로 기술 비전문가도 정확한 의뢰 가능' : 
+                              lang === 'en' ? 'AI converts natural language to development requirements so non-technical clients can request accurately' :
+                              lang === 'zh' ? 'AI将自然语言转换为开发需求，使非技术客户也能准确请求' :
+                              lang === 'ja' ? '自然言語を開発要求仕様に変換するAIで技術非専門家も正確な依頼可能' :
+                              lang === 'vi' ? 'AI chuyển đổi ngôn ngữ tự nhiên thành yêu cầu phát triển để khách hàng phi kỹ thuật có thể yêu cầu chính xác' :
+                              lang === 'th' ? 'AI แปลภาษาธรรมชาติเป็นความต้องการพัฒนาเพื่อให้ลูกค้าที่ไม่ใช่ทางเทคนิคสามารถขอได้อย่างถูกต้อง' :
+                              lang === 'es' ? 'La IA convierte el lenguaje natural en requisitos de desarrollo para que los clientes no técnicos puedan solicitar con precisión' :
+                              'KI wandelt natürliche Sprache in Entwicklungsanforderungen um, damit auch nicht-technische Kunden präzise anfragen können'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 9: Project Insurance -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-pink-600 mr-3">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '프로젝트 성공 보증' : 
+                                  lang === 'en' ? 'Project Success Guarantee' :
+                                  lang === 'zh' ? '项目成功保证' :
+                                  lang === 'ja' ? 'プロジェクト成功保証' :
+                                  lang === 'vi' ? 'Bảo đảm thành công dự án' :
+                                  lang === 'th' ? 'การรับประกันความสำเร็จของโครงการ' :
+                                  lang === 'es' ? 'Garantía de éxito del proyecto' :
+                                  'Projekterfolgsgarantie'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '일정·기능 미달 시 일부 보상 제공, 프리미엄 프로젝트 적용으로 플랫폼 신뢰도 상승' : 
+                              lang === 'en' ? 'Partial compensation for schedule/feature shortfall, applied to premium projects to increase platform trust' :
+                              lang === 'zh' ? '时间表/功能不足时提供部分补偿，应用于高级项目以提高平台信任度' :
+                              lang === 'ja' ? 'スケジュール・機能未達時一部補償提供、プレミアムプロジェクト適用でプラットフォーム信頼度上昇' :
+                              lang === 'vi' ? 'Bồi thường một phần khi thiếu lịch trình/tính năng, áp dụng cho dự án cao cấp để tăng độ tin cậy nền tảng' :
+                              lang === 'th' ? 'ชดเชยบางส่วนสำหรับการขาดแคลนกำหนดการ/คุณสมบัติ นำไปใช้กับโครงการพรีเมียมเพื่อเพิ่มความน่าเชื่อถือของแพลตฟอร์ม' :
+                              lang === 'es' ? 'Compensación parcial por déficit de cronograma/características, aplicado a proyectos premium para aumentar la confianza en la plataforma' :
+                              'Teilkompensation bei Zeitplan-/Funktionsdefiziten, angewendet auf Premium-Projekte zur Steigerung des Plattformvertrauens'}
+                        </p>
+                    </div>
+
+                    <!-- Feature 10: Maintenance Transition -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl text-cyan-600 mr-3">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">
+                                ${lang === 'ko' ? '운영·유지보수 연계' : 
+                                  lang === 'en' ? 'Maintenance Transition' :
+                                  lang === 'zh' ? '运营维护衔接' :
+                                  lang === 'ja' ? '運用・保守連携' :
+                                  lang === 'vi' ? 'Chuyển đổi bảo trì' :
+                                  lang === 'th' ? 'การเปลี่ยนไปสู่การบำรุงรักษา' :
+                                  lang === 'es' ? 'Transición de mantenimiento' :
+                                  'Wartungsübergang'}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm">
+                            ${lang === 'ko' ? '개발 완료 후 운영 전환 모드, 월 단위 유지보수 계약 자동 전환으로 장기 관리' : 
+                              lang === 'en' ? 'Operation transition mode after development, auto monthly maintenance contract conversion for long-term management' :
+                              lang === 'zh' ? '开发完成后运营转换模式，自动月度维护合同转换用于长期管理' :
+                              lang === 'ja' ? '開発完了後運用転換モード、月単位保守契約自動転換で長期管理' :
+                              lang === 'vi' ? 'Chế độ chuyển đổi hoạt động sau phát triển, chuyển đổi hợp đồng bảo trì hàng tháng tự động để quản lý dài hạn' :
+                              lang === 'th' ? 'โหมดการเปลี่ยนไปสู่การดำเนินงานหลังการพัฒนา การแปลงสัญญาบำรุงรักษารายเดือนอัตโนมัติสำหรับการจัดการระยะยาว' :
+                              lang === 'es' ? 'Modo de transición operativa después del desarrollo, conversión automática de contrato de mantenimiento mensual para gestión a largo plazo' :
+                              'Betriebsübergangsmodus nach Entwicklung, automatische monatliche Wartungsvertragsumwandlung für langfristige Verwaltung'}
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Global Connection Emphasis -->
+                <div class="mt-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white text-center">
+                    <h3 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-globe-americas mr-2"></i>
+                        ${lang === 'ko' ? '글로벌 의뢰인과 개발자 연결' : 
+                          lang === 'en' ? 'Connecting Global Clients and Developers' :
+                          lang === 'zh' ? '连接全球委托人和开发者' :
+                          lang === 'ja' ? 'グローバルな依頼者と開発者をつなぐ' :
+                          lang === 'vi' ? 'Kết nối khách hàng và nhà phát triển toàn cầu' :
+                          lang === 'th' ? 'เชื่อมต่อลูกค้าและนักพัฒนาทั่วโลก' :
+                          lang === 'es' ? 'Conectando clientes y desarrolladores globales' :
+                          'Globale Kunden und Entwickler verbinden'}
+                    </h3>
+                    <p class="text-lg mb-6">
+                        ${lang === 'ko' ? '8개 언어 지원으로 한국, 미국, 중국, 일본, 베트남, 태국, 스페인, 독일 등 전 세계 시장 연결' : 
+                          lang === 'en' ? 'Supporting 8 languages to connect global markets: Korea, USA, China, Japan, Vietnam, Thailand, Spain, Germany' :
+                          lang === 'zh' ? '支持8种语言连接全球市场：韩国、美国、中国、日本、越南、泰国、西班牙、德国' :
+                          lang === 'ja' ? '8言語対応で韓国、米国、中国、日本、ベトナム、タイ、スペイン、ドイツなど世界市場を接続' :
+                          lang === 'vi' ? 'Hỗ trợ 8 ngôn ngữ để kết nối thị trường toàn cầu: Hàn Quốc, Mỹ, Trung Quốc, Nhật Bản, Việt Nam, Thái Lan, Tây Ban Nha, Đức' :
+                          lang === 'th' ? 'รองรับ 8 ภาษาเพื่อเชื่อมต่อตลาดโลก: เกาหลี สหรัฐอเมริกา จีน ญี่ปุ่น เวียดนาม ไทย สเปน เยอรมนี' :
+                          lang === 'es' ? 'Soporte para 8 idiomas para conectar mercados globales: Corea, EE.UU., China, Japón, Vietnam, Tailandia, España, Alemania' :
+                          '8-Sprachen-Unterstützung zur Verbindung globaler Märkte: Korea, USA, China, Japan, Vietnam, Thailand, Spanien, Deutschland'}
+                    </p>
+                    <div class="flex justify-center space-x-4 text-3xl">
+                        <span>🇰🇷</span>
+                        <span>🇺🇸</span>
+                        <span>🇨🇳</span>
+                        <span>🇯🇵</span>
+                        <span>🇻🇳</span>
+                        <span>🇹🇭</span>
+                        <span>🇪🇸</span>
+                        <span>🇩🇪</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -443,6 +809,57 @@ app.get('/', (c) => {
                 const url = new URL(window.location.href);
                 url.searchParams.set('lang', lang);
                 window.location.href = url.toString();
+            }
+            
+            // Show notices modal
+            function showNotices() {
+                const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
+                const notices = {
+                    ko: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero 플랫폼 오픈!</h3><ul class="list-disc pl-5 space-y-2"><li>세계 최저 수수료: 의뢰인 2%, 개발자 0%</li><li>8개국 언어 지원 (한/영/중/일/베트남/태국/스페인/독일)</li><li>USDT 결제로 안전한 거래</li><li>AI 기반 프로젝트 매칭 시스템</li></ul>',
+                    en: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero Platform Launch!</h3><ul class="list-disc pl-5 space-y-2"><li>World\\'s lowest fees: Client 2%, Developer 0%</li><li>8 language support (KR/EN/CN/JP/VN/TH/ES/DE)</li><li>Secure transactions with USDT</li><li>AI-powered project matching system</li></ul>',
+                    zh: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero 平台开放！</h3><ul class="list-disc pl-5 space-y-2"><li>全球最低手续费：委托人2%，开发者0%</li><li>支持8种语言（韩/英/中/日/越/泰/西/德）</li><li>使用USDT安全交易</li><li>AI驱动的项目匹配系统</li></ul>',
+                    ja: '<h3 class="text-xl font-bold mb-4">🎉 FeeZeroプラットフォームオープン！</h3><ul class="list-disc pl-5 space-y-2"><li>世界最低手数料：依頼者2%、開発者0%</li><li>8カ国語対応（韓/英/中/日/越/タイ/西/独）</li><li>USDTで安全な取引</li><li>AI搭載プロジェクトマッチングシステム</li></ul>',
+                    vi: '<h3 class="text-xl font-bold mb-4">🎉 Nền tảng FeeZero ra mắt!</h3><ul class="list-disc pl-5 space-y-2"><li>Phí thấp nhất thế giới: Khách hàng 2%, Nhà phát triển 0%</li><li>Hỗ trợ 8 ngôn ngữ (Hàn/Anh/Trung/Nhật/Việt/Thái/Tây/Đức)</li><li>Giao dịch an toàn với USDT</li><li>Hệ thống ghép dự án AI</li></ul>',
+                    th: '<h3 class="text-xl font-bold mb-4">🎉 เปิดตัวแพลตฟอร์ม FeeZero!</h3><ul class="list-disc pl-5 space-y-2"><li>ค่าธรรมเนียมต่ำสุดในโลก: ลูกค้า 2% นักพัฒนา 0%</li><li>รองรับ 8 ภาษา (เกาหลี/อังกฤษ/จีน/ญี่ปุ่น/เวียดนาม/ไทย/สเปน/เยอรมัน)</li><li>ธุรกรรมปลอดภัยด้วย USDT</li><li>ระบบจับคู่โครงการ AI</li></ul>',
+                    es: '<h3 class="text-xl font-bold mb-4">🎉 ¡Lanzamiento de la plataforma FeeZero!</h3><ul class="list-disc pl-5 space-y-2"><li>Tarifas más bajas del mundo: Cliente 2%, Desarrollador 0%</li><li>Soporte para 8 idiomas (KR/EN/CN/JP/VN/TH/ES/DE)</li><li>Transacciones seguras con USDT</li><li>Sistema de emparejamiento de proyectos con IA</li></ul>',
+                    de: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero-Plattform-Start!</h3><ul class="list-disc pl-5 space-y-2"><li>Weltweit niedrigste Gebühren: Kunde 2%, Entwickler 0%</li><li>8-Sprachen-Unterstützung (KR/EN/CN/JP/VN/TH/ES/DE)</li><li>Sichere Transaktionen mit USDT</li><li>KI-gestütztes Projekt-Matching-System</li></ul>'
+                };
+                
+                alert(notices[lang] || notices.ko);
+            }
+            
+            // Show register modal
+            function showRegister() {
+                const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
+                const messages = {
+                    ko: '회원가입 기능이 곧 제공됩니다!\\n\\n지원 기능:\\n✓ 의뢰인/프리랜서 선택\\n✓ 이메일 인증\\n✓ 프로필 설정\\n✓ 포트폴리오 업로드',
+                    en: 'Registration feature coming soon!\\n\\nFeatures:\\n✓ Client/Freelancer selection\\n✓ Email verification\\n✓ Profile setup\\n✓ Portfolio upload',
+                    zh: '注册功能即将推出！\\n\\n功能：\\n✓ 委托人/自由职业者选择\\n✓ 电子邮件验证\\n✓ 个人资料设置\\n✓ 作品集上传',
+                    ja: '会員登録機能は間もなく提供されます！\\n\\n機能：\\n✓ 依頼者/フリーランサー選択\\n✓ メール認証\\n✓ プロフィール設定\\n✓ ポートフォリオアップロード',
+                    vi: 'Tính năng đăng ký sắp ra mắt!\\n\\nTính năng:\\n✓ Chọn Khách hàng/Freelancer\\n✓ Xác minh email\\n✓ Thiết lập hồ sơ\\n✓ Tải lên portfolio',
+                    th: 'ฟีเจอร์การลงทะเบียนเร็วๆ นี้!\\n\\nฟีเจอร์:\\n✓ เลือกลูกค้า/ฟรีแลนซ์\\n✓ ยืนยันอีเมล\\n✓ ตั้งค่าโปรไฟล์\\n✓ อัปโหลดพอร์ตโฟลิโอ',
+                    es: '¡Función de registro próximamente!\\n\\nCaracterísticas:\\n✓ Selección Cliente/Freelancer\\n✓ Verificación de correo\\n✓ Configuración de perfil\\n✓ Carga de portafolio',
+                    de: 'Registrierungsfunktion in Kürze!\\n\\nFunktionen:\\n✓ Kunde/Freiberufler-Auswahl\\n✓ E-Mail-Verifizierung\\n✓ Profil-Einrichtung\\n✓ Portfolio-Upload'
+                };
+                
+                alert(messages[lang] || messages.ko);
+            }
+            
+            // Show login modal
+            function showLogin() {
+                const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
+                const messages = {
+                    ko: '로그인 기능이 곧 제공됩니다!\\n\\n지원 로그인:\\n✓ 이메일/비밀번호\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ 2단계 인증',
+                    en: 'Login feature coming soon!\\n\\nLogin options:\\n✓ Email/Password\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Two-factor authentication',
+                    zh: '登录功能即将推出！\\n\\n登录选项：\\n✓ 电子邮件/密码\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ 双因素认证',
+                    ja: 'ログイン機能は間もなく提供されます！\\n\\nログインオプション：\\n✓ メール/パスワード\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ 二段階認証',
+                    vi: 'Tính năng đăng nhập sắp ra mắt!\\n\\nTùy chọn đăng nhập:\\n✓ Email/Mật khẩu\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Xác thực hai yếu tố',
+                    th: 'ฟีเจอร์เข้าสู่ระบบเร็วๆ นี้!\\n\\nตัวเลือกการเข้าสู่ระบบ:\\n✓ อีเมล/รหัสผ่าน\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ การยืนยันสองขั้นตอน',
+                    es: '¡Función de inicio de sesión próximamente!\\n\\nOpciones de inicio:\\n✓ Correo/Contraseña\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Autenticación de dos factores',
+                    de: 'Login-Funktion in Kürze!\\n\\nLogin-Optionen:\\n✓ E-Mail/Passwort\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Zwei-Faktor-Authentifizierung'
+                };
+                
+                alert(messages[lang] || messages.ko);
             }
             
             // Load data from API

@@ -371,10 +371,10 @@ app.get('/', (c) => {
                     </div>
                     
                     <div class="hidden md:flex items-center space-x-10">
-                        <a href="/" class="nav-link">${t('nav.home', lang)}</a>
-                        <a href="/projects" class="nav-link">${t('nav.find_projects', lang)}</a>
-                        <a href="/freelancers" class="nav-link">${t('nav.find_experts', lang)}</a>
-                        <a href="/categories" class="nav-link">${t('nav.categories', lang)}</a>
+                        <a href="/?lang=${lang}" class="nav-link">${t('nav.home', lang)}</a>
+                        <a href="javascript:void(0)" onclick="navigateToProjects()" class="nav-link">${t('nav.find_projects', lang)}</a>
+                        <a href="javascript:void(0)" onclick="navigateToFreelancers()" class="nav-link">${t('nav.find_experts', lang)}</a>
+                        <a href="javascript:void(0)" onclick="navigateToCategories()" class="nav-link">${t('nav.categories', lang)}</a>
                     </div>
                     
                     <div class="flex items-center space-x-4">
@@ -421,10 +421,10 @@ app.get('/', (c) => {
                     ${t('platform.global_description', lang)}
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4 items-center">
-                    <button class="btn-secondary px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform" style="min-height: 56px;">
+                    <button onclick="navigateToProjects()" class="btn-secondary px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform" style="min-height: 56px;">
                         ${t('nav.find_projects', lang)}
                     </button>
-                    <button class="bg-white text-gray-900 px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform shadow-lg" style="min-height: 56px;">
+                    <button onclick="navigateToFreelancers()" class="bg-white text-gray-900 px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform shadow-lg" style="min-height: 56px;">
                         ${t('nav.find_experts', lang)}
                     </button>
                 </div>
@@ -867,9 +867,9 @@ app.get('/', (c) => {
                     <div>
                         <h4 class="font-semibold mb-4 text-lg">${lang === 'ko' ? '서비스' : lang === 'en' ? 'Services' : lang === 'zh' ? '服务' : 'サービス'}</h4>
                         <ul class="space-y-3 opacity-70">
-                            <li><a href="/projects" class="hover:opacity-100 transition">${t('nav.find_projects', lang)}</a></li>
-                            <li><a href="/freelancers" class="hover:opacity-100 transition">${t('nav.find_experts', lang)}</a></li>
-                            <li><a href="/categories" class="hover:opacity-100 transition">${t('nav.categories', lang)}</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToProjects()" class="hover:opacity-100 transition cursor-pointer">${t('nav.find_projects', lang)}</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToFreelancers()" class="hover:opacity-100 transition cursor-pointer">${t('nav.find_experts', lang)}</a></li>
+                            <li><a href="javascript:void(0)" onclick="navigateToCategories()" class="hover:opacity-100 transition cursor-pointer">${t('nav.categories', lang)}</a></li>
                         </ul>
                     </div>
                     <div>
@@ -894,76 +894,204 @@ app.get('/', (c) => {
             </div>
         </footer>
 
+        <!-- Modal Container -->
+        <div id="modalContainer" class="hidden fixed inset-0 z-50 overflow-y-auto">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75" onclick="closeModal()"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+                <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div id="modalContent"></div>
+                </div>
+            </div>
+        </div>
+
         <script>
-            function changeLang(lang) {
+            const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
+            
+            const translations = {
+                ko: {
+                    notices: { title: '🎉 FeeZero 플랫폼 오픈!', items: ['세계 최저 수수료: 의뢰인 2%, 개발자 0%', '8개국 언어 지원', 'USDT 결제로 안전한 거래', 'AI 기반 프로젝트 매칭'] },
+                    register: { title: '회원가입', userType: '회원 유형', client: '의뢰인', freelancer: '프리랜서', email: '이메일', password: '비밀번호', confirmPw: '비밀번호 확인', fullName: '이름', phone: '전화번호', country: '국가', submit: '가입하기', cancel: '취소' },
+                    login: { title: '로그인', email: '이메일', password: '비밀번호', submit: '로그인', cancel: '취소', forgot: '비밀번호 찾기' }
+                },
+                en: {
+                    notices: { title: '🎉 FeeZero Platform Launch!', items: ['Lowest fees: Client 2%, Developer 0%', '8 language support', 'Secure USDT transactions', 'AI-powered matching'] },
+                    register: { title: 'Sign Up', userType: 'User Type', client: 'Client', freelancer: 'Freelancer', email: 'Email', password: 'Password', confirmPw: 'Confirm Password', fullName: 'Full Name', phone: 'Phone', country: 'Country', submit: 'Sign Up', cancel: 'Cancel' },
+                    login: { title: 'Login', email: 'Email', password: 'Password', submit: 'Login', cancel: 'Cancel', forgot: 'Forgot Password' }
+                },
+                zh: {
+                    notices: { title: '🎉 FeeZero 平台开放！', items: ['最低手续费：委托人2%，开发者0%', '支持8种语言', 'USDT安全交易', 'AI项目匹配'] },
+                    register: { title: '注册', userType: '用户类型', client: '委托人', freelancer: '自由职业者', email: '电子邮件', password: '密码', confirmPw: '确认密码', fullName: '姓名', phone: '电话', country: '国家', submit: '注册', cancel: '取消' },
+                    login: { title: '登录', email: '电子邮件', password: '密码', submit: '登录', cancel: '取消', forgot: '忘记密码' }
+                },
+                ja: {
+                    notices: { title: '🎉 FeeZeroオープン！', items: ['最低手数料：依頼者2%、開発者0%', '8言語対応', 'USDT安全取引', 'AIマッチング'] },
+                    register: { title: '会員登録', userType: 'ユーザータイプ', client: '依頼者', freelancer: 'フリーランサー', email: 'メール', password: 'パスワード', confirmPw: 'パスワード確認', fullName: '氏名', phone: '電話番号', country: '国', submit: '登録', cancel: 'キャンセル' },
+                    login: { title: 'ログイン', email: 'メール', password: 'パスワード', submit: 'ログイン', cancel: 'キャンセル', forgot: 'パスワード再設定' }
+                },
+                vi: {
+                    notices: { title: '🎉 FeeZero ra mắt!', items: ['Phí thấp nhất: Khách 2%, Dev 0%', 'Hỗ trợ 8 ngôn ngữ', 'Giao dịch USDT an toàn', 'Ghép đôi AI'] },
+                    register: { title: 'Đăng ký', userType: 'Loại người dùng', client: 'Khách hàng', freelancer: 'Freelancer', email: 'Email', password: 'Mật khẩu', confirmPw: 'Xác nhận MK', fullName: 'Họ tên', phone: 'Điện thoại', country: 'Quốc gia', submit: 'Đăng ký', cancel: 'Hủy' },
+                    login: { title: 'Đăng nhập', email: 'Email', password: 'Mật khẩu', submit: 'Đăng nhập', cancel: 'Hủy', forgot: 'Quên mật khẩu' }
+                },
+                th: {
+                    notices: { title: '🎉 FeeZero เปิดตัว!', items: ['ค่าธรรมเนียมต่ำสุด: ลูกค้า 2%, Dev 0%', 'รองรับ 8 ภาษา', 'ธุรกรรม USDT ปลอดภัย', 'จับคู่ AI'] },
+                    register: { title: 'สมัครสมาชิก', userType: 'ประเภทผู้ใช้', client: 'ลูกค้า', freelancer: 'ฟรีแลนซ์', email: 'อีเมล', password: 'รหัสผ่าน', confirmPw: 'ยืนยันรหัสผ่าน', fullName: 'ชื่อ', phone: 'โทรศัพท์', country: 'ประเทศ', submit: 'สมัคร', cancel: 'ยกเลิก' },
+                    login: { title: 'เข้าสู่ระบบ', email: 'อีเมล', password: 'รหัสผ่าน', submit: 'เข้าสู่ระบบ', cancel: 'ยกเลิก', forgot: 'ลืมรหัสผ่าน' }
+                },
+                es: {
+                    notices: { title: '🎉 ¡FeeZero lanzado!', items: ['Tarifas más bajas: Cliente 2%, Dev 0%', 'Soporte 8 idiomas', 'Transacciones USDT seguras', 'Emparejamiento IA'] },
+                    register: { title: 'Registro', userType: 'Tipo de usuario', client: 'Cliente', freelancer: 'Freelancer', email: 'Correo', password: 'Contraseña', confirmPw: 'Confirmar contraseña', fullName: 'Nombre', phone: 'Teléfono', country: 'País', submit: 'Registrarse', cancel: 'Cancelar' },
+                    login: { title: 'Iniciar sesión', email: 'Correo', password: 'Contraseña', submit: 'Iniciar', cancel: 'Cancelar', forgot: 'Olvidé contraseña' }
+                },
+                de: {
+                    notices: { title: '🎉 FeeZero Start!', items: ['Niedrigste Gebühren: Kunde 2%, Dev 0%', '8 Sprachen', 'Sichere USDT-Transaktionen', 'KI-Matching'] },
+                    register: { title: 'Registrierung', userType: 'Benutzertyp', client: 'Kunde', freelancer: 'Freiberufler', email: 'E-Mail', password: 'Passwort', confirmPw: 'Passwort bestätigen', fullName: 'Name', phone: 'Telefon', country: 'Land', submit: 'Registrieren', cancel: 'Abbrechen' },
+                    login: { title: 'Anmelden', email: 'E-Mail', password: 'Passwort', submit: 'Anmelden', cancel: 'Abbrechen', forgot: 'Passwort vergessen' }
+                }
+            };
+            
+            const t = translations[lang] || translations.ko;
+            
+            function changeLang(newLang) {
                 const url = new URL(window.location.href);
-                url.searchParams.set('lang', lang);
+                url.searchParams.set('lang', newLang);
                 window.location.href = url.toString();
             }
             
-            // Show notices modal
+            function openModal(content) {
+                document.getElementById('modalContent').innerHTML = content;
+                document.getElementById('modalContainer').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeModal() {
+                document.getElementById('modalContainer').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+            
             function showNotices() {
-                const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
-                const notices = {
-                    ko: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero 플랫폼 오픈!</h3><ul class="list-disc pl-5 space-y-2"><li>세계 최저 수수료: 의뢰인 2%, 개발자 0%</li><li>8개국 언어 지원 (한/영/중/일/베트남/태국/스페인/독일)</li><li>USDT 결제로 안전한 거래</li><li>AI 기반 프로젝트 매칭 시스템</li></ul>',
-                    en: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero Platform Launch!</h3><ul class="list-disc pl-5 space-y-2"><li>World\\'s lowest fees: Client 2%, Developer 0%</li><li>8 language support (KR/EN/CN/JP/VN/TH/ES/DE)</li><li>Secure transactions with USDT</li><li>AI-powered project matching system</li></ul>',
-                    zh: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero 平台开放！</h3><ul class="list-disc pl-5 space-y-2"><li>全球最低手续费：委托人2%，开发者0%</li><li>支持8种语言（韩/英/中/日/越/泰/西/德）</li><li>使用USDT安全交易</li><li>AI驱动的项目匹配系统</li></ul>',
-                    ja: '<h3 class="text-xl font-bold mb-4">🎉 FeeZeroプラットフォームオープン！</h3><ul class="list-disc pl-5 space-y-2"><li>世界最低手数料：依頼者2%、開発者0%</li><li>8カ国語対応（韓/英/中/日/越/タイ/西/独）</li><li>USDTで安全な取引</li><li>AI搭載プロジェクトマッチングシステム</li></ul>',
-                    vi: '<h3 class="text-xl font-bold mb-4">🎉 Nền tảng FeeZero ra mắt!</h3><ul class="list-disc pl-5 space-y-2"><li>Phí thấp nhất thế giới: Khách hàng 2%, Nhà phát triển 0%</li><li>Hỗ trợ 8 ngôn ngữ (Hàn/Anh/Trung/Nhật/Việt/Thái/Tây/Đức)</li><li>Giao dịch an toàn với USDT</li><li>Hệ thống ghép dự án AI</li></ul>',
-                    th: '<h3 class="text-xl font-bold mb-4">🎉 เปิดตัวแพลตฟอร์ม FeeZero!</h3><ul class="list-disc pl-5 space-y-2"><li>ค่าธรรมเนียมต่ำสุดในโลก: ลูกค้า 2% นักพัฒนา 0%</li><li>รองรับ 8 ภาษา (เกาหลี/อังกฤษ/จีน/ญี่ปุ่น/เวียดนาม/ไทย/สเปน/เยอรมัน)</li><li>ธุรกรรมปลอดภัยด้วย USDT</li><li>ระบบจับคู่โครงการ AI</li></ul>',
-                    es: '<h3 class="text-xl font-bold mb-4">🎉 ¡Lanzamiento de la plataforma FeeZero!</h3><ul class="list-disc pl-5 space-y-2"><li>Tarifas más bajas del mundo: Cliente 2%, Desarrollador 0%</li><li>Soporte para 8 idiomas (KR/EN/CN/JP/VN/TH/ES/DE)</li><li>Transacciones seguras con USDT</li><li>Sistema de emparejamiento de proyectos con IA</li></ul>',
-                    de: '<h3 class="text-xl font-bold mb-4">🎉 FeeZero-Plattform-Start!</h3><ul class="list-disc pl-5 space-y-2"><li>Weltweit niedrigste Gebühren: Kunde 2%, Entwickler 0%</li><li>8-Sprachen-Unterstützung (KR/EN/CN/JP/VN/TH/ES/DE)</li><li>Sichere Transaktionen mit USDT</li><li>KI-gestütztes Projekt-Matching-System</li></ul>'
-                };
-                
-                alert(notices[lang] || notices.ko);
+                const content = \`
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold mb-6 text-luxury">\${t.notices.title}</h3>
+                        <ul class="space-y-3 mb-6">
+                            \${t.notices.items.map(item => \`<li class="flex items-start"><span class="text-xl mr-2" style="color: var(--deep-navy);">✓</span><span class="text-sub">\${item}</span></li>\`).join('')}
+                        </ul>
+                        <button onclick="closeModal()" class="btn-primary w-full py-3 rounded-full font-medium">
+                            \${t.register.cancel}
+                        </button>
+                    </div>
+                \`;
+                openModal(content);
             }
             
-            // Show register modal
             function showRegister() {
-                const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
-                const messages = {
-                    ko: '회원가입 기능이 곧 제공됩니다!\\n\\n지원 기능:\\n✓ 의뢰인/프리랜서 선택\\n✓ 이메일 인증\\n✓ 프로필 설정\\n✓ 포트폴리오 업로드',
-                    en: 'Registration feature coming soon!\\n\\nFeatures:\\n✓ Client/Freelancer selection\\n✓ Email verification\\n✓ Profile setup\\n✓ Portfolio upload',
-                    zh: '注册功能即将推出！\\n\\n功能：\\n✓ 委托人/自由职业者选择\\n✓ 电子邮件验证\\n✓ 个人资料设置\\n✓ 作品集上传',
-                    ja: '会員登録機能は間もなく提供されます！\\n\\n機能：\\n✓ 依頼者/フリーランサー選択\\n✓ メール認証\\n✓ プロフィール設定\\n✓ ポートフォリオアップロード',
-                    vi: 'Tính năng đăng ký sắp ra mắt!\\n\\nTính năng:\\n✓ Chọn Khách hàng/Freelancer\\n✓ Xác minh email\\n✓ Thiết lập hồ sơ\\n✓ Tải lên portfolio',
-                    th: 'ฟีเจอร์การลงทะเบียนเร็วๆ นี้!\\n\\nฟีเจอร์:\\n✓ เลือกลูกค้า/ฟรีแลนซ์\\n✓ ยืนยันอีเมล\\n✓ ตั้งค่าโปรไฟล์\\n✓ อัปโหลดพอร์ตโฟลิโอ',
-                    es: '¡Función de registro próximamente!\\n\\nCaracterísticas:\\n✓ Selección Cliente/Freelancer\\n✓ Verificación de correo\\n✓ Configuración de perfil\\n✓ Carga de portafolio',
-                    de: 'Registrierungsfunktion in Kürze!\\n\\nFunktionen:\\n✓ Kunde/Freiberufler-Auswahl\\n✓ E-Mail-Verifizierung\\n✓ Profil-Einrichtung\\n✓ Portfolio-Upload'
-                };
-                
-                alert(messages[lang] || messages.ko);
+                const content = \`
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold mb-6 text-luxury">\${t.register.title}</h3>
+                        <form onsubmit="handleRegister(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.register.userType}</label>
+                                <select name="userType" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                                    <option value="client">\${t.register.client}</option>
+                                    <option value="freelancer">\${t.register.freelancer}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.register.email}</label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.register.password}</label>
+                                <input type="password" name="password" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.register.confirmPw}</label>
+                                <input type="password" name="confirmPassword" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.register.fullName}</label>
+                                <input type="text" name="fullName" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                            </div>
+                            <div class="flex gap-4 mt-6">
+                                <button type="button" onclick="closeModal()" class="btn-secondary flex-1 py-3 rounded-full font-medium" style="min-height: 44px;">
+                                    \${t.register.cancel}
+                                </button>
+                                <button type="submit" class="btn-primary flex-1 py-3 rounded-full font-medium" style="min-height: 44px;">
+                                    \${t.register.submit}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+                openModal(content);
             }
             
-            // Show login modal
             function showLogin() {
-                const lang = new URL(window.location.href).searchParams.get('lang') || 'ko';
-                const messages = {
-                    ko: '로그인 기능이 곧 제공됩니다!\\n\\n지원 로그인:\\n✓ 이메일/비밀번호\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ 2단계 인증',
-                    en: 'Login feature coming soon!\\n\\nLogin options:\\n✓ Email/Password\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Two-factor authentication',
-                    zh: '登录功能即将推出！\\n\\n登录选项：\\n✓ 电子邮件/密码\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ 双因素认证',
-                    ja: 'ログイン機能は間もなく提供されます！\\n\\nログインオプション：\\n✓ メール/パスワード\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ 二段階認証',
-                    vi: 'Tính năng đăng nhập sắp ra mắt!\\n\\nTùy chọn đăng nhập:\\n✓ Email/Mật khẩu\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Xác thực hai yếu tố',
-                    th: 'ฟีเจอร์เข้าสู่ระบบเร็วๆ นี้!\\n\\nตัวเลือกการเข้าสู่ระบบ:\\n✓ อีเมล/รหัสผ่าน\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ การยืนยันสองขั้นตอน',
-                    es: '¡Función de inicio de sesión próximamente!\\n\\nOpciones de inicio:\\n✓ Correo/Contraseña\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Autenticación de dos factores',
-                    de: 'Login-Funktion in Kürze!\\n\\nLogin-Optionen:\\n✓ E-Mail/Passwort\\n✓ Google OAuth\\n✓ GitHub OAuth\\n✓ Zwei-Faktor-Authentifizierung'
-                };
-                
-                alert(messages[lang] || messages.ko);
+                const content = \`
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold mb-6 text-luxury">\${t.login.title}</h3>
+                        <form onsubmit="handleLogin(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.login.email}</label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${t.login.password}</label>
+                                <input type="password" name="password" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-transparent" style="min-height: 44px;">
+                            </div>
+                            <div class="text-right">
+                                <a href="#" class="text-sm text-sub hover:text-luxury">\${t.login.forgot}</a>
+                            </div>
+                            <div class="flex gap-4 mt-6">
+                                <button type="button" onclick="closeModal()" class="btn-secondary flex-1 py-3 rounded-full font-medium" style="min-height: 44px;">
+                                    \${t.login.cancel}
+                                </button>
+                                <button type="submit" class="btn-primary flex-1 py-3 rounded-full font-medium" style="min-height: 44px;">
+                                    \${t.login.submit}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+                openModal(content);
             }
             
-            // Load data from API
-            async function loadData() {
-                try {
-                    const response = await fetch('/api/categories?lang=${lang}');
-                    const data = await response.json();
-                    console.log('Categories:', data);
-                } catch (error) {
-                    console.error('Error loading data:', error);
-                }
+            function handleRegister(e) {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
+                console.log('Register data:', data);
+                alert(\`\${t.register.title} \${lang === 'ko' ? '성공!' : 'Success!'}\n\${lang === 'ko' ? '환영합니다' : 'Welcome'}: \${data.email}\`);
+                closeModal();
             }
             
-            loadData();
+            function handleLogin(e) {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
+                console.log('Login data:', data);
+                alert(\`\${t.login.title} \${lang === 'ko' ? '성공!' : 'Success!'}\n\${lang === 'ko' ? '환영합니다' : 'Welcome'}: \${data.email}\`);
+                closeModal();
+            }
+            
+            // Navigation functions
+            function navigateToProjects() {
+                window.location.href = '/projects?lang=' + lang;
+            }
+            
+            function navigateToFreelancers() {
+                window.location.href = '/freelancers?lang=' + lang;
+            }
+            
+            function navigateToCategories() {
+                window.location.href = '/categories?lang=' + lang;
+            }
+            
+            // Close modal on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
         </script>
     </body>
     </html>

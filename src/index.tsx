@@ -296,15 +296,17 @@ app.get('/', (c) => {
                     </div>
                     
                     <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-1">
-                            <button onclick="changeLang('ko')" class="px-2 py-1 text-sm rounded ${lang === 'ko' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="한국어">한</button>
-                            <button onclick="changeLang('en')" class="px-2 py-1 text-sm rounded ${lang === 'en' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="English">EN</button>
-                            <button onclick="changeLang('zh')" class="px-2 py-1 text-sm rounded ${lang === 'zh' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="中文">中</button>
-                            <button onclick="changeLang('ja')" class="px-2 py-1 text-sm rounded ${lang === 'ja' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="日本語">日</button>
-                            <button onclick="changeLang('vi')" class="px-2 py-1 text-sm rounded ${lang === 'vi' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Tiếng Việt">VI</button>
-                            <button onclick="changeLang('th')" class="px-2 py-1 text-sm rounded ${lang === 'th' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="ไทย">TH</button>
-                            <button onclick="changeLang('es')" class="px-2 py-1 text-sm rounded ${lang === 'es' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Español">ES</button>
-                            <button onclick="changeLang('de')" class="px-2 py-1 text-sm rounded ${lang === 'de' ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}" title="Deutsch">DE</button>
+                        <div class="relative">
+                            <select onchange="changeLang(this.value)" class="px-3 py-1.5 text-sm rounded-md bg-gray-700 text-white border border-gray-600 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer">
+                                <option value="ko" ${lang === 'ko' ? 'selected' : ''}>🇰🇷 한국어</option>
+                                <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸 English</option>
+                                <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 中文</option>
+                                <option value="ja" ${lang === 'ja' ? 'selected' : ''}>🇯🇵 日本語</option>
+                                <option value="vi" ${lang === 'vi' ? 'selected' : ''}>🇻🇳 Tiếng Việt</option>
+                                <option value="th" ${lang === 'th' ? 'selected' : ''}>🇹🇭 ไทย</option>
+                                <option value="es" ${lang === 'es' ? 'selected' : ''}>🇪🇸 Español</option>
+                                <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪 Deutsch</option>
+                            </select>
                         </div>
                         <button onclick="showNotices()" class="text-gray-700 hover:text-purple-600">
                             <i class="fas fa-bell mr-1"></i>

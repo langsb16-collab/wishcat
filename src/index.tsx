@@ -249,55 +249,137 @@ app.get('/', (c) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+          
+          :root {
+            --ivory-white: #FAFAF7;
+            --charcoal-black: #1C1C1E;
+            --warm-gray: #6E6E73;
+            --deep-navy: #0B1C2D;
+            --accent-gold: #D4AF37;
+          }
+          
+          * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
           
           body {
-            font-family: 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+            background-color: var(--ivory-white);
+            color: var(--charcoal-black);
+            letter-spacing: -0.01em;
           }
           
           .hero-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--deep-navy) 0%, #1a2c3d 100%);
           }
           
           .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
           
           .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+          }
+          
+          .btn-primary {
+            background: var(--deep-navy);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(11, 28, 45, 0.25);
+          }
+          
+          .btn-primary:hover {
+            background: #0f2338;
+            box-shadow: 0 6px 20px rgba(11, 28, 45, 0.35);
+            transform: translateY(-2px);
+          }
+          
+          .btn-secondary {
+            background: white;
+            color: var(--charcoal-black);
+            border: 1px solid #e5e5e5;
+            transition: all 0.3s ease;
+          }
+          
+          .btn-secondary:hover {
+            background: #f8f8f8;
+            border-color: var(--warm-gray);
+          }
+          
+          .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+          }
+          
+          .nav-link {
+            color: var(--warm-gray);
+            transition: color 0.2s ease;
+            font-weight: 500;
+            font-size: 15px;
+          }
+          
+          .nav-link:hover {
+            color: var(--charcoal-black);
+          }
+          
+          .feature-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          
+          .feature-card:hover {
+            border-color: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+          }
+          
+          h1, h2, h3 {
+            letter-spacing: -0.02em;
+          }
+          
+          .text-luxury {
+            color: var(--charcoal-black);
+            font-weight: 600;
+          }
+          
+          .text-sub {
+            color: var(--warm-gray);
+          }
+          
+          @media (max-width: 768px) {
+            .feature-card {
+              padding: 24px;
+            }
           }
         </style>
     </head>
-    <body class="bg-gray-50">
+    <body>
         <!-- Navigation -->
-        <nav class="bg-white shadow-md sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
+        <nav class="glass-effect sticky top-0 z-50 border-b border-gray-200" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
                     <div class="flex items-center">
-                        <span class="text-2xl font-bold text-purple-600">
-                            <i class="fas fa-handshake mr-2"></i>${t('platform.name', lang)}
+                        <span class="text-2xl font-semibold text-luxury tracking-tight">
+                            ${t('platform.name', lang)}
                         </span>
                     </div>
                     
-                    <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-purple-600">
-                            <i class="fas fa-home mr-1"></i>${t('nav.home', lang)}
-                        </a>
-                        <a href="/projects" class="text-gray-700 hover:text-purple-600">
-                            <i class="fas fa-briefcase mr-1"></i>${t('nav.find_projects', lang)}
-                        </a>
-                        <a href="/freelancers" class="text-gray-700 hover:text-purple-600">
-                            <i class="fas fa-users mr-1"></i>${t('nav.find_experts', lang)}
-                        </a>
-                        <a href="/categories" class="text-gray-700 hover:text-purple-600">
-                            <i class="fas fa-th-large mr-1"></i>${t('nav.categories', lang)}
-                        </a>
+                    <div class="hidden md:flex items-center space-x-10">
+                        <a href="/" class="nav-link">${t('nav.home', lang)}</a>
+                        <a href="/projects" class="nav-link">${t('nav.find_projects', lang)}</a>
+                        <a href="/freelancers" class="nav-link">${t('nav.find_experts', lang)}</a>
+                        <a href="/categories" class="nav-link">${t('nav.categories', lang)}</a>
                     </div>
                     
                     <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <select onchange="changeLang(this.value)" class="px-3 py-1.5 text-sm rounded-md bg-gray-700 text-white border border-gray-600 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer">
+                            <select onchange="changeLang(this.value)" class="px-4 py-2 text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer font-medium" style="min-height: 44px;">
                                 <option value="ko" ${lang === 'ko' ? 'selected' : ''}>🇰🇷 한국어</option>
                                 <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸 English</option>
                                 <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 中文</option>
@@ -308,15 +390,14 @@ app.get('/', (c) => {
                                 <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪 Deutsch</option>
                             </select>
                         </div>
-                        <button onclick="showNotices()" class="text-gray-700 hover:text-purple-600">
-                            <i class="fas fa-bell mr-1"></i>
-                            ${lang === 'ko' ? '공지' : lang === 'en' ? 'Notice' : lang === 'zh' ? '公告' : lang === 'ja' ? 'お知らせ' : lang === 'vi' ? 'Thông báo' : lang === 'th' ? 'ประกาศ' : lang === 'es' ? 'Aviso' : 'Hinweis'}
+                        <button onclick="showNotices()" class="nav-link p-2 hover:bg-gray-50 rounded-lg transition" style="min-width: 44px; min-height: 44px;">
+                            <i class="fas fa-bell"></i>
                         </button>
-                        <button onclick="showRegister()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                            <i class="fas fa-user-plus mr-1"></i>${t('auth.register', lang)}
+                        <button onclick="showRegister()" class="btn-secondary px-6 py-2.5 rounded-full font-medium" style="min-height: 44px;">
+                            ${t('auth.register', lang)}
                         </button>
-                        <button onclick="showLogin()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                            <i class="fas fa-sign-in-alt mr-1"></i>${t('auth.login', lang)}
+                        <button onclick="showLogin()" class="btn-primary px-6 py-2.5 rounded-full font-medium" style="min-height: 44px;">
+                            ${t('auth.login', lang)}
                         </button>
                     </div>
                 </div>
@@ -324,71 +405,74 @@ app.get('/', (c) => {
         </nav>
 
         <!-- Hero Section -->
-        <div class="hero-gradient text-white py-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h1 class="text-5xl font-bold mb-6">
+        <div class="hero-gradient text-white py-32">
+            <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+                <h1 class="text-6xl md:text-7xl font-semibold mb-8 leading-tight tracking-tight">
                     ${t('platform.tagline', lang)}
                 </h1>
-                <div class="flex items-center justify-center space-x-2 mb-4">
-                    <i class="fab fa-bitcoin text-3xl"></i>
-                    <p class="text-2xl font-bold">
+                <div class="inline-flex items-center space-x-3 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
+                    <i class="fab fa-bitcoin text-2xl"></i>
+                    <p class="text-xl font-medium">
                         ${lang === 'ko' ? '모든 거래는 테더 USDT' : lang === 'en' ? 'All Transactions in Tether USDT' : lang === 'zh' ? '所有交易均使用泰达币USDT' : lang === 'ja' ? 'すべての取引はテザーUSDT' : lang === 'vi' ? 'Tất cả giao dịch bằng Tether USDT' : lang === 'th' ? 'ธุรกรรมทั้งหมดด้วย Tether USDT' : lang === 'es' ? 'Todas las transacciones en Tether USDT' : 'Alle Transaktionen in Tether USDT'}
                     </p>
                 </div>
-                <p class="text-xl mb-4">${t('platform.fee_policy', lang)}</p>
-                <p class="text-lg mb-8 opacity-90">
+                <p class="text-2xl mb-6 font-light opacity-95">${t('platform.fee_policy', lang)}</p>
+                <p class="text-lg mb-12 opacity-80 max-w-3xl mx-auto leading-relaxed">
                     ${t('platform.global_description', lang)}
                 </p>
-                <div class="flex justify-center space-x-4">
-                    <button class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                        <i class="fas fa-briefcase mr-2"></i>${t('nav.find_projects', lang)}
+                <div class="flex flex-col sm:flex-row justify-center gap-4 items-center">
+                    <button class="btn-secondary px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform" style="min-height: 56px;">
+                        ${t('nav.find_projects', lang)}
                     </button>
-                    <button class="bg-purple-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-900 transition">
-                        <i class="fas fa-users mr-2"></i>${t('nav.find_experts', lang)}
+                    <button class="bg-white text-gray-900 px-10 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform shadow-lg" style="min-height: 56px;">
+                        ${t('nav.find_experts', lang)}
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Features Section -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+            <h2 class="text-5xl font-semibold text-center mb-4 text-luxury">
                 ${t('footer.why_choose', lang)}
             </h2>
+            <p class="text-center text-sub text-lg mb-16 max-w-2xl mx-auto">
+                ${lang === 'ko' ? '프리미엄 프리랜서 플랫폼의 새로운 기준' : lang === 'en' ? 'A new standard for premium freelance platforms' : lang === 'zh' ? '高级自由职业平台的新标准' : lang === 'ja' ? 'プレミアムフリーランスプラットフォームの新基準' : 'A new standard for premium freelance platforms'}
+            </p>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-xl shadow-lg card-hover text-center">
-                    <div class="text-5xl text-purple-600 mb-4">
+                <div class="feature-card text-center card-hover">
+                    <div class="text-5xl mb-6" style="color: var(--deep-navy);">
                         <i class="fas fa-percentage"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">
+                    <h3 class="text-2xl font-semibold mb-4 text-luxury">
                         ${t('feature.lowest_fees', lang)}
                     </h3>
-                    <p class="text-gray-600">
+                    <p class="text-sub leading-relaxed">
                         ${t('feature.lowest_fees_desc', lang)}
                     </p>
                 </div>
                 
-                <div class="bg-white p-8 rounded-xl shadow-lg card-hover text-center">
-                    <div class="text-5xl text-green-600 mb-4">
+                <div class="feature-card text-center card-hover">
+                    <div class="text-5xl mb-6" style="color: #D4AF37;">
                         <i class="fab fa-bitcoin"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">
+                    <h3 class="text-2xl font-semibold mb-4 text-luxury">
                         ${t('feature.usdt_payment', lang)}
                     </h3>
-                    <p class="text-gray-600">
+                    <p class="text-sub leading-relaxed">
                         ${t('feature.usdt_payment_desc', lang)}
                     </p>
                 </div>
                 
-                <div class="bg-white p-8 rounded-xl shadow-lg card-hover text-center">
-                    <div class="text-5xl text-blue-600 mb-4">
+                <div class="feature-card text-center card-hover">
+                    <div class="text-5xl mb-6" style="color: var(--deep-navy);">
                         <i class="fas fa-globe"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">
+                    <h3 class="text-2xl font-semibold mb-4 text-luxury">
                         ${t('feature.global_network', lang)}
                     </h3>
-                    <p class="text-gray-600">
+                    <p class="text-sub leading-relaxed">
                         ${t('feature.global_network_desc', lang)}
                     </p>
                 </div>
@@ -396,9 +480,9 @@ app.get('/', (c) => {
         </div>
 
         <!-- Core Differentiators Section -->
-        <div class="bg-gray-50 py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">
+        <div class="py-24" style="background: linear-gradient(180deg, #FAFAF7 0%, #F5F5F2 100%);">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <h2 class="text-5xl font-semibold text-center mb-4 text-luxury">
                     ${lang === 'ko' ? '위시캣·프리모아 단점을 해결하는 핵심 기능' : 
                       lang === 'en' ? 'Core Features Solving Wishket·Freemoa Issues' :
                       lang === 'zh' ? '解决Wishket·Freemoa缺点的核心功能' :
@@ -408,7 +492,7 @@ app.get('/', (c) => {
                       lang === 'es' ? 'Características principales que resuelven problemas de Wishket·Freemoa' :
                       'Kernfunktionen zur Lösung von Wishket·Freemoa-Problemen'}
                 </h2>
-                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+                <p class="text-center text-sub text-lg mb-16 max-w-3xl mx-auto leading-relaxed">
                     ${lang === 'ko' ? '기존 플랫폼은 "사람 중심 중개", FeeZero는 "시스템 중심 프로젝트 관리"' : 
                       lang === 'en' ? 'Existing platforms: "People-centered brokerage", FeeZero: "System-centered project management"' :
                       lang === 'zh' ? '现有平台："以人为中心的中介"，FeeZero："以系统为中心的项目管理"' :
@@ -419,14 +503,14 @@ app.get('/', (c) => {
                       'Bestehende Plattformen: "Personenzentrierte Vermittlung", FeeZero: "Systemzentriertes Projektmanagement"'}
                 </p>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Feature 1: AI-based Standard Quotation -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-blue-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-calculator"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? 'AI 기반 표준 견적' : 
                                   lang === 'en' ? 'AI-based Standard Quotation' :
                                   lang === 'zh' ? 'AI标准报价' :
@@ -437,7 +521,7 @@ app.get('/', (c) => {
                                   'AI-basiertes Standardangebot'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '기능 수 자동 분해, 기술 스택별 난이도 점수화, 예상 개발 기간 자동 산출로 투명한 가격 책정' : 
                               lang === 'en' ? 'Automatic feature breakdown, tech stack difficulty scoring, auto development timeline for transparent pricing' :
                               lang === 'zh' ? '自动功能分解，技术栈难度评分，自动开发时间计算，透明定价' :
@@ -450,12 +534,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 2: Success Criteria Definition -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-green-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: #2D7A3E;">
                                 <i class="fas fa-check-double"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '성공 기준 자동 정의' : 
                                   lang === 'en' ? 'Auto Success Criteria' :
                                   lang === 'zh' ? '自动成功标准' :
@@ -466,7 +550,7 @@ app.get('/', (c) => {
                                   'Automatische Erfolgskriterien'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '개발 완료 기준 자동 체크리스트, 기능별 완료 조건 명문화로 분쟁 70% 차단' : 
                               lang === 'en' ? 'Auto completion checklist, documented completion conditions to prevent 70% of disputes' :
                               lang === 'zh' ? '自动完成检查表，明确的完成条件可防止70%的纠纷' :
@@ -479,12 +563,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 3: Milestone Escrow -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-purple-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-lock"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '마일스톤 에스크로' : 
                                   lang === 'en' ? 'Milestone Escrow' :
                                   lang === 'zh' ? '里程碑托管' :
@@ -495,7 +579,7 @@ app.get('/', (c) => {
                                   'Meilenstein-Treuhand'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '단계별 분할 에스크로로 개발자·클라이언트 모두 리스크 감소, 미이행 시 자동 환불' : 
                               lang === 'en' ? 'Phased escrow reduces risk for both parties, automatic refund on non-performance' :
                               lang === 'zh' ? '分阶段托管降低双方风险，未履行时自动退款' :
@@ -508,12 +592,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 4: Trust Score System -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-yellow-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: #D4AF37;">
                                 <i class="fas fa-star"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '실전 검증 신뢰지수' : 
                                   lang === 'en' ? 'Verified Trust Score' :
                                   lang === 'zh' ? '实战验证信任指数' :
@@ -524,7 +608,7 @@ app.get('/', (c) => {
                                   'Verifizierter Vertrauens-Score'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '포트폴리오가 아닌 완료율, 일정 준수율, 재의뢰율 등 정량 지표로 실력 검증' : 
                               lang === 'en' ? 'Skill verification through quantitative metrics like completion rate, schedule adherence, re-hire rate, not portfolios' :
                               lang === 'zh' ? '通过完成率、时间表遵守率、重新雇佣率等定量指标验证技能，而非作品集' :
@@ -537,12 +621,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 5: AI PM Assistant -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-red-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-robot"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? 'AI PM 보조 시스템' : 
                                   lang === 'en' ? 'AI PM Assistant' :
                                   lang === 'zh' ? 'AI项目经理助手' :
@@ -553,7 +637,7 @@ app.get('/', (c) => {
                                   'KI-PM-Assistent'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '일정 지연 감지, 요구사항 변경 로그 자동 기록, 주간 리포트 자동 생성으로 품질 관리' : 
                               lang === 'en' ? 'Schedule delay detection, auto requirement change log, weekly report generation for quality management' :
                               lang === 'zh' ? '时间表延迟检测，自动需求变更日志，每周报告生成以进行质量管理' :
@@ -566,12 +650,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 6: Intermediate Deliverables -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-indigo-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: var(--deep-navy);">
                                 <i class="fas fa-code-branch"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '중간 결과물 제출' : 
                                   lang === 'en' ? 'Intermediate Deliverables' :
                                   lang === 'zh' ? '中间交付物' :
@@ -582,7 +666,7 @@ app.get('/', (c) => {
                                   'Zwischenergebnisse'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? 'Git/배포 링크 제출 의무화, 테스트 서버 접속 권한 공유로 블랙박스 개발 방지' : 
                               lang === 'en' ? 'Mandatory Git/deployment link submission, test server access sharing to prevent black-box development' :
                               lang === 'zh' ? '强制提交Git/部署链接，共享测试服务器访问权限以防止黑箱开发' :
@@ -595,12 +679,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 7: Delay Penalty System -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-orange-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: #FF6B35;">
                                 <i class="fas fa-clock"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '일정 지연 패널티' : 
                                   lang === 'en' ? 'Delay Penalty System' :
                                   lang === 'zh' ? '延迟惩罚系统' :
@@ -611,7 +695,7 @@ app.get('/', (c) => {
                                   'Verzögerungs-Strafsystem'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '지연 일수 자동 계산, 수수료 차감 or 클라이언트 보상으로 일정 준수 유도' : 
                               lang === 'en' ? 'Auto delay calculation, fee deduction or client compensation to encourage schedule adherence' :
                               lang === 'zh' ? '自动计算延迟天数，扣除费用或补偿客户以鼓励遵守时间表' :
@@ -624,12 +708,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 8: Requirement Translator -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-teal-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: #14B8A6;">
                                 <i class="fas fa-language"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '요구사항 자동 변환' : 
                                   lang === 'en' ? 'Requirement Translator' :
                                   lang === 'zh' ? '需求自动转换' :
@@ -640,7 +724,7 @@ app.get('/', (c) => {
                                   'Anforderungs-Übersetzer'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '자연어를 개발 요구사항으로 변환하는 AI로 기술 비전문가도 정확한 의뢰 가능' : 
                               lang === 'en' ? 'AI converts natural language to development requirements so non-technical clients can request accurately' :
                               lang === 'zh' ? 'AI将自然语言转换为开发需求，使非技术客户也能准确请求' :
@@ -653,12 +737,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 9: Project Insurance -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-pink-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: #EC4899;">
                                 <i class="fas fa-shield-alt"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '프로젝트 성공 보증' : 
                                   lang === 'en' ? 'Project Success Guarantee' :
                                   lang === 'zh' ? '项目成功保证' :
@@ -669,7 +753,7 @@ app.get('/', (c) => {
                                   'Projekterfolgsgarantie'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '일정·기능 미달 시 일부 보상 제공, 프리미엄 프로젝트 적용으로 플랫폼 신뢰도 상승' : 
                               lang === 'en' ? 'Partial compensation for schedule/feature shortfall, applied to premium projects to increase platform trust' :
                               lang === 'zh' ? '时间表/功能不足时提供部分补偿，应用于高级项目以提高平台信任度' :
@@ -682,12 +766,12 @@ app.get('/', (c) => {
                     </div>
 
                     <!-- Feature 10: Maintenance Transition -->
-                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                        <div class="flex items-center mb-4">
-                            <div class="text-3xl text-cyan-600 mr-3">
+                    <div class="feature-card card-hover">
+                        <div class="flex items-center mb-5">
+                            <div class="text-4xl mr-4" style="color: #06B6D4;">
                                 <i class="fas fa-tools"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800">
+                            <h3 class="text-xl font-semibold text-luxury">
                                 ${lang === 'ko' ? '운영·유지보수 연계' : 
                                   lang === 'en' ? 'Maintenance Transition' :
                                   lang === 'zh' ? '运营维护衔接' :
@@ -698,7 +782,7 @@ app.get('/', (c) => {
                                   'Wartungsübergang'}
                             </h3>
                         </div>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-sub text-base leading-relaxed">
                             ${lang === 'ko' ? '개발 완료 후 운영 전환 모드, 월 단위 유지보수 계약 자동 전환으로 장기 관리' : 
                               lang === 'en' ? 'Operation transition mode after development, auto monthly maintenance contract conversion for long-term management' :
                               lang === 'zh' ? '开发完成后运营转换模式，自动月度维护合同转换用于长期管理' :
@@ -712,9 +796,9 @@ app.get('/', (c) => {
                 </div>
                 
                 <!-- Global Connection Emphasis -->
-                <div class="mt-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white text-center">
-                    <h3 class="text-2xl font-bold mb-4">
-                        <i class="fas fa-globe-americas mr-2"></i>
+                <div class="mt-16 feature-card text-center" style="background: linear-gradient(135deg, var(--deep-navy) 0%, #1a2c3d 100%); color: white; padding: 48px;">
+                    <h3 class="text-4xl font-semibold mb-6">
+                        <i class="fas fa-globe-americas mr-3"></i>
                         ${lang === 'ko' ? '글로벌 의뢰인과 개발자 연결' : 
                           lang === 'en' ? 'Connecting Global Clients and Developers' :
                           lang === 'zh' ? '连接全球委托人和开发者' :
@@ -724,7 +808,7 @@ app.get('/', (c) => {
                           lang === 'es' ? 'Conectando clientes y desarrolladores globales' :
                           'Globale Kunden und Entwickler verbinden'}
                     </h3>
-                    <p class="text-lg mb-6">
+                    <p class="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
                         ${lang === 'ko' ? '8개 언어 지원으로 한국, 미국, 중국, 일본, 베트남, 태국, 스페인, 독일 등 전 세계 시장 연결' : 
                           lang === 'en' ? 'Supporting 8 languages to connect global markets: Korea, USA, China, Japan, Vietnam, Thailand, Spain, Germany' :
                           lang === 'zh' ? '支持8种语言连接全球市场：韩国、美国、中国、日本、越南、泰国、西班牙、德国' :
@@ -734,78 +818,78 @@ app.get('/', (c) => {
                           lang === 'es' ? 'Soporte para 8 idiomas para conectar mercados globales: Corea, EE.UU., China, Japón, Vietnam, Tailandia, España, Alemania' :
                           '8-Sprachen-Unterstützung zur Verbindung globaler Märkte: Korea, USA, China, Japan, Vietnam, Thailand, Spanien, Deutschland'}
                     </p>
-                    <div class="flex justify-center space-x-4 text-3xl">
-                        <span>🇰🇷</span>
-                        <span>🇺🇸</span>
-                        <span>🇨🇳</span>
-                        <span>🇯🇵</span>
-                        <span>🇻🇳</span>
-                        <span>🇹🇭</span>
-                        <span>🇪🇸</span>
-                        <span>🇩🇪</span>
+                    <div class="flex justify-center space-x-6 text-4xl">
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇰🇷</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇺🇸</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇨🇳</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇯🇵</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇻🇳</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇹🇭</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇪🇸</span>
+                        <span class="hover:scale-110 transition-transform cursor-pointer">🇩🇪</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Stats Section -->
-        <div class="bg-purple-600 text-white py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid md:grid-cols-4 gap-8 text-center">
-                    <div>
-                        <div class="text-4xl font-bold mb-2">10,000+</div>
-                        <div class="text-purple-200">${t('stats.freelancers', lang)}</div>
+        <div class="py-24" style="background: var(--deep-navy);">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="grid md:grid-cols-4 gap-12 text-center text-white">
+                    <div class="card-hover">
+                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">10,000+</div>
+                        <div class="text-lg opacity-80 font-light">${t('stats.freelancers', lang)}</div>
                     </div>
-                    <div>
-                        <div class="text-4xl font-bold mb-2">5,000+</div>
-                        <div class="text-purple-200">${t('stats.completed_projects', lang)}</div>
+                    <div class="card-hover">
+                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">5,000+</div>
+                        <div class="text-lg opacity-80 font-light">${t('stats.completed_projects', lang)}</div>
                     </div>
-                    <div>
-                        <div class="text-4xl font-bold mb-2">98%</div>
-                        <div class="text-purple-200">${t('stats.client_satisfaction', lang)}</div>
+                    <div class="card-hover">
+                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">98%</div>
+                        <div class="text-lg opacity-80 font-light">${t('stats.client_satisfaction', lang)}</div>
                     </div>
-                    <div>
-                        <div class="text-4xl font-bold mb-2">24/7</div>
-                        <div class="text-purple-200">${lang === 'ko' ? '고객 지원' : lang === 'en' ? 'Customer Support' : lang === 'zh' ? '客户支持' : 'カスタマーサポート'}</div>
+                    <div class="card-hover">
+                        <div class="text-6xl font-semibold mb-3" style="color: #D4AF37;">24/7</div>
+                        <div class="text-lg opacity-80 font-light">${lang === 'ko' ? '고객 지원' : lang === 'en' ? 'Customer Support' : lang === 'zh' ? '客户支持' : 'カスタマーサポート'}</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer class="bg-gray-800 text-white py-12">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid md:grid-cols-4 gap-8">
+        <footer class="py-16" style="background: var(--charcoal-black); color: white;">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="grid md:grid-cols-4 gap-12">
                     <div>
-                        <h4 class="text-xl font-bold mb-4">${t('platform.name', lang)}</h4>
-                        <p class="text-gray-400">${t('platform.tagline', lang)}</p>
+                        <h4 class="text-2xl font-semibold mb-4">${t('platform.name', lang)}</h4>
+                        <p class="opacity-60 leading-relaxed">${t('platform.tagline', lang)}</p>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">${lang === 'ko' ? '서비스' : lang === 'en' ? 'Services' : lang === 'zh' ? '服务' : 'サービス'}</h4>
-                        <ul class="space-y-2 text-gray-400">
-                            <li><a href="/projects" class="hover:text-white">${t('nav.find_projects', lang)}</a></li>
-                            <li><a href="/freelancers" class="hover:text-white">${t('nav.find_experts', lang)}</a></li>
-                            <li><a href="/categories" class="hover:text-white">${t('nav.categories', lang)}</a></li>
+                        <h4 class="font-semibold mb-4 text-lg">${lang === 'ko' ? '서비스' : lang === 'en' ? 'Services' : lang === 'zh' ? '服务' : 'サービス'}</h4>
+                        <ul class="space-y-3 opacity-70">
+                            <li><a href="/projects" class="hover:opacity-100 transition">${t('nav.find_projects', lang)}</a></li>
+                            <li><a href="/freelancers" class="hover:opacity-100 transition">${t('nav.find_experts', lang)}</a></li>
+                            <li><a href="/categories" class="hover:opacity-100 transition">${t('nav.categories', lang)}</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">${lang === 'ko' ? '지원' : lang === 'en' ? 'Support' : lang === 'zh' ? '支持' : 'サポート'}</h4>
-                        <ul class="space-y-2 text-gray-400">
-                            <li><a href="/faq" class="hover:text-white">FAQ</a></li>
-                            <li><a href="/contact" class="hover:text-white">${lang === 'ko' ? '문의하기' : lang === 'en' ? 'Contact' : lang === 'zh' ? '联系我们' : 'お問い合わせ'}</a></li>
+                        <h4 class="font-semibold mb-4 text-lg">${lang === 'ko' ? '지원' : lang === 'en' ? 'Support' : lang === 'zh' ? '支持' : 'サポート'}</h4>
+                        <ul class="space-y-3 opacity-70">
+                            <li><a href="/faq" class="hover:opacity-100 transition">FAQ</a></li>
+                            <li><a href="/contact" class="hover:opacity-100 transition">${lang === 'ko' ? '문의하기' : lang === 'en' ? 'Contact' : lang === 'zh' ? '联系我们' : 'お問い合わせ'}</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-semibold mb-4">${lang === 'ko' ? '소셜 미디어' : lang === 'en' ? 'Social Media' : lang === 'zh' ? '社交媒体' : 'ソーシャルメディア'}</h4>
+                        <h4 class="font-semibold mb-4 text-lg">${lang === 'ko' ? '소셜 미디어' : lang === 'en' ? 'Social Media' : lang === 'zh' ? '社交媒体' : 'ソーシャルメディア'}</h4>
                         <div class="flex space-x-4 text-2xl">
-                            <a href="#" class="hover:text-purple-400"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="hover:text-purple-400"><i class="fab fa-facebook"></i></a>
-                            <a href="#" class="hover:text-purple-400"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="hover:opacity-100 opacity-70 transition" style="color: #D4AF37;"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="hover:opacity-100 opacity-70 transition" style="color: #D4AF37;"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="hover:opacity-100 opacity-70 transition" style="color: #D4AF37;"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                    <p>&copy; 2025 ${t('platform.name', lang)}. All rights reserved.</p>
+                <div class="mt-12 pt-8 text-center opacity-60" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p class="text-sm">&copy; 2025 ${t('platform.name', lang)}. All rights reserved.</p>
                 </div>
             </div>
         </footer>

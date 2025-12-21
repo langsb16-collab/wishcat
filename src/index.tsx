@@ -403,80 +403,202 @@ app.get('/categories', async (c) => {
             </div>
         </nav>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-6">
-                <i class="fas fa-th-large mr-3"></i>
-                ${t('nav.categories', lang)}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+                <i class="fas fa-th-large mr-2"></i>
+                ${lang === 'ko' ? '서비스 카테고리' : 'Service Categories'}
             </h1>
             
-            <div id="categoriesContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="text-center py-12 col-span-full">
-                    <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
-                    <p class="mt-4 text-gray-500">${lang === 'ko' ? '로딩 중...' : 'Loading...'}</p>
-                </div>
-            </div>
+            <div id="categoriesContainer" class="space-y-4 md:space-y-6"></div>
         </div>
 
         <script>
             const lang = new URLSearchParams(window.location.search).get('lang') || 'ko';
             
-            async function loadCategories() {
-                try {
-                    const response = await fetch('/api/categories');
-                    const data = await response.json();
-                    
-                    const container = document.getElementById('categoriesContainer');
-                    
-                    if (!data.success || !data.data || data.data.length === 0) {
-                        container.innerHTML = \`
-                            <div class="text-center py-12 col-span-full">
-                                <i class="fas fa-inbox text-6xl text-gray-300"></i>
-                                <p class="mt-4 text-gray-500">\${lang === 'ko' ? '카테고리가 없습니다' : 'No categories found'}</p>
-                            </div>
-                        \`;
-                        return;
+            const categories = {
+                ko: [
+                    {
+                        id: 1,
+                        name: '개발 (Development)',
+                        icon: 'fa-code',
+                        color: 'blue',
+                        children: [
+                            { name: '웹 개발', items: ['홈페이지 제작', '반응형 웹', '쇼핑몰/커머스', '관리자 페이지', '예약·결제 시스템', '웹 서비스/플랫폼 개발'] },
+                            { name: '앱 개발', items: ['안드로이드 앱', 'iOS 앱', '크로스플랫폼 앱', '하이브리드 앱'] },
+                            { name: '소프트웨어/시스템', items: ['PC 프로그램', '사내 시스템', 'ERP/CRM', 'API 연동', '데이터 수집/크롤링'] },
+                            { name: 'AI·데이터', items: ['AI 모델 개발', '챗봇', '데이터 분석', '머신러닝/딥러닝', '추천 시스템'] }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: '디자인 (Design)',
+                        icon: 'fa-palette',
+                        color: 'purple',
+                        children: [
+                            { name: 'UI/UX 디자인', items: ['웹 UI/UX', '앱 UI/UX', '프로토타입 (Figma, XD)'] },
+                            { name: '그래픽 디자인', items: ['로고 디자인', '브랜드 아이덴티티(BI/CI)', '배너/상세페이지', '카드뉴스/SNS 이미지'] },
+                            { name: '영상·모션', items: ['홍보 영상', '모션그래픽', '애니메이션', '유튜브 영상 편집'] }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        name: '마케팅 (Marketing)',
+                        icon: 'fa-bullhorn',
+                        color: 'green',
+                        children: [
+                            { name: '디지털 마케팅', items: ['검색광고 (네이버, 구글)', 'SNS 광고', '퍼포먼스 마케팅', '데이터 기반 마케팅'] },
+                            { name: '콘텐츠 마케팅', items: ['블로그 운영', '콘텐츠 기획', '카피라이팅', '브랜드 스토리텔링'] },
+                            { name: 'SNS 운영', items: ['인스타그램', '유튜브', '틱톡', '커뮤니티 관리'] }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        name: '기획·컨설팅',
+                        icon: 'fa-lightbulb',
+                        color: 'yellow',
+                        children: [
+                            { name: '서비스 기획', items: ['앱/웹 기획', '사업 기획서', 'IR 자료', '플랫폼 구조 설계'] },
+                            { name: '리서치', items: ['UX 리서치', '시장 조사', '경쟁사 분석'] }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        name: '번역·통역·문서',
+                        icon: 'fa-language',
+                        color: 'red',
+                        children: [
+                            { name: '번역', items: ['다국어 번역', '기술 문서 번역', '계약서/제안서'] },
+                            { name: '문서 작성', items: ['매뉴얼 작성', '보고서 작성', '기술 문서'] }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        name: '기타 전문 서비스',
+                        icon: 'fa-tools',
+                        color: 'gray',
+                        children: [
+                            { name: '운영·관리', items: ['QA/테스트', '유지보수', '보안 점검'] },
+                            { name: '인프라', items: ['클라우드/서버 세팅', 'DevOps', '네트워크 구축'] }
+                        ]
                     }
-                    
-                    container.innerHTML = data.data.map(category => \`
-                        <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">
-                                    <i class="fas fa-folder text-blue-600"></i>
+                ],
+                en: [
+                    {
+                        id: 1,
+                        name: 'Development',
+                        icon: 'fa-code',
+                        color: 'blue',
+                        children: [
+                            { name: 'Web Development', items: ['Website', 'Responsive Web', 'E-commerce', 'Admin Panel', 'Booking/Payment', 'Web Platform'] },
+                            { name: 'App Development', items: ['Android App', 'iOS App', 'Cross-platform', 'Hybrid App'] },
+                            { name: 'Software/Systems', items: ['Desktop Program', 'Internal System', 'ERP/CRM', 'API Integration', 'Data Crawling'] },
+                            { name: 'AI·Data', items: ['AI Model', 'Chatbot', 'Data Analysis', 'ML/DL', 'Recommendation'] }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: 'Design',
+                        icon: 'fa-palette',
+                        color: 'purple',
+                        children: [
+                            { name: 'UI/UX Design', items: ['Web UI/UX', 'App UI/UX', 'Prototype (Figma, XD)'] },
+                            { name: 'Graphic Design', items: ['Logo Design', 'Brand Identity', 'Banner/Detail Page', 'SNS Images'] },
+                            { name: 'Video·Motion', items: ['Promo Video', 'Motion Graphics', 'Animation', 'YouTube Editing'] }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        name: 'Marketing',
+                        icon: 'fa-bullhorn',
+                        color: 'green',
+                        children: [
+                            { name: 'Digital Marketing', items: ['Search Ads', 'SNS Ads', 'Performance Marketing', 'Data Marketing'] },
+                            { name: 'Content Marketing', items: ['Blog Management', 'Content Planning', 'Copywriting', 'Brand Storytelling'] },
+                            { name: 'SNS Management', items: ['Instagram', 'YouTube', 'TikTok', 'Community'] }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        name: 'Planning·Consulting',
+                        icon: 'fa-lightbulb',
+                        color: 'yellow',
+                        children: [
+                            { name: 'Service Planning', items: ['App/Web Planning', 'Business Plan', 'IR Materials', 'Platform Design'] },
+                            { name: 'Research', items: ['UX Research', 'Market Research', 'Competitor Analysis'] }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        name: 'Translation·Documents',
+                        icon: 'fa-language',
+                        color: 'red',
+                        children: [
+                            { name: 'Translation', items: ['Multi-language', 'Technical Docs', 'Contract/Proposal'] },
+                            { name: 'Documentation', items: ['Manual', 'Report', 'Technical Writing'] }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        name: 'Other Services',
+                        icon: 'fa-tools',
+                        color: 'gray',
+                        children: [
+                            { name: 'Operations', items: ['QA/Testing', 'Maintenance', 'Security'] },
+                            { name: 'Infrastructure', items: ['Cloud/Server Setup', 'DevOps', 'Network'] }
+                        ]
+                    }
+                ]
+            };
+            
+            function renderCategories() {
+                const container = document.getElementById('categoriesContainer');
+                const data = categories[lang] || categories['ko'];
+                
+                const colorClasses = {
+                    blue: 'bg-blue-50 text-blue-600 border-blue-200',
+                    purple: 'bg-purple-50 text-purple-600 border-purple-200',
+                    green: 'bg-green-50 text-green-600 border-green-200',
+                    yellow: 'bg-yellow-50 text-yellow-600 border-yellow-200',
+                    red: 'bg-red-50 text-red-600 border-red-200',
+                    gray: 'bg-gray-50 text-gray-600 border-gray-200'
+                };
+                
+                container.innerHTML = data.map(category => \`
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="bg-gradient-to-r from-gray-50 to-white p-4 md:p-6 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg \${colorClasses[category.color]} flex items-center justify-center text-xl md:text-2xl border">
+                                    <i class="fas \${category.icon}"></i>
                                 </div>
-                                <h3 class="ml-4 text-lg font-semibold text-gray-900">\${category.name}</h3>
+                                <h2 class="ml-3 md:ml-4 text-lg md:text-xl font-bold text-gray-900">\${category.name}</h2>
                             </div>
-                            
-                            \${category.children && category.children.length > 0 ? \`
-                                <div class="space-y-2">
-                                    \${category.children.slice(0, 5).map(child => \`
-                                        <div class="flex items-center text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
-                                            <i class="fas fa-chevron-right text-xs mr-2"></i>
-                                            <span>\${child.name}</span>
-                                        </div>
-                                    \`).join('')}
-                                    \${category.children.length > 5 ? \`
-                                        <div class="text-sm text-blue-600 hover:text-blue-700 cursor-pointer">
-                                            + \${category.children.length - 5} \${lang === 'ko' ? '개 더보기' : 'more'}
-                                        </div>
-                                    \` : ''}
+                        </div>
+                        
+                        <div class="p-4 md:p-6 space-y-4 md:space-y-6">
+                            \${category.children.map(subcat => \`
+                                <div>
+                                    <h3 class="text-sm md:text-base font-semibold text-gray-900 mb-2 md:mb-3">\${subcat.name}</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        \${subcat.items.map(item => \`
+                                            <button onclick="selectCategory('\${category.name}', '\${subcat.name}', '\${item}')" 
+                                                class="px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-lg border border-gray-200 hover:border-blue-300 transition whitespace-nowrap">
+                                                \${item}
+                                            </button>
+                                        \`).join('')}
+                                    </div>
                                 </div>
-                            \` : \`
-                                <p class="text-sm text-gray-500">\${category.description || (lang === 'ko' ? '하위 카테고리가 없습니다' : 'No subcategories')}</p>
-                            \`}
+                            \`).join('')}
                         </div>
-                    \`).join('');
-                } catch (error) {
-                    console.error('Error loading categories:', error);
-                    document.getElementById('categoriesContainer').innerHTML = \`
-                        <div class="text-center py-12 col-span-full">
-                            <i class="fas fa-exclamation-triangle text-6xl text-red-300"></i>
-                            <p class="mt-4 text-red-500">\${lang === 'ko' ? '카테고리를 불러오는데 실패했습니다' : 'Failed to load categories'}</p>
-                        </div>
-                    \`;
-                }
+                    </div>
+                \`).join('');
             }
             
-            loadCategories();
+            function selectCategory(main, sub, item) {
+                alert(\`선택한 카테고리:\n\n대분류: \${main}\n중분류: \${sub}\n세부: \${item}\n\n프로젝트 등록 페이지로 이동합니다.\`);
+                window.location.href = '/projects?category=' + encodeURIComponent(item) + '&lang=' + lang;
+            }
+            
+            renderCategories();
         </script>
     </body>
     </html>
@@ -757,11 +879,9 @@ app.get('/', (c) => {
                         ${t('platform.name', lang)}
                     </a>
                     
-                    <div class="flex items-center space-x-4 md:space-x-8 text-sm md:text-base">
-                        <a href="/?lang=${lang}" class="nav-link hidden md:block">${t('nav.home', lang)}</a>
-                        <a href="/projects?lang=${lang}" class="nav-link">${t('nav.find_projects', lang)}</a>
-                        <a href="/freelancers?lang=${lang}" class="nav-link">${t('nav.find_experts', lang)}</a>
-                        <a href="/categories?lang=${lang}" class="nav-link">${t('nav.categories', lang)}</a>
+                    <div class="flex items-center space-x-2 md:space-x-8 text-xs md:text-base overflow-x-auto">
+                        <a href="/?lang=${lang}" class="nav-link hidden md:block whitespace-nowrap">${t('nav.home', lang)}</a>
+                        <a href="/categories?lang=${lang}" class="nav-link whitespace-nowrap">${t('nav.categories', lang)}</a>
                     </div>
                     
                     <div class="flex items-center space-x-2 md:space-x-3 ml-auto">
@@ -808,11 +928,8 @@ app.get('/', (c) => {
                     <span class="block sm:inline">${lang === 'ko' ? '연결하는 글로벌 플랫폼' : ''}</span>
                 </p>
                 <div class="hero-buttons flex flex-col sm:flex-row justify-center gap-2 md:gap-3 items-center max-w-xs mx-auto sm:max-w-none">
-                    <button onclick="showProjectForm()" class="btn-secondary w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform" style="min-height: 40px;">
-                        ${t('nav.find_projects', lang)}
-                    </button>
-                    <button onclick="showFreelancerForm()" class="bg-white text-gray-900 w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform shadow-lg" style="min-height: 40px;">
-                        ${t('nav.find_experts', lang)}
+                    <button onclick="window.location.href='/categories?lang=${lang}'" class="bg-white text-gray-900 w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform shadow-lg" style="min-height: 40px;">
+                        ${t('nav.categories', lang)}
                     </button>
                 </div>
             </div>

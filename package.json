@@ -13,7 +13,7 @@
     "db:create": "wrangler d1 create feezero-production",
     "db:migrate:local": "wrangler d1 migrations apply feezero-production --local",
     "db:migrate:prod": "wrangler d1 migrations apply feezero-production",
-    "db:seed": "wrangler d1 execute feezero-production --local --file=./seed.sql",
+    "db:seed": "wrangler d1 execute feezero-production --local --file=./seed_quick.sql",
     "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed",
     "db:console:local": "wrangler d1 execute feezero-production --local",
     "db:console:prod": "wrangler d1 execute feezero-production",

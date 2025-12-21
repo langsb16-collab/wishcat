@@ -2,12 +2,5 @@
   "name": "feezero",
   "compatibility_date": "2025-12-10",
   "pages_build_output_dir": "./dist",
-  "compatibility_flags": ["nodejs_compat"],
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "feezero-production",
-      "database_id": "local"
-    }
-  ]
+  "compatibility_flags": ["nodejs_compat"]
 }

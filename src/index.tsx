@@ -765,10 +765,10 @@ app.get('/', (c) => {
                     </div>
                     
                     <div class="flex items-center space-x-2 md:space-x-3 ml-auto">
-                        <button onclick="showRegister()" class="btn-secondary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm">
+                        <button onclick="showRegister()" class="btn-secondary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm whitespace-nowrap">
                             ${t('auth.register', lang)}
                         </button>
-                        <button onclick="showLogin()" class="btn-primary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm">
+                        <button onclick="showLogin()" class="btn-primary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm whitespace-nowrap">
                             ${t('auth.login', lang)}
                         </button>
                         <button onclick="showNotices()" class="nav-link p-2 hover:bg-gray-50 rounded-lg transition">
@@ -805,7 +805,7 @@ app.get('/', (c) => {
         <!-- Hero Section -->
         <div class="hero-gradient text-white py-6 md:py-20">
             <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-                <h1 class="hero-title text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 md:mb-8 leading-tight tracking-tight">
+                <h1 class="hero-title text-base sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-4 md:mb-8 leading-tight tracking-tight whitespace-nowrap">
                     ${lang === 'ko' ? '수수료 제로, 프리랜서 플랫폼의 새로운 기준' : t('platform.tagline', lang)}
                 </h1>
                 <div class="inline-flex items-center space-x-1 md:space-x-2 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-2 md:px-4 py-1 md:py-2 mb-2 md:mb-4">

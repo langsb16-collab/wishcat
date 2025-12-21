@@ -794,11 +794,10 @@ app.get('/', (c) => {
         </nav>
 
         <!-- Hero Section -->
-        <div class="hero-gradient text-white py-8 md:py-32">
+        <div class="hero-gradient text-white py-6 md:py-20">
             <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-                <h1 class="hero-title text-xl sm:text-2xl md:text-6xl lg:text-7xl font-semibold mb-4 md:mb-8 leading-tight tracking-tight">
-                    <span class="block sm:inline">${lang === 'ko' ? '수수료 제로, 프리랜서' : t('platform.tagline', lang).split(',')[0]}</span>
-                    <span class="block sm:inline">${lang === 'ko' ? ' 플랫폼의 새로운 기준' : t('platform.tagline', lang).split(',')[1] || ''}</span>
+                <h1 class="hero-title text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 md:mb-8 leading-tight tracking-tight">
+                    ${lang === 'ko' ? '수수료 제로, 프리랜서 플랫폼의 새로운 기준' : t('platform.tagline', lang)}
                 </h1>
                 <div class="inline-flex items-center space-x-1 md:space-x-3 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-3 md:px-6 py-1.5 md:py-3 mb-3 md:mb-6">
                     <i class="fab fa-bitcoin text-sm md:text-2xl"></i>

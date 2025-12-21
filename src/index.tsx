@@ -365,6 +365,124 @@ app.get('/projects', async (c) => {
   `);
 })
 
+// Categories page
+app.get('/categories', async (c) => {
+  const lang = getLanguageFromRequest(c.req.raw);
+  
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="${lang}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${t('nav.categories', lang)} - ${t('platform.name', lang)}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+          
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans KR', sans-serif;
+          }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <a href="/?lang=${lang}" class="text-xl font-bold text-gray-900">
+                        ${t('platform.name', lang)}
+                    </a>
+                    <div class="flex items-center space-x-4">
+                        <a href="/?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.home', lang)}</a>
+                        <a href="/projects?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.find_projects', lang)}</a>
+                        <a href="/freelancers?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.find_experts', lang)}</a>
+                        <a href="/categories?lang=${lang}" class="text-gray-900 font-semibold">${t('nav.categories', lang)}</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-th-large mr-3"></i>
+                ${t('nav.categories', lang)}
+            </h1>
+            
+            <div id="categoriesContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="text-center py-12 col-span-full">
+                    <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
+                    <p class="mt-4 text-gray-500">${lang === 'ko' ? '로딩 중...' : 'Loading...'}</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const lang = new URLSearchParams(window.location.search).get('lang') || 'ko';
+            
+            async function loadCategories() {
+                try {
+                    const response = await fetch('/api/categories');
+                    const data = await response.json();
+                    
+                    const container = document.getElementById('categoriesContainer');
+                    
+                    if (!data.success || !data.data || data.data.length === 0) {
+                        container.innerHTML = \`
+                            <div class="text-center py-12 col-span-full">
+                                <i class="fas fa-inbox text-6xl text-gray-300"></i>
+                                <p class="mt-4 text-gray-500">\${lang === 'ko' ? '카테고리가 없습니다' : 'No categories found'}</p>
+                            </div>
+                        \`;
+                        return;
+                    }
+                    
+                    container.innerHTML = data.data.map(category => \`
+                        <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-2xl">
+                                    <i class="fas fa-folder text-blue-600"></i>
+                                </div>
+                                <h3 class="ml-4 text-lg font-semibold text-gray-900">\${category.name}</h3>
+                            </div>
+                            
+                            \${category.children && category.children.length > 0 ? \`
+                                <div class="space-y-2">
+                                    \${category.children.slice(0, 5).map(child => \`
+                                        <div class="flex items-center text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                                            <i class="fas fa-chevron-right text-xs mr-2"></i>
+                                            <span>\${child.name}</span>
+                                        </div>
+                                    \`).join('')}
+                                    \${category.children.length > 5 ? \`
+                                        <div class="text-sm text-blue-600 hover:text-blue-700 cursor-pointer">
+                                            + \${category.children.length - 5} \${lang === 'ko' ? '개 더보기' : 'more'}
+                                        </div>
+                                    \` : ''}
+                                </div>
+                            \` : \`
+                                <p class="text-sm text-gray-500">\${category.description || (lang === 'ko' ? '하위 카테고리가 없습니다' : 'No subcategories')}</p>
+                            \`}
+                        </div>
+                    \`).join('');
+                } catch (error) {
+                    console.error('Error loading categories:', error);
+                    document.getElementById('categoriesContainer').innerHTML = \`
+                        <div class="text-center py-12 col-span-full">
+                            <i class="fas fa-exclamation-triangle text-6xl text-red-300"></i>
+                            <p class="mt-4 text-red-500">\${lang === 'ko' ? '카테고리를 불러오는데 실패했습니다' : 'Failed to load categories'}</p>
+                        </div>
+                    \`;
+                }
+            }
+            
+            loadCategories();
+        </script>
+    </body>
+    </html>
+  `);
+})
+
 // Freelancers page
 app.get('/freelancers', async (c) => {
   const lang = getLanguageFromRequest(c.req.raw);
@@ -641,8 +759,8 @@ app.get('/', (c) => {
                         </span>
                     </div>
                     
-                    <div class="hidden md:flex items-center space-x-10">
-                        <a href="/?lang=${lang}" class="nav-link">${t('nav.home', lang)}</a>
+                    <div class="flex items-center space-x-3 md:space-x-10">
+                        <a href="/?lang=${lang}" class="nav-link hidden md:block">${t('nav.home', lang)}</a>
                         <a href="javascript:void(0)" onclick="navigateToProjects()" class="nav-link">${t('nav.find_projects', lang)}</a>
                         <a href="javascript:void(0)" onclick="navigateToFreelancers()" class="nav-link">${t('nav.find_experts', lang)}</a>
                         <a href="javascript:void(0)" onclick="navigateToCategories()" class="nav-link">${t('nav.categories', lang)}</a>

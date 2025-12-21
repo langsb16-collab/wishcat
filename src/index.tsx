@@ -879,16 +879,16 @@ app.get('/', (c) => {
                         ${t('platform.name', lang)}
                     </a>
                     
-                    <div class="flex items-center space-x-2 md:space-x-8 text-xs md:text-base overflow-x-auto">
-                        <a href="/?lang=${lang}" class="nav-link hidden md:block whitespace-nowrap">${t('nav.home', lang)}</a>
-                        <a href="/categories?lang=${lang}" class="nav-link whitespace-nowrap">${t('nav.categories', lang)}</a>
+                    <div class="flex items-center space-x-1 md:space-x-8 overflow-x-auto">
+                        <a href="/?lang=${lang}" class="nav-link hidden md:block text-xs md:text-base whitespace-nowrap">${t('nav.home', lang)}</a>
+                        <a href="/categories?lang=${lang}" class="nav-link text-[10px] md:text-base whitespace-nowrap px-2">${t('nav.categories', lang)}</a>
                     </div>
                     
-                    <div class="flex items-center space-x-2 md:space-x-3 ml-auto">
-                        <button onclick="showRegister()" class="btn-secondary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm whitespace-nowrap">
+                    <div class="flex items-center space-x-1 md:space-x-3 ml-auto">
+                        <button onclick="showRegister()" class="btn-secondary px-2 py-1 md:px-5 md:py-2 rounded-full font-medium text-[10px] md:text-sm whitespace-nowrap">
                             ${t('auth.register', lang)}
                         </button>
-                        <button onclick="showLogin()" class="btn-primary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm whitespace-nowrap">
+                        <button onclick="showLogin()" class="btn-primary px-2 py-1 md:px-5 md:py-2 rounded-full font-medium text-[10px] md:text-sm whitespace-nowrap">
                             ${t('auth.login', lang)}
                         </button>
                         <button onclick="showNotices()" class="nav-link p-2 hover:bg-gray-50 rounded-lg transition">

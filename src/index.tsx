@@ -236,6 +236,274 @@ app.get('/api/freelancers/:id', async (c) => {
 // Frontend Routes
 // ===========================
 
+// Projects page
+app.get('/projects', async (c) => {
+  const lang = getLanguageFromRequest(c.req.raw);
+  
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="${lang}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${t('nav.find_projects', lang)} - ${t('platform.name', lang)}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+          
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans KR', sans-serif;
+          }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <a href="/?lang=${lang}" class="text-xl font-bold text-gray-900">
+                        ${t('platform.name', lang)}
+                    </a>
+                    <div class="flex items-center space-x-4">
+                        <a href="/?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.home', lang)}</a>
+                        <a href="/projects?lang=${lang}" class="text-gray-900 font-semibold">${t('nav.find_projects', lang)}</a>
+                        <a href="/freelancers?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.find_experts', lang)}</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-project-diagram mr-3"></i>
+                ${t('nav.find_projects', lang)}
+            </h1>
+            
+            <div id="projectsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="text-center py-12 col-span-full">
+                    <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
+                    <p class="mt-4 text-gray-500">${lang === 'ko' ? '로딩 중...' : 'Loading...'}</p>
+                </div>
+            </div>
+            
+            <div id="pagination" class="mt-8 flex justify-center"></div>
+        </div>
+
+        <script>
+            const lang = new URLSearchParams(window.location.search).get('lang') || 'ko';
+            let currentPage = 1;
+            
+            async function loadProjects(page = 1) {
+                try {
+                    const response = await fetch(\`/api/projects?page=\${page}&limit=12\`);
+                    const data = await response.json();
+                    
+                    const container = document.getElementById('projectsContainer');
+                    
+                    if (!data.success || !data.data || data.data.length === 0) {
+                        container.innerHTML = \`
+                            <div class="text-center py-12 col-span-full">
+                                <i class="fas fa-inbox text-6xl text-gray-300"></i>
+                                <p class="mt-4 text-gray-500">\${lang === 'ko' ? '프로젝트가 없습니다' : 'No projects found'}</p>
+                            </div>
+                        \`;
+                        return;
+                    }
+                    
+                    container.innerHTML = data.data.map(project => \`
+                        <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+                            \${project.is_urgent ? '<span class="inline-block px-2 py-1 bg-red-100 text-red-600 text-xs font-semibold rounded mb-2">🔥 ' + (lang === 'ko' ? '긴급' : 'URGENT') + '</span>' : ''}
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">\${project.title}</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">\${project.description}</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-green-600">\${project.budget_min} - \${project.budget_max} USDT</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm text-gray-500">
+                                <span><i class="far fa-clock mr-1"></i>\${new Date(project.created_at).toLocaleDateString()}</span>
+                                <span><i class="fas fa-user mr-1"></i>\${project.client_nickname || 'Client'}</span>
+                            </div>
+                            <a href="/projects/\${project.id}?lang=\${lang}" class="mt-4 block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+                                \${lang === 'ko' ? '자세히 보기' : 'View Details'}
+                            </a>
+                        </div>
+                    \`).join('');
+                    
+                    // Pagination
+                    if (data.total_pages > 1) {
+                        const pagination = document.getElementById('pagination');
+                        let paginationHTML = '';
+                        
+                        for (let i = 1; i <= data.total_pages; i++) {
+                            paginationHTML += \`
+                                <button 
+                                    onclick="loadProjects(\${i})" 
+                                    class="mx-1 px-4 py-2 rounded \${i === page ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}"
+                                >
+                                    \${i}
+                                </button>
+                            \`;
+                        }
+                        
+                        pagination.innerHTML = paginationHTML;
+                    }
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                    document.getElementById('projectsContainer').innerHTML = \`
+                        <div class="text-center py-12 col-span-full">
+                            <i class="fas fa-exclamation-triangle text-6xl text-red-300"></i>
+                            <p class="mt-4 text-red-500">\${lang === 'ko' ? '프로젝트를 불러오는데 실패했습니다' : 'Failed to load projects'}</p>
+                        </div>
+                    \`;
+                }
+            }
+            
+            // Load projects on page load
+            loadProjects();
+        </script>
+    </body>
+    </html>
+  `);
+})
+
+// Freelancers page
+app.get('/freelancers', async (c) => {
+  const lang = getLanguageFromRequest(c.req.raw);
+  
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="${lang}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${t('nav.find_experts', lang)} - ${t('platform.name', lang)}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+          
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Noto Sans KR', sans-serif;
+          }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <nav class="bg-white shadow-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <a href="/?lang=${lang}" class="text-xl font-bold text-gray-900">
+                        ${t('platform.name', lang)}
+                    </a>
+                    <div class="flex items-center space-x-4">
+                        <a href="/?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.home', lang)}</a>
+                        <a href="/projects?lang=${lang}" class="text-gray-600 hover:text-gray-900">${t('nav.find_projects', lang)}</a>
+                        <a href="/freelancers?lang=${lang}" class="text-gray-900 font-semibold">${t('nav.find_experts', lang)}</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-users mr-3"></i>
+                ${t('nav.find_experts', lang)}
+            </h1>
+            
+            <div id="freelancersContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="text-center py-12 col-span-full">
+                    <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
+                    <p class="mt-4 text-gray-500">${lang === 'ko' ? '로딩 중...' : 'Loading...'}</p>
+                </div>
+            </div>
+            
+            <div id="pagination" class="mt-8 flex justify-center"></div>
+        </div>
+
+        <script>
+            const lang = new URLSearchParams(window.location.search).get('lang') || 'ko';
+            let currentPage = 1;
+            
+            async function loadFreelancers(page = 1) {
+                try {
+                    const response = await fetch(\`/api/freelancers?page=\${page}&limit=12\`);
+                    const data = await response.json();
+                    
+                    const container = document.getElementById('freelancersContainer');
+                    
+                    if (!data.success || !data.data || data.data.length === 0) {
+                        container.innerHTML = \`
+                            <div class="text-center py-12 col-span-full">
+                                <i class="fas fa-inbox text-6xl text-gray-300"></i>
+                                <p class="mt-4 text-gray-500">\${lang === 'ko' ? '전문가가 없습니다' : 'No freelancers found'}</p>
+                            </div>
+                        \`;
+                        return;
+                    }
+                    
+                    container.innerHTML = data.data.map(freelancer => \`
+                        <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+                            <div class="flex items-start mb-4">
+                                <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-2xl">
+                                    \${freelancer.profile_photo_url ? \`<img src="\${freelancer.profile_photo_url}" class="w-16 h-16 rounded-full object-cover" />\` : '<i class="fas fa-user text-gray-400"></i>'}
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-gray-900">\${freelancer.nickname || 'Freelancer'}</h3>
+                                    <p class="text-sm text-gray-500">\${freelancer.country || ''}</p>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-yellow-400">★</span>
+                                        <span class="ml-1 text-sm font-semibold">\${freelancer.average_rating || 0}</span>
+                                        <span class="ml-2 text-sm text-gray-500">(\${freelancer.completed_projects || 0} \${lang === 'ko' ? '프로젝트' : 'projects'})</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">\${freelancer.bio || (lang === 'ko' ? '자기소개가 없습니다' : 'No bio available')}</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                \${freelancer.skills ? freelancer.skills.split(',').slice(0, 3).map(skill => \`
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">\${skill.trim()}</span>
+                                \`).join('') : ''}
+                            </div>
+                            <a href="/freelancers/\${freelancer.id}?lang=\${lang}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+                                \${lang === 'ko' ? '프로필 보기' : 'View Profile'}
+                            </a>
+                        </div>
+                    \`).join('');
+                    
+                    // Pagination
+                    if (data.total_pages > 1) {
+                        const pagination = document.getElementById('pagination');
+                        let paginationHTML = '';
+                        
+                        for (let i = 1; i <= data.total_pages; i++) {
+                            paginationHTML += \`
+                                <button 
+                                    onclick="loadFreelancers(\${i})" 
+                                    class="mx-1 px-4 py-2 rounded \${i === page ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}"
+                                >
+                                    \${i}
+                                </button>
+                            \`;
+                        }
+                        
+                        pagination.innerHTML = paginationHTML;
+                    }
+                } catch (error) {
+                    console.error('Error loading freelancers:', error);
+                    document.getElementById('freelancersContainer').innerHTML = \`
+                        <div class="text-center py-12 col-span-full">
+                            <i class="fas fa-exclamation-triangle text-6xl text-red-300"></i>
+                            <p class="mt-4 text-red-500">\${lang === 'ko' ? '전문가를 불러오는데 실패했습니다' : 'Failed to load freelancers'}</p>
+                        </div>
+                    \`;
+                }
+            }
+            
+            // Load freelancers on page load
+            loadFreelancers();
+        </script>
+    </body>
+    </html>
+  `);
+})
+
 app.get('/', (c) => {
   const lang = getLanguageFromRequest(c.req.raw);
   

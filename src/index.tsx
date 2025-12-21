@@ -751,44 +751,53 @@ app.get('/', (c) => {
     <body>
         <!-- Navigation -->
         <nav class="glass-effect sticky top-0 z-50 border-b border-gray-200" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="flex justify-between items-center h-20">
-                    <div class="flex items-center">
-                        <span class="text-2xl font-semibold text-luxury tracking-tight">
-                            ${t('platform.name', lang)}
-                        </span>
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center h-16 md:h-20">
+                    <a href="/?lang=${lang}" class="text-xl md:text-2xl font-semibold text-luxury tracking-tight mr-6">
+                        ${t('platform.name', lang)}
+                    </a>
+                    
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="/?lang=${lang}" class="nav-link">${t('nav.home', lang)}</a>
+                        <a href="/projects?lang=${lang}" class="nav-link">${t('nav.find_projects', lang)}</a>
+                        <a href="/freelancers?lang=${lang}" class="nav-link">${t('nav.find_experts', lang)}</a>
+                        <a href="/categories?lang=${lang}" class="nav-link">${t('nav.categories', lang)}</a>
                     </div>
                     
-                    <div class="flex items-center space-x-3 md:space-x-10">
-                        <a href="/?lang=${lang}" class="nav-link hidden md:block">${t('nav.home', lang)}</a>
-                        <a href="javascript:void(0)" onclick="navigateToProjects()" class="nav-link">${t('nav.find_projects', lang)}</a>
-                        <a href="javascript:void(0)" onclick="navigateToFreelancers()" class="nav-link">${t('nav.find_experts', lang)}</a>
-                        <a href="javascript:void(0)" onclick="navigateToCategories()" class="nav-link">${t('nav.categories', lang)}</a>
-                    </div>
-                    
-                    <div class="flex items-center space-x-2 md:space-x-4 ml-auto">
-                        <button onclick="showRegister()" class="btn-secondary px-3 py-1.5 md:px-6 md:py-2.5 rounded-full font-medium text-xs md:text-base" style="min-height: 36px;">
+                    <div class="flex items-center space-x-2 md:space-x-3 ml-auto">
+                        <button onclick="showRegister()" class="btn-secondary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm">
                             ${t('auth.register', lang)}
                         </button>
-                        <button onclick="showLogin()" class="btn-primary px-3 py-1.5 md:px-6 md:py-2.5 rounded-full font-medium text-xs md:text-base" style="min-height: 36px;">
+                        <button onclick="showLogin()" class="btn-primary px-3 py-1.5 md:px-5 md:py-2 rounded-full font-medium text-xs md:text-sm">
                             ${t('auth.login', lang)}
                         </button>
-                        <button onclick="showNotices()" class="nav-link p-1.5 md:p-2 hover:bg-gray-50 rounded-lg transition text-sm md:text-base" style="min-width: 36px; min-height: 36px;">
-                            <i class="fas fa-bell"></i>
+                        <button onclick="showNotices()" class="nav-link p-2 hover:bg-gray-50 rounded-lg transition">
+                            <i class="fas fa-bell text-sm md:text-base"></i>
                         </button>
-                        <div class="relative">
-                            <select onchange="changeLang(this.value)" class="px-1.5 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer font-medium" style="min-height: 36px; max-width: 90px;">
-                                <option value="ko" ${lang === 'ko' ? 'selected' : ''}>🇰🇷 한국어</option>
-                                <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸 EN</option>
-                                <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 中文</option>
-                                <option value="ja" ${lang === 'ja' ? 'selected' : ''}>🇯🇵 日本語</option>
-                                <option value="vi" ${lang === 'vi' ? 'selected' : ''}>🇻🇳 VN</option>
-                                <option value="th" ${lang === 'th' ? 'selected' : ''}>🇹🇭 ไทย</option>
-                                <option value="es" ${lang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
-                                <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪 DE</option>
-                            </select>
-                        </div>
+                        <select onchange="changeLang(this.value)" class="px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none cursor-pointer font-medium">
+                            <option value="ko" ${lang === 'ko' ? 'selected' : ''}>🇰🇷</option>
+                            <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸</option>
+                            <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳</option>
+                            <option value="ja" ${lang === 'ja' ? 'selected' : ''}>🇯🇵</option>
+                            <option value="vi" ${lang === 'vi' ? 'selected' : ''}>🇻🇳</option>
+                            <option value="th" ${lang === 'th' ? 'selected' : ''}>🇹🇭</option>
+                            <option value="es" ${lang === 'es' ? 'selected' : ''}>🇪🇸</option>
+                            <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪</option>
+                        </select>
                     </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden ml-2 p-2 rounded-lg hover:bg-gray-100" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-gray-700"></i>
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <div id="mobileMenu" class="hidden md:hidden pb-4 space-y-2">
+                    <a href="/?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.home', lang)}</a>
+                    <a href="/projects?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.find_projects', lang)}</a>
+                    <a href="/freelancers?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.find_experts', lang)}</a>
+                    <a href="/categories?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.categories', lang)}</a>
                 </div>
             </div>
         </nav>
@@ -1465,17 +1474,10 @@ app.get('/', (c) => {
                 closeModal();
             }
             
-            // Navigation functions
-            function navigateToProjects() {
-                window.location.href = '/projects?lang=' + lang;
-            }
-            
-            function navigateToFreelancers() {
-                window.location.href = '/freelancers?lang=' + lang;
-            }
-            
-            function navigateToCategories() {
-                window.location.href = '/categories?lang=' + lang;
+            // Mobile menu toggle
+            function toggleMobileMenu() {
+                const menu = document.getElementById('mobileMenu');
+                menu.classList.toggle('hidden');
             }
             
             // Close modal on Escape key

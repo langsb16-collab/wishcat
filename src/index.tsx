@@ -403,13 +403,13 @@ app.get('/categories', async (c) => {
             </div>
         </nav>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                <i class="fas fa-th-large mr-2"></i>
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
+            <h1 class="text-base md:text-3xl font-bold text-gray-900 mb-3 md:mb-6">
+                <i class="fas fa-th-large mr-2 text-sm md:text-xl"></i>
                 ${lang === 'ko' ? '서비스 카테고리' : 'Service Categories'}
             </h1>
             
-            <div id="categoriesContainer" class="space-y-4 md:space-y-6"></div>
+            <div id="categoriesContainer" class="space-y-3 md:space-y-6"></div>
         </div>
 
         <script>
@@ -565,23 +565,23 @@ app.get('/categories', async (c) => {
                 
                 container.innerHTML = data.map(category => \`
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="bg-gradient-to-r from-gray-50 to-white p-4 md:p-6 border-b border-gray-200">
+                        <div class="bg-gradient-to-r from-gray-50 to-white p-2 md:p-6 border-b border-gray-200">
                             <div class="flex items-center">
-                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg \${colorClasses[category.color]} flex items-center justify-center text-xl md:text-2xl border">
+                                <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg \${colorClasses[category.color]} flex items-center justify-center text-sm md:text-2xl border">
                                     <i class="fas \${category.icon}"></i>
                                 </div>
-                                <h2 class="ml-3 md:ml-4 text-lg md:text-xl font-bold text-gray-900">\${category.name}</h2>
+                                <h2 class="ml-2 md:ml-4 text-xs md:text-xl font-bold text-gray-900">\${category.name}</h2>
                             </div>
                         </div>
                         
-                        <div class="p-4 md:p-6 space-y-4 md:space-y-6">
+                        <div class="p-2 md:p-6 space-y-2 md:space-y-6">
                             \${category.children.map(subcat => \`
                                 <div>
-                                    <h3 class="text-sm md:text-base font-semibold text-gray-900 mb-2 md:mb-3">\${subcat.name}</h3>
-                                    <div class="flex flex-wrap gap-2">
+                                    <h3 class="text-xs md:text-base font-semibold text-gray-900 mb-1 md:mb-3">\${subcat.name}</h3>
+                                    <div class="flex flex-wrap gap-1 md:gap-2">
                                         \${subcat.items.map(item => \`
                                             <button onclick="selectCategory('\${category.name}', '\${subcat.name}', '\${item}')" 
-                                                class="px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-lg border border-gray-200 hover:border-blue-300 transition whitespace-nowrap">
+                                                class="px-1.5 md:px-3 py-0.5 md:py-1.5 text-[10px] md:text-sm bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded border border-gray-200 hover:border-blue-300 transition whitespace-nowrap">
                                                 \${item}
                                             </button>
                                         \`).join('')}

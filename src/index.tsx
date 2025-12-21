@@ -757,8 +757,8 @@ app.get('/', (c) => {
                         ${t('platform.name', lang)}
                     </a>
                     
-                    <div class="hidden md:flex items-center space-x-8">
-                        <a href="/?lang=${lang}" class="nav-link">${t('nav.home', lang)}</a>
+                    <div class="flex items-center space-x-4 md:space-x-8 text-sm md:text-base">
+                        <a href="/?lang=${lang}" class="nav-link hidden md:block">${t('nav.home', lang)}</a>
                         <a href="/projects?lang=${lang}" class="nav-link">${t('nav.find_projects', lang)}</a>
                         <a href="/freelancers?lang=${lang}" class="nav-link">${t('nav.find_experts', lang)}</a>
                         <a href="/categories?lang=${lang}" class="nav-link">${t('nav.categories', lang)}</a>
@@ -786,18 +786,6 @@ app.get('/', (c) => {
                         </select>
                     </div>
                     
-                    <!-- Mobile Menu Button -->
-                    <button class="md:hidden ml-2 p-2 rounded-lg hover:bg-gray-100" onclick="toggleMobileMenu()">
-                        <i class="fas fa-bars text-gray-700"></i>
-                    </button>
-                </div>
-                
-                <!-- Mobile Menu -->
-                <div id="mobileMenu" class="hidden md:hidden pb-4 space-y-2">
-                    <a href="/?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.home', lang)}</a>
-                    <a href="/projects?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.find_projects', lang)}</a>
-                    <a href="/freelancers?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.find_experts', lang)}</a>
-                    <a href="/categories?lang=${lang}" class="block py-2 text-gray-700 hover:text-gray-900">${t('nav.categories', lang)}</a>
                 </div>
             </div>
         </nav>
@@ -820,10 +808,10 @@ app.get('/', (c) => {
                     <span class="block sm:inline">${lang === 'ko' ? '연결하는 글로벌 플랫폼' : ''}</span>
                 </p>
                 <div class="hero-buttons flex flex-col sm:flex-row justify-center gap-2 md:gap-3 items-center max-w-xs mx-auto sm:max-w-none">
-                    <button onclick="navigateToProjects()" class="btn-secondary w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform" style="min-height: 40px;">
+                    <button onclick="showProjectForm()" class="btn-secondary w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform" style="min-height: 40px;">
                         ${t('nav.find_projects', lang)}
                     </button>
-                    <button onclick="navigateToFreelancers()" class="bg-white text-gray-900 w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform shadow-lg" style="min-height: 40px;">
+                    <button onclick="showFreelancerForm()" class="bg-white text-gray-900 w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform shadow-lg" style="min-height: 40px;">
                         ${t('nav.find_experts', lang)}
                     </button>
                 </div>
@@ -1478,6 +1466,119 @@ app.get('/', (c) => {
             function toggleMobileMenu() {
                 const menu = document.getElementById('mobileMenu');
                 menu.classList.toggle('hidden');
+            }
+            
+            // Show project submission form
+            function showProjectForm() {
+                const content = \`
+                    <div class="p-6 md:p-8">
+                        <h3 class="text-2xl md:text-3xl font-semibold mb-6 text-luxury">\${lang === 'ko' ? '프로젝트 의뢰하기' : 'Post a Project'}</h3>
+                        <form onsubmit="handleProjectSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '프로젝트 제목' : 'Project Title'}</label>
+                                <input type="text" name="title" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '프로젝트 설명' : 'Description'}</label>
+                                <textarea name="description" required rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '최소 예산 (USDT)' : 'Min Budget (USDT)'}</label>
+                                    <input type="number" name="budget_min" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '최대 예산 (USDT)' : 'Max Budget (USDT)'}</label>
+                                    <input type="number" name="budget_max" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '기술 스택' : 'Tech Stack'}</label>
+                                <input type="text" name="tech_stack" placeholder="\${lang === 'ko' ? '예: React, Node.js, Python' : 'e.g. React, Node.js, Python'}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '긴급 여부' : 'Urgent'}</label>
+                                <input type="checkbox" name="is_urgent" class="mr-2">
+                                <span class="text-sm text-gray-600">\${lang === 'ko' ? '긴급 프로젝트로 표시' : 'Mark as urgent'}</span>
+                            </div>
+                            <div class="flex gap-4 mt-6">
+                                <button type="button" onclick="closeModal()" class="btn-secondary flex-1 py-3 rounded-full font-medium">
+                                    \${lang === 'ko' ? '취소' : 'Cancel'}
+                                </button>
+                                <button type="submit" class="btn-primary flex-1 py-3 rounded-full font-medium">
+                                    \${lang === 'ko' ? '프로젝트 등록' : 'Submit Project'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+                openModal(content);
+            }
+            
+            // Show freelancer application form
+            function showFreelancerForm() {
+                const content = \`
+                    <div class="p-6 md:p-8">
+                        <h3 class="text-2xl md:text-3xl font-semibold mb-6 text-luxury">\${lang === 'ko' ? '전문가 등록하기' : 'Register as Expert'}</h3>
+                        <form onsubmit="handleFreelancerSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '전문 분야' : 'Title'}</label>
+                                <input type="text" name="title" required placeholder="\${lang === 'ko' ? '예: 풀스택 개발자' : 'e.g. Full-stack Developer'}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '자기소개' : 'Bio'}</label>
+                                <textarea name="bio" required rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '시간당 요금 (USDT)' : 'Hourly Rate (USDT)'}</label>
+                                    <input type="number" name="hourly_rate" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '가능 시간' : 'Availability'}</label>
+                                    <select name="availability" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="full-time">\${lang === 'ko' ? '풀타임' : 'Full-time'}</option>
+                                        <option value="part-time">\${lang === 'ko' ? '파트타임' : 'Part-time'}</option>
+                                        <option value="contract">\${lang === 'ko' ? '계약직' : 'Contract'}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sub mb-2">\${lang === 'ko' ? '기술 스택' : 'Skills'}</label>
+                                <input type="text" name="skills" required placeholder="\${lang === 'ko' ? '예: React, Node.js, Python' : 'e.g. React, Node.js, Python'}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div class="flex gap-4 mt-6">
+                                <button type="button" onclick="closeModal()" class="btn-secondary flex-1 py-3 rounded-full font-medium">
+                                    \${lang === 'ko' ? '취소' : 'Cancel'}
+                                </button>
+                                <button type="submit" class="btn-primary flex-1 py-3 rounded-full font-medium">
+                                    \${lang === 'ko' ? '전문가 등록' : 'Register'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+                openModal(content);
+            }
+            
+            // Handle project submission
+            function handleProjectSubmit(e) {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
+                console.log('Project data:', data);
+                alert(\`\${lang === 'ko' ? '프로젝트가 등록되었습니다!' : 'Project submitted!'}\n\${lang === 'ko' ? '제목' : 'Title'}: \${data.title}\`);
+                closeModal();
+            }
+            
+            // Handle freelancer submission
+            function handleFreelancerSubmit(e) {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
+                console.log('Freelancer data:', data);
+                alert(\`\${lang === 'ko' ? '전문가 등록이 완료되었습니다!' : 'Registration completed!'}\n\${lang === 'ko' ? '전문 분야' : 'Title'}: \${data.title}\`);
+                closeModal();
             }
             
             // Close modal on Escape key

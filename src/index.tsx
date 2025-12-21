@@ -380,9 +380,9 @@ app.get('/', (c) => {
                         <a href="javascript:void(0)" onclick="navigateToCategories()" class="nav-link">${t('nav.categories', lang)}</a>
                     </div>
                     
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-1 md:space-x-4">
                         <div class="relative">
-                            <select onchange="changeLang(this.value)" class="px-4 py-2 text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer font-medium" style="min-height: 44px;">
+                            <select onchange="changeLang(this.value)" class="px-2 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer font-medium" style="min-height: 36px;">
                                 <option value="ko" ${lang === 'ko' ? 'selected' : ''}>🇰🇷 한국어</option>
                                 <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸 English</option>
                                 <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 中文</option>
@@ -393,13 +393,13 @@ app.get('/', (c) => {
                                 <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪 Deutsch</option>
                             </select>
                         </div>
-                        <button onclick="showNotices()" class="nav-link p-2 hover:bg-gray-50 rounded-lg transition" style="min-width: 44px; min-height: 44px;">
+                        <button onclick="showNotices()" class="nav-link p-1.5 md:p-2 hover:bg-gray-50 rounded-lg transition text-sm md:text-base" style="min-width: 36px; min-height: 36px;">
                             <i class="fas fa-bell"></i>
                         </button>
-                        <button onclick="showRegister()" class="btn-secondary px-6 py-2.5 rounded-full font-medium" style="min-height: 44px;">
+                        <button onclick="showRegister()" class="btn-secondary px-3 py-1.5 md:px-6 md:py-2.5 rounded-full font-medium text-xs md:text-base" style="min-height: 36px;">
                             ${t('auth.register', lang)}
                         </button>
-                        <button onclick="showLogin()" class="btn-primary px-6 py-2.5 rounded-full font-medium" style="min-height: 44px;">
+                        <button onclick="showLogin()" class="btn-primary px-3 py-1.5 md:px-6 md:py-2.5 rounded-full font-medium text-xs md:text-base" style="min-height: 36px;">
                             ${t('auth.login', lang)}
                         </button>
                     </div>

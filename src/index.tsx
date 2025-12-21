@@ -382,15 +382,15 @@ app.get('/', (c) => {
                     
                     <div class="flex items-center space-x-1 md:space-x-4">
                         <div class="relative">
-                            <select onchange="changeLang(this.value)" class="px-2 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer font-medium" style="min-height: 36px;">
+                            <select onchange="changeLang(this.value)" class="px-1.5 py-1.5 md:px-3 md:py-2 text-xs md:text-sm rounded-lg bg-gray-700 text-white border-none hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer font-medium" style="min-height: 36px; max-width: 90px;">
                                 <option value="ko" ${lang === 'ko' ? 'selected' : ''}>🇰🇷 한국어</option>
-                                <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸 English</option>
+                                <option value="en" ${lang === 'en' ? 'selected' : ''}>🇺🇸 EN</option>
                                 <option value="zh" ${lang === 'zh' ? 'selected' : ''}>🇨🇳 中文</option>
                                 <option value="ja" ${lang === 'ja' ? 'selected' : ''}>🇯🇵 日本語</option>
-                                <option value="vi" ${lang === 'vi' ? 'selected' : ''}>🇻🇳 Tiếng Việt</option>
+                                <option value="vi" ${lang === 'vi' ? 'selected' : ''}>🇻🇳 VN</option>
                                 <option value="th" ${lang === 'th' ? 'selected' : ''}>🇹🇭 ไทย</option>
-                                <option value="es" ${lang === 'es' ? 'selected' : ''}>🇪🇸 Español</option>
-                                <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪 Deutsch</option>
+                                <option value="es" ${lang === 'es' ? 'selected' : ''}>🇪🇸 ES</option>
+                                <option value="de" ${lang === 'de' ? 'selected' : ''}>🇩🇪 DE</option>
                             </select>
                         </div>
                         <button onclick="showNotices()" class="nav-link p-1.5 md:p-2 hover:bg-gray-50 rounded-lg transition text-sm md:text-base" style="min-width: 36px; min-height: 36px;">

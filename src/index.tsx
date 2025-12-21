@@ -799,22 +799,22 @@ app.get('/', (c) => {
                 <h1 class="hero-title text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 md:mb-8 leading-tight tracking-tight">
                     ${lang === 'ko' ? '수수료 제로, 프리랜서 플랫폼의 새로운 기준' : t('platform.tagline', lang)}
                 </h1>
-                <div class="inline-flex items-center space-x-1 md:space-x-3 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-3 md:px-6 py-1.5 md:py-3 mb-3 md:mb-6">
-                    <i class="fab fa-bitcoin text-sm md:text-2xl"></i>
-                    <p class="hero-subtitle text-xs md:text-xl font-medium">
+                <div class="inline-flex items-center space-x-1 md:space-x-2 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-2 md:px-4 py-1 md:py-2 mb-2 md:mb-4">
+                    <i class="fab fa-bitcoin text-sm md:text-base"></i>
+                    <p class="hero-subtitle text-xs md:text-sm font-medium">
                         ${lang === 'ko' ? '모든 거래는 테더 USDT' : lang === 'en' ? 'All Transactions in Tether USDT' : lang === 'zh' ? '所有交易均使用泰达币USDT' : lang === 'ja' ? 'すべての取引はテザーUSDT' : lang === 'vi' ? 'Tất cả giao dịch bằng Tether USDT' : lang === 'th' ? 'ธุรกรรมทั้งหมดด้วย Tether USDT' : lang === 'es' ? 'Todas las transacciones en Tether USDT' : 'Alle Transaktionen in Tether USDT'}
                     </p>
                 </div>
-                <p class="hero-subtitle text-sm md:text-2xl mb-3 md:mb-6 font-light opacity-95">${t('platform.fee_policy', lang)}</p>
-                <p class="hero-description text-xs md:text-lg mb-6 md:mb-12 opacity-80 max-w-3xl mx-auto leading-relaxed">
+                <p class="hero-subtitle text-sm md:text-base mb-2 md:mb-4 font-light opacity-95">${t('platform.fee_policy', lang)}</p>
+                <p class="hero-description text-xs md:text-sm mb-4 md:mb-8 opacity-80 max-w-3xl mx-auto leading-relaxed">
                     <span class="block sm:inline">${lang === 'ko' ? '전 세계 의뢰인과 개발자를 ' : t('platform.global_description', lang)}</span>
                     <span class="block sm:inline">${lang === 'ko' ? '연결하는 글로벌 플랫폼' : ''}</span>
                 </p>
-                <div class="hero-buttons flex flex-col sm:flex-row justify-center gap-2 md:gap-4 items-center max-w-xs mx-auto sm:max-w-none">
-                    <button onclick="navigateToProjects()" class="btn-secondary w-full sm:w-auto px-4 md:px-10 py-2 md:py-4 rounded-full font-medium text-xs md:text-lg hover:scale-105 transition-transform" style="min-height: 40px;">
+                <div class="hero-buttons flex flex-col sm:flex-row justify-center gap-2 md:gap-3 items-center max-w-xs mx-auto sm:max-w-none">
+                    <button onclick="navigateToProjects()" class="btn-secondary w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform" style="min-height: 40px;">
                         ${t('nav.find_projects', lang)}
                     </button>
-                    <button onclick="navigateToFreelancers()" class="bg-white text-gray-900 w-full sm:w-auto px-4 md:px-10 py-2 md:py-4 rounded-full font-medium text-xs md:text-lg hover:scale-105 transition-transform shadow-lg" style="min-height: 40px;">
+                    <button onclick="navigateToFreelancers()" class="bg-white text-gray-900 w-full sm:w-auto px-3 md:px-7 py-2 md:py-3 rounded-full font-medium text-xs md:text-base hover:scale-105 transition-transform shadow-lg" style="min-height: 40px;">
                         ${t('nav.find_experts', lang)}
                     </button>
                 </div>

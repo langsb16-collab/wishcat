@@ -594,8 +594,247 @@ app.get('/categories', async (c) => {
             }
             
             function selectCategory(main, sub, item) {
-                alert(\`선택한 카테고리:\n\n대분류: \${main}\n중분류: \${sub}\n세부: \${item}\n\n프로젝트 등록 페이지로 이동합니다.\`);
-                window.location.href = '/projects?category=' + encodeURIComponent(item) + '&lang=' + lang;
+                showCategoryModal(main, sub, item);
+            }
+            
+            function showCategoryModal(main, sub, item) {
+                const modal = document.createElement('div');
+                modal.id = 'categoryModal';
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+                modal.innerHTML = \`
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8 transform transition-all">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-folder-open text-blue-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">\${item}</h3>
+                            <p class="text-sm text-gray-600">\${sub} > \${main}</p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <button onclick="showProjectForm('\${main}', '\${sub}', '\${item}')" 
+                                class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-4 px-6 rounded-xl font-semibold text-base transition-all transform hover:scale-105 shadow-lg flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fas fa-plus-circle mr-3 text-xl"></i>
+                                    <span>${lang === 'ko' ? '프로젝트 등록하기' : 'Post Project'}</span>
+                                </span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                            
+                            <button onclick="showFreelancerForm('\${main}', '\${sub}', '\${item}')" 
+                                class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 px-6 rounded-xl font-semibold text-base transition-all transform hover:scale-105 shadow-lg flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fas fa-user-tie mr-3 text-xl"></i>
+                                    <span>${lang === 'ko' ? '전문가로 지원하기' : 'Apply as Expert'}</span>
+                                </span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                            
+                            <button onclick="closeModal()" 
+                                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-xl font-medium text-base transition-all">
+                                ${lang === 'ko' ? '취소' : 'Cancel'}
+                            </button>
+                        </div>
+                    </div>
+                \`;
+                document.body.appendChild(modal);
+                
+                modal.onclick = function(e) {
+                    if (e.target === modal) closeModal();
+                };
+            }
+            
+            function closeModal() {
+                const modal = document.getElementById('categoryModal');
+                if (modal) modal.remove();
+                const formModal = document.getElementById('formModal');
+                if (formModal) formModal.remove();
+            }
+            
+            function showProjectForm(main, sub, item) {
+                closeModal();
+                const formModal = document.createElement('div');
+                formModal.id = 'formModal';
+                formModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto';
+                formModal.innerHTML = \`
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8 p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl md:text-2xl font-bold text-gray-900">
+                                <i class="fas fa-plus-circle text-blue-600 mr-2"></i>
+                                ${lang === 'ko' ? '프로젝트 등록' : 'Post Project'}
+                            </h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="projectForm" class="space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                <p class="text-sm text-gray-700"><strong>${lang === 'ko' ? '카테고리' : 'Category'}:</strong> \${item}</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '프로젝트 제목' : 'Project Title'} *</label>
+                                <input type="text" name="title" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="${lang === 'ko' ? '프로젝트 제목을 입력하세요' : 'Enter project title'}">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '프로젝트 설명' : 'Description'} *</label>
+                                <textarea name="description" required rows="4"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="${lang === 'ko' ? '프로젝트에 대해 자세히 설명해주세요' : 'Describe your project in detail'}"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '예산 (USDT)' : 'Budget (USDT)'} *</label>
+                                    <input type="number" name="budget" required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="1000">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '기간' : 'Duration'} *</label>
+                                    <select name="duration" required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">${lang === 'ko' ? '선택하세요' : 'Select'}</option>
+                                        <option value="1week">${lang === 'ko' ? '1주 이내' : '1 week'}</option>
+                                        <option value="2weeks">${lang === 'ko' ? '2주' : '2 weeks'}</option>
+                                        <option value="1month">${lang === 'ko' ? '1개월' : '1 month'}</option>
+                                        <option value="3months">${lang === 'ko' ? '3개월' : '3 months'}</option>
+                                        <option value="flexible">${lang === 'ko' ? '협의 가능' : 'Flexible'}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '필요 기술' : 'Required Skills'}</label>
+                                <input type="text" name="skills" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="${lang === 'ko' ? '예: React, Node.js, Python' : 'e.g., React, Node.js, Python'}">
+                            </div>
+                            
+                            <div class="flex gap-3 pt-4">
+                                <button type="submit" 
+                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors">
+                                    <i class="fas fa-check mr-2"></i>
+                                    ${lang === 'ko' ? '등록하기' : 'Submit'}
+                                </button>
+                                <button type="button" onclick="closeModal()" 
+                                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors">
+                                    ${lang === 'ko' ? '취소' : 'Cancel'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+                document.body.appendChild(formModal);
+                
+                document.getElementById('projectForm').onsubmit = function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    console.log('프로젝트 등록:', Object.fromEntries(formData));
+                    alert(\`${lang === 'ko' ? '프로젝트가 등록되었습니다!' : 'Project submitted successfully!'}\n\n${lang === 'ko' ? '카테고리' : 'Category'}: \${item}\`);
+                    closeModal();
+                };
+            }
+            
+            function showFreelancerForm(main, sub, item) {
+                closeModal();
+                const formModal = document.createElement('div');
+                formModal.id = 'formModal';
+                formModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto';
+                formModal.innerHTML = \`
+                    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8 p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl md:text-2xl font-bold text-gray-900">
+                                <i class="fas fa-user-tie text-green-600 mr-2"></i>
+                                ${lang === 'ko' ? '전문가 등록' : 'Apply as Expert'}
+                            </h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="freelancerForm" class="space-y-4">
+                            <div class="bg-green-50 p-4 rounded-lg mb-4">
+                                <p class="text-sm text-gray-700"><strong>${lang === 'ko' ? '전문 분야' : 'Specialty'}:</strong> \${item}</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '전문가 이름' : 'Your Name'} *</label>
+                                <input type="text" name="name" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    placeholder="${lang === 'ko' ? '이름을 입력하세요' : 'Enter your name'}">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '자기소개' : 'Bio'} *</label>
+                                <textarea name="bio" required rows="4"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    placeholder="${lang === 'ko' ? '경력과 전문성을 소개해주세요' : 'Introduce your experience and expertise'}"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '시간당 요율 (USDT)' : 'Hourly Rate (USDT)'} *</label>
+                                    <input type="number" name="rate" required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                        placeholder="50">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '가능 시간' : 'Availability'} *</label>
+                                    <select name="availability" required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                        <option value="">${lang === 'ko' ? '선택하세요' : 'Select'}</option>
+                                        <option value="fulltime">${lang === 'ko' ? '풀타임' : 'Full-time'}</option>
+                                        <option value="parttime">${lang === 'ko' ? '파트타임' : 'Part-time'}</option>
+                                        <option value="weekends">${lang === 'ko' ? '주말만' : 'Weekends'}</option>
+                                        <option value="flexible">${lang === 'ko' ? '협의 가능' : 'Flexible'}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '보유 기술' : 'Skills'} *</label>
+                                <input type="text" name="skills" required 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    placeholder="${lang === 'ko' ? '예: React, Node.js, Python' : 'e.g., React, Node.js, Python'}">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">${lang === 'ko' ? '포트폴리오 링크' : 'Portfolio Link'}</label>
+                                <input type="url" name="portfolio" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                    placeholder="https://">
+                            </div>
+                            
+                            <div class="flex gap-3 pt-4">
+                                <button type="submit" 
+                                    class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors">
+                                    <i class="fas fa-check mr-2"></i>
+                                    ${lang === 'ko' ? '지원하기' : 'Apply'}
+                                </button>
+                                <button type="button" onclick="closeModal()" 
+                                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors">
+                                    ${lang === 'ko' ? '취소' : 'Cancel'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                \`;
+                document.body.appendChild(formModal);
+                
+                document.getElementById('freelancerForm').onsubmit = function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    console.log('전문가 지원:', Object.fromEntries(formData));
+                    alert(\`${lang === 'ko' ? '전문가 등록이 완료되었습니다!' : 'Expert application submitted successfully!'}\n\n${lang === 'ko' ? '전문 분야' : 'Specialty'}: \${item}\`);
+                    closeModal();
+                };
             }
             
             renderCategories();

@@ -1087,15 +1087,15 @@ app.get('/', (c) => {
           .feature-card {
             background: white;
             border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: 16px;
-            padding: 32px;
+            border-radius: 12px;
+            padding: 20px;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
           
           @media (max-width: 768px) {
             .feature-card {
               padding: 12px !important;
-              border-radius: 12px;
+              border-radius: 10px;
             }
           }
           
@@ -1161,9 +1161,9 @@ app.get('/', (c) => {
         </nav>
 
         <!-- Hero Section -->
-        <div class="hero-gradient text-white py-6 md:py-20">
+        <div class="hero-gradient text-white py-6 md:py-12">
             <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-                <h1 class="hero-title text-base sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-4 md:mb-8 leading-tight tracking-tight whitespace-nowrap">
+                <h1 class="hero-title text-base sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-3 md:mb-5 leading-tight tracking-tight whitespace-nowrap">
                     ${lang === 'ko' ? '수수료 제로, 프리랜서 플랫폼의 새로운 기준' : t('platform.tagline', lang)}
                 </h1>
                 <div class="inline-flex items-center space-x-1 md:space-x-2 bg-white bg-opacity-10 backdrop-blur-sm rounded-full px-2 md:px-4 py-1 md:py-2 mb-2 md:mb-4">
@@ -1186,15 +1186,15 @@ app.get('/', (c) => {
         </div>
 
         <!-- Features Section -->
-        <div class="max-w-7xl mx-auto px-4 lg:px-8 py-8 md:py-24">
-            <h2 class="text-xl md:text-5xl font-semibold text-center mb-2 md:mb-4 text-luxury">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 py-6 md:py-12">
+            <h2 class="text-xl md:text-4xl font-semibold text-center mb-2 md:mb-4 text-luxury">
                 ${t('footer.why_choose', lang)}
             </h2>
-            <p class="text-center text-sub text-xs md:text-lg mb-6 md:mb-16 max-w-2xl mx-auto">
+            <p class="text-center text-sub text-xs md:text-base mb-4 md:mb-8 max-w-2xl mx-auto">
                 ${lang === 'ko' ? '프리미엄 프리랜서 플랫폼의 새로운 기준' : lang === 'en' ? 'A new standard for premium freelance platforms' : lang === 'zh' ? '高级自由职业平台的新标准' : lang === 'ja' ? 'プレミアムフリーランスプラットフォームの新基準' : 'A new standard for premium freelance platforms'}
             </p>
             
-            <div class="grid md:grid-cols-3 gap-3 md:gap-8">
+            <div class="grid md:grid-cols-3 gap-4 md:gap-6">
                 <div class="feature-card text-center card-hover">
                     <div class="text-2xl md:text-5xl mb-2 md:mb-6" style="color: var(--deep-navy);">
                         <i class="fas fa-percentage"></i>
@@ -1234,19 +1234,9 @@ app.get('/', (c) => {
         </div>
 
         <!-- Core Differentiators Section -->
-        <div class="py-8 md:py-24" style="background: linear-gradient(180deg, #FAFAF7 0%, #F5F5F2 100%);">
+        <div class="py-6 md:py-12" style="background: linear-gradient(180deg, #FAFAF7 0%, #F5F5F2 100%);">
             <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <h2 class="text-lg md:text-5xl font-semibold text-center mb-2 md:mb-4 text-luxury">
-                    ${lang === 'ko' ? '위시캣·프리모아 단점을 해결하는 핵심 기능' : 
-                      lang === 'en' ? 'Core Features Solving Wishket·Freemoa Issues' :
-                      lang === 'zh' ? '解决Wishket·Freemoa缺点的核心功能' :
-                      lang === 'ja' ? 'Wishket·Fremoaの欠点を解決する核心機能' :
-                      lang === 'vi' ? 'Tính năng cốt lõi giải quyết vấn đề Wishket·Freemoa' :
-                      lang === 'th' ? 'ฟีเจอร์หลักแก้ปัญหา Wishket·Freemoa' :
-                      lang === 'es' ? 'Características principales que resuelven problemas de Wishket·Freemoa' :
-                      'Kernfunktionen zur Lösung von Wishket·Freemoa-Problemen'}
-                </h2>
-                <p class="text-center text-sub text-xs md:text-lg mb-4 md:mb-16 max-w-3xl mx-auto leading-relaxed hidden sm:block">
+                <p class="text-center text-luxury font-semibold text-base md:text-2xl mb-6 md:mb-10 max-w-4xl mx-auto leading-relaxed">
                     ${lang === 'ko' ? '기존 플랫폼은 "사람 중심 중개", FeeZero는 "시스템 중심 프로젝트 관리"' : 
                       lang === 'en' ? 'Existing platforms: "People-centered brokerage", FeeZero: "System-centered project management"' :
                       lang === 'zh' ? '现有平台："以人为中心的中介"，FeeZero："以系统为中心的项目管理"' :
@@ -1257,7 +1247,7 @@ app.get('/', (c) => {
                       'Bestehende Plattformen: "Personenzentrierte Vermittlung", FeeZero: "Systemzentriertes Projektmanagement"'}
                 </p>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-8">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     <!-- Feature 1: AI-based Standard Quotation -->
                     <div class="feature-card card-hover">
                         <div class="flex items-center mb-3 md:mb-5">
@@ -1587,7 +1577,7 @@ app.get('/', (c) => {
         </div>
 
         <!-- Stats Section -->
-        <div class="py-6 md:py-24" style="background: var(--deep-navy);">
+        <div class="py-6 md:py-12" style="background: var(--deep-navy);">
             <div class="max-w-7xl mx-auto px-4 lg:px-8">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12 text-center text-white">
                     <div class="card-hover">
@@ -1611,7 +1601,7 @@ app.get('/', (c) => {
         </div>
 
         <!-- Footer -->
-        <footer class="py-6 md:py-16" style="background: var(--charcoal-black); color: white;">
+        <footer class="py-4 md:py-8" style="background: var(--charcoal-black); color: white;">
             <div class="max-w-7xl mx-auto px-4 lg:px-8">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12">
                     <div class="col-span-2 md:col-span-1">

@@ -10,6 +10,23 @@ export type PaymentStatus = 'pending' | 'escrowed' | 'released' | 'refunded';
 
 export interface Bindings {
   DB: D1Database;
+  // API Keys (from .dev.vars or Cloudflare Secrets)
+  RESEND_API_KEY: string;
+  RESEND_FROM_EMAIL: string;
+  COINBASE_API_KEY: string;
+  COINBASE_WEBHOOK_SECRET: string;
+  OPENAI_API_KEY: string;
+  OPENAI_MODEL: string;
+  OPENAI_MAX_TOKENS: string;
+  AUTH0_DOMAIN: string;
+  AUTH0_CLIENT_ID: string;
+  AUTH0_CLIENT_SECRET: string;
+  AUTH0_AUDIENCE: string;
+  APP_ENV: string;
+  APP_URL: string;
+  FRONTEND_URL: string;
+  LOG_LEVEL: string;
+  CORS_ORIGINS: string;
 }
 
 export interface User {

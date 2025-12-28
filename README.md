@@ -91,13 +91,27 @@ webapp/
 │   ├── types.ts           # TypeScript 타입 정의
 │   ├── i18n.ts            # 다국어 번역
 │   ├── db.ts              # 데이터베이스 유틸리티
-│   └── renderer.tsx       # JSX 렌더러
+│   ├── renderer.tsx       # JSX 렌더러
+│   ├── admin.tsx          # 관리자 페이지
+│   ├── routes/            # API 라우트
+│   │   ├── email.ts       # 📧 이메일 API (Resend)
+│   │   ├── payment.ts     # 💳 결제 API (Coinbase)
+│   │   ├── ai.ts          # 🤖 AI API (OpenAI)
+│   │   ├── auth.ts        # 🔐 인증 API (Auth0)
+│   │   └── announcements.ts
+│   └── services/          # 제3자 서비스 통합
+│       ├── resend.ts      # Resend 이메일 서비스
+│       ├── coinbase.ts    # Coinbase Commerce 결제
+│       ├── openai.ts      # OpenAI AI 서비스
+│       └── auth0.ts       # Auth0 인증 서비스
 ├── migrations/
 │   └── 0001_initial_schema.sql  # 데이터베이스 스키마
 ├── public/
 │   └── static/            # 정적 파일
 ├── dist/                  # 빌드 결과물
 ├── .wrangler/             # Wrangler 로컬 데이터
+├── .dev.vars              # 로컬 개발용 환경 변수 (Git 제외)
+├── .gitignore             # Git 제외 파일 목록
 ├── ecosystem.config.cjs   # PM2 설정
 ├── wrangler.json          # Cloudflare 설정
 ├── seed.sql               # 시드 데이터
@@ -245,48 +259,152 @@ curl -H "Accept-Language: ja" http://localhost:3000/
 
 ## 🔗 제3자 서비스 통합
 
-### 현재 상태
-현재 FeeZero는 기본 웹 플랫폼 기능을 제공하며, 다음 고급 기능은 제3자 서비스 통합이 필요합니다:
+### ✅ 통합 완료 서비스
 
-### 통합 예정 서비스
+FeeZero는 다음 제3자 서비스와 통합되어 있으며, 실제 API 키를 설정하면 즉시 사용 가능합니다:
+
+#### 1. 📧 이메일 서비스 - Resend
+- **상태**: ✅ 통합 완료
+- **용도**: 회원가입 인증, 프로젝트 알림, 시스템 이메일
+- **API 엔드포인트**:
+  - `POST /api/email/send-verification` - 인증 이메일 발송
+  - `POST /api/email/send-notification` - 알림 이메일 발송
+- **문서**: https://resend.com/docs
+- **가격**: 무료 100통/월, $20/월 (50,000통)
+
+#### 2. 💳 USDT 결제 - Coinbase Commerce
+- **상태**: ✅ 통합 완료
+- **용도**: USDT 암호화폐 결제, 에스크로
+- **API 엔드포인트**:
+  - `POST /api/payment/create` - 결제 생성
+  - `GET /api/payment/:chargeId` - 결제 상태 조회
+  - `POST /api/payment/webhook` - 결제 이벤트 처리
+- **문서**: https://docs.cloud.coinbase.com/commerce/docs
+- **수수료**: 거래당 1%
+
+#### 3. 🤖 AI 서비스 - OpenAI
+- **상태**: ✅ 통합 완료
+- **용도**: 
+  - AI 기반 표준 견적 자동 생성
+  - 프로젝트 일정 지연 분석
+  - 요구사항 명확화 도우미
+  - 코드 리뷰 자동화
+- **API 엔드포인트**:
+  - `POST /api/ai/estimate` - 프로젝트 견적 생성
+  - `POST /api/ai/analyze-delay` - 일정 지연 분석
+  - `POST /api/ai/clarify-requirements` - 요구사항 명확화
+  - `POST /api/ai/review-code` - 코드 리뷰
+  - `GET /api/ai/status` - AI 서비스 상태
+- **모델**: gpt-4o-mini (비용 효율) / gpt-4o (고품질)
+- **문서**: https://platform.openai.com/docs
+- **가격**: 
+  - gpt-4o-mini: $0.150/1M input, $0.600/1M output
+  - gpt-4o: $2.50/1M input, $10.00/1M output
+
+#### 4. 🔐 사용자 인증 - Auth0
+- **상태**: ✅ 통합 완료
+- **용도**: 사용자 인증, 권한 관리, SSO
+- **API 엔드포인트**:
+  - `GET /api/auth/me` - 현재 사용자 정보
+  - `POST /api/auth/update-profile` - 프로필 업데이트
+  - `GET /api/auth/check-role/:role` - 역할 확인
+  - `GET /api/auth/check-permission/:permission` - 권한 확인
+  - `GET /api/auth/status` - 인증 서비스 상태
+  - `GET /api/auth/roles` - 사용 가능한 역할 목록
+  - `GET /api/auth/permissions` - 사용 가능한 권한 목록
+- **문서**: https://auth0.com/docs
+- **가격**: 무료 7,500 활성 사용자/월, $35/월~
+
+### 🔧 API 키 설정 방법
+
+#### 로컬 개발 환경
+1. `.dev.vars` 파일이 프로젝트 루트에 생성되어 있습니다
+2. 각 서비스에서 API 키를 발급받아 `.dev.vars` 파일에 입력:
+
+\`\`\`env
+# 📧 Resend
+RESEND_API_KEY=re_your_actual_key_here
+RESEND_FROM_EMAIL=noreply@yourdomain.com
+
+# 💳 Coinbase Commerce
+COINBASE_API_KEY=your_actual_key_here
+COINBASE_WEBHOOK_SECRET=your_webhook_secret_here
+
+# 🤖 OpenAI
+OPENAI_API_KEY=sk-proj-your_actual_key_here
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_MAX_TOKENS=2000
+
+# 🔐 Auth0
+AUTH0_DOMAIN=your-tenant.auth0.com
+AUTH0_CLIENT_ID=your_client_id
+AUTH0_CLIENT_SECRET=your_client_secret
+AUTH0_AUDIENCE=https://your-api-identifier
+\`\`\`
+
+3. 개발 서버 재시작:
+\`\`\`bash
+pm2 restart feezero
+\`\`\`
+
+#### 프로덕션 배포 (Cloudflare Pages)
+API 키를 Cloudflare Secrets에 안전하게 저장:
+
+\`\`\`bash
+# Resend
+npx wrangler pages secret put RESEND_API_KEY --project-name feezero
+npx wrangler pages secret put RESEND_FROM_EMAIL --project-name feezero
+
+# Coinbase Commerce
+npx wrangler pages secret put COINBASE_API_KEY --project-name feezero
+npx wrangler pages secret put COINBASE_WEBHOOK_SECRET --project-name feezero
+
+# OpenAI
+npx wrangler pages secret put OPENAI_API_KEY --project-name feezero
+
+# Auth0
+npx wrangler pages secret put AUTH0_DOMAIN --project-name feezero
+npx wrangler pages secret put AUTH0_CLIENT_ID --project-name feezero
+npx wrangler pages secret put AUTH0_CLIENT_SECRET --project-name feezero
+npx wrangler pages secret put AUTH0_AUDIENCE --project-name feezero
+\`\`\`
+
+### 🔄 통합 예정 서비스
 
 #### 1. 실시간 메시징
-- **추천 서비스**: 
-  - [Stream Chat](https://getstream.io/chat/) - 엔터프라이즈급 채팅 API
-  - [SendBird](https://sendbird.com/) - 종합 메시징 플랫폼
-  - [PubNub](https://www.pubnub.com/) - 실시간 데이터 스트리밍
+- **추천 서비스**: Stream Chat, SendBird, PubNub
 - **기능**: 텍스트, 파일, 음성 메시지, 읽음 확인
 
 #### 2. 음성/영상 통화
-- **추천 서비스**:
-  - [Agora](https://www.agora.io/) - 실시간 음성/영상 통화
-  - [Twilio](https://www.twilio.com/) - 프로그래밍 가능한 통신
-  - [Daily.co](https://www.daily.co/) - 비디오 통화 임베딩
+- **추천 서비스**: Agora, Twilio, Daily.co
 - **기능**: 1:1 음성 통화, 영상 통화, 화면 공유
 
-#### 3. USDT 결제
-- **추천 서비스**:
-  - [NOWPayments](https://nowpayments.io/) - 암호화폐 결제 게이트웨이
-  - [Coinbase Commerce](https://commerce.coinbase.com/) - 암호화폐 결제
-  - [BitPay](https://bitpay.com/) - 블록체인 결제
-- **기능**: USDT 입출금, 에스크로, 트랜잭션 추적
-
-#### 4. 파일 저장소
-- **추천 서비스**:
-  - [Cloudflare R2](https://developers.cloudflare.com/r2/) - S3 호환 스토리지
-  - [AWS S3](https://aws.amazon.com/s3/) - 오브젝트 스토리지
+#### 3. 파일 저장소
+- **추천 서비스**: Cloudflare R2, AWS S3
 - **기능**: 포트폴리오 이미지, 프로젝트 파일, 문서
 
-### 통합 구조
-모든 제3자 서비스는 Hono API 라우트를 통해 통합되며, 클라이언트는 직접 제3자 서비스에 접근하지 않습니다.
+### 🔒 보안 중요사항
 
+#### ⚠️ 절대 하지 말아야 할 것
+- ❌ API 키를 코드에 직접 작성
+- ❌ API 키를 GitHub에 커밋
+- ❌ 프론트엔드에서 직접 API 키 사용
+
+#### ✅ 올바른 방법
+1. **로컬 개발**: `.dev.vars` 파일 사용 (`.gitignore`에 포함됨)
+2. **프로덕션**: Cloudflare Secrets 사용
+3. **API 호출**: 모든 제3자 서비스는 Hono 백엔드를 통해서만 호출
+
+### 통합 아키텍처
 \`\`\`
-클라이언트 → Hono API → 제3자 서비스
+클라이언트 (브라우저)
+    ↓
+Hono API 서버 (Cloudflare Workers)
+    ↓
+제3자 서비스 (Resend, Coinbase, OpenAI, Auth0)
 \`\`\`
 
-**보안**: 모든 API 키와 토큰은 Cloudflare Secrets에 저장되며, 클라이언트에 노출되지 않습니다.
-
-자세한 통합 가이드는 `INTEGRATION.md` 문서를 참조하세요.
+**보안**: 모든 API 키는 서버 사이드에서만 사용되며, 클라이언트에 절대 노출되지 않습니다.
 
 ## 📦 배포
 

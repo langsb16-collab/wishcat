@@ -12,11 +12,22 @@ import {
   queryDatabase
 } from './db'
 import admin from './admin'
+// Import new API routes
+import email from './routes/email'
+import payment from './routes/payment'
+import ai from './routes/ai'
+import auth from './routes/auth'
 
 const app = new Hono<{ Bindings: Bindings }>()
 
 // Mount admin routes
 app.route('/admin', admin)
+
+// Mount new API routes
+app.route('/api/email', email)
+app.route('/api/payment', payment)
+app.route('/api/ai', ai)
+app.route('/api/auth', auth)
 
 // Enable CORS for API routes
 app.use('/api/*', cors())

@@ -35,6 +35,10 @@
     chatbotIcon.style.display = 'flex';
   }
 
+  // 전역 함수로 노출 (inline onclick을 위해)
+  window.openChatbot = openChatbot;
+  window.closeChatbotWindow = closeChatbotWindow;
+
   // FAQ 리스트 렌더링
   function renderFAQList(filterText = '') {
     const data = window.CHATBOT_DATA[currentLang];

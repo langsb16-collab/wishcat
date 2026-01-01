@@ -1945,7 +1945,7 @@ app.get('/', (c) => {
         </script>
 
         <!-- 챗봇 -->
-        <div id="chatbotIcon" style="position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); z-index: 999;">
+        <div id="chatbotIcon" onclick="window.openChatbot()" style="position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); z-index: 999;">
             <i class="fas fa-comments" style="color: white; font-size: 28px;"></i>
         </div>
 
@@ -1971,7 +1971,7 @@ app.get('/', (c) => {
                         <button class="lang-btn" onclick="window.changeChatLanguage('zh')" title="中文" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 18px; transition: all 0.2s;">🇨🇳</button>
                         <button class="lang-btn" onclick="window.changeChatLanguage('ja')" title="日本語" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 18px; transition: all 0.2s;">🇯🇵</button>
                     </div>
-                    <button id="closeChatbot" style="background: none; border: none; color: white; cursor: pointer; font-size: 20px; padding: 4px;">
+                    <button id="closeChatbot" onclick="window.closeChatbotWindow()" style="background: none; border: none; color: white; cursor: pointer; font-size: 20px; padding: 4px;">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>

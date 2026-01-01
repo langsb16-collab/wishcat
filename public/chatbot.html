@@ -31,8 +31,8 @@
             position: fixed;
             bottom: 100px;
             right: 24px;
-            width: 380px;
-            height: 600px;
+            width: 400px;
+            height: 650px;
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
@@ -89,138 +89,138 @@
             padding: 4px;
         }
         
-        /* 메시지 영역 */
-        .chat-messages {
+        /* FAQ 헤더 */
+        .faq-header {
+            padding: 16px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .faq-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 40px 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+        
+        /* FAQ 컨테이너 */
+        .faq-container {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 8px;
             background: #f9fafb;
         }
         
-        .message {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .bot-message { align-items: flex-start; }
-        .user-message {
-            flex-direction: row-reverse;
-            justify-content: flex-start;
-        }
-        
-        .bot-avatar {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            flex-shrink: 0;
-        }
-        
-        .message-content { max-width: 70%; }
-        .message-text {
-            padding: 12px 16px;
-            border-radius: 12px;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-        .bot-message .message-text {
+        /* FAQ 아이템 */
+        .faq-item {
             background: white;
             border: 1px solid #e5e7eb;
-        }
-        .user-message .message-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .message-time {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 4px;
-            padding: 0 4px;
-        }
-        
-        /* 빠른 답변 */
-        .quick-replies {
-            padding: 8px 16px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .quick-reply-btn {
-            padding: 8px 12px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            overflow: hidden;
             transition: all 0.2s;
         }
-        .quick-reply-btn:hover {
-            background: #f3f4f6;
+        .faq-item:hover {
             border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
         }
         
-        /* 입력 영역 */
-        .chat-input-container {
-            padding: 12px 16px;
-            border-top: 1px solid #e5e7eb;
+        .faq-question {
+            padding: 14px 16px;
             display: flex;
-            gap: 8px;
+            justify-content: space-between;
             align-items: center;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #e5e7eb;
-            border-radius: 20px;
-            font-size: 14px;
-            resize: none;
-            font-family: inherit;
-        }
-        .btn-send {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 50%;
-            color: white;
             cursor: pointer;
+            user-select: none;
+        }
+        .faq-q-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            flex: 1;
+            line-height: 1.5;
+        }
+        .faq-icon {
+            color: #9ca3af;
+            font-size: 14px;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+            color: #667eea;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+        .faq-a-text {
+            padding: 0 16px 14px 16px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #6b7280;
+        }
+        
+        /* 검색 결과 없음 */
+        .no-results {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
         }
         
-        /* 타이핑 인디케이터 */
-        .typing-indicator {
-            display: flex;
-            gap: 12px;
-            padding: 0 16px 16px;
-        }
-        .typing-indicator.hidden { display: none; }
-        .typing-dots {
-            background: white;
-            border: 1px solid #e5e7eb;
-            padding: 12px 16px;
-            border-radius: 12px;
-            display: flex;
-            gap: 4px;
-        }
-        .typing-dots span {
+        /* 스크롤바 스타일 */
+        .faq-container::-webkit-scrollbar {
             width: 6px;
-            height: 6px;
-            background: #9ca3af;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
         }
-        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        .faq-container::-webkit-scrollbar-track {
+            background: #f3f4f6;
+        }
+        .faq-container::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+        .faq-container::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
         
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
+        /* 모바일 반응형 */
+        @media (max-width: 480px) {
+            .chatbot-window {
+                width: calc(100vw - 32px);
+                height: calc(100vh - 140px);
+                right: 16px;
+                bottom: 90px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -262,35 +262,21 @@
             </div>
         </div>
 
-        <!-- 메시지 영역 -->
-        <div id="chatMessages" class="chat-messages"></div>
-
-        <!-- 빠른 답변 버튼 -->
-        <div id="quickReplies" class="quick-replies"></div>
-
-        <!-- 타이핑 인디케이터 -->
-        <div id="typingIndicator" class="typing-indicator hidden">
-            <div class="bot-avatar">
-                <i class="fas fa-robot"></i>
-            </div>
-            <div class="typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
+        <!-- FAQ 헤더 -->
+        <div class="faq-header">
+            <div id="faqSubtitle" class="faq-subtitle">자주 묻는 질문</div>
+            <div class="search-box">
+                <input 
+                    id="searchInput" 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="질문 검색...">
+                <i class="fas fa-search search-icon"></i>
             </div>
         </div>
 
-        <!-- 입력 영역 -->
-        <div class="chat-input-container">
-            <textarea 
-                id="userInput" 
-                class="chat-input" 
-                placeholder="메시지를 입력하세요..."
-                rows="1"></textarea>
-            <button id="sendBtn" class="btn-send">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
+        <!-- FAQ 리스트 -->
+        <div id="faqContainer" class="faq-container"></div>
     </div>
 
     <script src="/static/chatbot-data.js"></script>

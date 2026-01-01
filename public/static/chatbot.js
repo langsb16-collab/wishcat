@@ -1,40 +1,32 @@
-// 챗봇 메인 로직
+// 챗봇 메인 로직 - FAQ 리스트 방식
 (function() {
   let currentLang = 'ko';
-  let chatHistory = [];
 
   // DOM 요소
   const chatbotIcon = document.getElementById('chatbotIcon');
   const chatbotWindow = document.getElementById('chatbotWindow');
   const closeChatbot = document.getElementById('closeChatbot');
-  const chatMessages = document.getElementById('chatMessages');
-  const userInput = document.getElementById('userInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const quickReplies = document.getElementById('quickReplies');
-  const typingIndicator = document.getElementById('typingIndicator');
+  const faqContainer = document.getElementById('faqContainer');
+  const searchInput = document.getElementById('searchInput');
 
   // 초기화
   function init() {
-    showWelcomeMessage();
-    renderQuickReplies();
+    renderFAQList();
     
     // 이벤트 리스너
     chatbotIcon.addEventListener('click', openChatbot);
     closeChatbot.addEventListener('click', closeChatbotWindow);
-    sendBtn.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
+    
+    // 검색 기능
+    if (searchInput) {
+      searchInput.addEventListener('input', handleSearch);
+    }
   }
 
   // 챗봇 열기
   function openChatbot() {
     chatbotWindow.classList.remove('hidden');
     chatbotIcon.style.display = 'none';
-    userInput.focus();
   }
 
   // 챗봇 닫기
@@ -43,125 +35,84 @@
     chatbotIcon.style.display = 'flex';
   }
 
-  // 환영 메시지
-  function showWelcomeMessage() {
+  // FAQ 리스트 렌더링
+  function renderFAQList(filterText = '') {
     const data = window.CHATBOT_DATA[currentLang];
-    addBotMessage(data.welcome);
-  }
+    if (!data || !faqContainer) return;
 
-  // 빠른 답변 렌더링
-  function renderQuickReplies() {
-    const data = window.CHATBOT_DATA[currentLang];
-    quickReplies.innerHTML = '';
-    
-    data.quickReplies.forEach(text => {
-      const btn = document.createElement('button');
-      btn.className = 'quick-reply-btn';
-      btn.textContent = text;
-      btn.onclick = () => handleQuickReply(text);
-      quickReplies.appendChild(btn);
-    });
-  }
-
-  // 빠른 답변 클릭
-  function handleQuickReply(text) {
-    addUserMessage(text);
-    processUserMessage(text);
-  }
-
-  // 메시지 전송
-  function sendMessage() {
-    const message = userInput.value.trim();
-    if (!message) return;
-
-    addUserMessage(message);
-    userInput.value = '';
-    processUserMessage(message);
-  }
-
-  // 사용자 메시지 추가
-  function addUserMessage(text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message user-message';
-    messageDiv.innerHTML = `
-      <div class="message-content">
-        <div class="message-text">${escapeHtml(text)}</div>
-        <div class="message-time">${getTime()}</div>
-      </div>
-    `;
-    chatMessages.appendChild(messageDiv);
-    scrollToBottom();
-  }
-
-  // 봇 메시지 추가
-  function addBotMessage(text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message bot-message';
-    messageDiv.innerHTML = `
-      <div class="bot-avatar">
-        <i class="fas fa-robot"></i>
-      </div>
-      <div class="message-content">
-        <div class="message-text">${text.replace(/\n/g, '<br>')}</div>
-        <div class="message-time">${getTime()}</div>
-      </div>
-    `;
-    chatMessages.appendChild(messageDiv);
-    scrollToBottom();
-  }
-
-  // 메시지 처리
-  function processUserMessage(message) {
-    showTyping();
-    
-    setTimeout(() => {
-      hideTyping();
-      const response = getAutoResponse(message.toLowerCase());
-      addBotMessage(response);
-    }, 800);
-  }
-
-  // 자동 응답 찾기
-  function getAutoResponse(message) {
-    const data = window.CHATBOT_DATA[currentLang];
-    
-    for (const qa of data.qa) {
-      for (const keyword of qa.keywords) {
-        if (message.includes(keyword.toLowerCase())) {
-          return qa.answer;
-        }
-      }
+    // 필터링
+    let filteredFaqs = data.faqs;
+    if (filterText) {
+      const lowerFilter = filterText.toLowerCase();
+      filteredFaqs = data.faqs.filter(faq => 
+        faq.q.toLowerCase().includes(lowerFilter) || 
+        faq.a.toLowerCase().includes(lowerFilter)
+      );
     }
+
+    // FAQ 리스트 생성
+    faqContainer.innerHTML = filteredFaqs.map((faq, index) => `
+      <div class="faq-item" data-index="${index}">
+        <div class="faq-question" onclick="window.toggleFAQ(${index})">
+          <span class="faq-q-text">${faq.q}</span>
+          <i class="fas fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-a-text">${faq.a}</div>
+        </div>
+      </div>
+    `).join('');
+
+    // 필터링 결과 없음 표시
+    if (filteredFaqs.length === 0) {
+      faqContainer.innerHTML = `
+        <div class="no-results">
+          <i class="fas fa-search" style="font-size: 48px; color: #9ca3af; margin-bottom: 12px;"></i>
+          <p style="color: #6b7280; font-size: 14px;">
+            ${currentLang === 'ko' ? '검색 결과가 없습니다.' :
+              currentLang === 'en' ? 'No results found.' :
+              currentLang === 'zh' ? '未找到结果。' :
+              '検索結果がありません。'}
+          </p>
+        </div>
+      `;
+    }
+  }
+
+  // FAQ 토글 (전역 함수)
+  window.toggleFAQ = function(index) {
+    const faqItems = document.querySelectorAll('.faq-item');
+    const clickedItem = faqItems[index];
     
-    return data.notFound;
-  }
+    if (!clickedItem) return;
 
-  // 타이핑 표시
-  function showTyping() {
-    typingIndicator.classList.remove('hidden');
-    scrollToBottom();
-  }
+    const isActive = clickedItem.classList.contains('active');
+    
+    // 다른 모든 FAQ 닫기
+    faqItems.forEach(item => {
+      item.classList.remove('active');
+    });
 
-  function hideTyping() {
-    typingIndicator.classList.add('hidden');
-  }
+    // 클릭한 FAQ 토글
+    if (!isActive) {
+      clickedItem.classList.add('active');
+      
+      // 스크롤 애니메이션
+      setTimeout(() => {
+        const container = document.getElementById('faqContainer');
+        const itemTop = clickedItem.offsetTop;
+        container.scrollTo({
+          top: itemTop - 20,
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+  };
 
-  // 스크롤 하단으로
-  function scrollToBottom() {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  // 시간 포맷
-  function getTime() {
-    const now = new Date();
-    return now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
-  }
-
-  // HTML 이스케이프
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+  // 검색 핸들러
+  function handleSearch(e) {
+    const searchText = e.target.value.trim();
+    renderFAQList(searchText);
   }
 
   // 언어 변경 (전역 함수)
@@ -176,26 +127,27 @@
     
     // UI 업데이트
     const data = window.CHATBOT_DATA[currentLang];
-    document.getElementById('chatbotTitle').textContent = 
-      lang === 'ko' ? 'FeeZero 케어봇' :
-      lang === 'en' ? 'FeeZero Care Bot' :
-      lang === 'zh' ? 'FeeZero 护理机器人' :
-      'FeeZero ケアボット';
     
-    document.getElementById('statusText').textContent = 
-      lang === 'ko' ? '온라인' :
-      lang === 'en' ? 'Online' :
-      lang === 'zh' ? '在线' :
-      'オンライン';
+    // 제목 업데이트
+    document.getElementById('chatbotTitle').textContent = data.title;
     
-    userInput.placeholder = data.placeholder;
+    // 상태 텍스트 업데이트
+    document.getElementById('statusText').textContent = data.statusOnline;
     
-    // 빠른 답변 다시 렌더링
-    renderQuickReplies();
+    // 부제목 업데이트
+    const subtitleEl = document.getElementById('faqSubtitle');
+    if (subtitleEl) {
+      subtitleEl.textContent = data.subtitle;
+    }
     
-    // 메시지 초기화 및 환영 메시지
-    chatMessages.innerHTML = '';
-    showWelcomeMessage();
+    // 검색창 placeholder 업데이트
+    if (searchInput) {
+      searchInput.value = '';
+      searchInput.placeholder = data.searchPlaceholder;
+    }
+    
+    // FAQ 리스트 다시 렌더링
+    renderFAQList();
     
     console.log('Language changed to:', lang);
   };

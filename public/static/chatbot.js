@@ -1,4 +1,25 @@
 // 챗봇 메인 로직 - FAQ 리스트 방식
+
+// 전역 함수 먼저 정의 (즉시 사용 가능하도록)
+window.openChatbot = function() {
+  const chatbotWindow = document.getElementById('chatbotWindow');
+  const chatbotIcon = document.getElementById('chatbotIcon');
+  if (chatbotWindow && chatbotIcon) {
+    chatbotWindow.classList.remove('hidden');
+    chatbotIcon.style.display = 'none';
+  }
+};
+
+window.closeChatbotWindow = function() {
+  const chatbotWindow = document.getElementById('chatbotWindow');
+  const chatbotIcon = document.getElementById('chatbotIcon');
+  if (chatbotWindow && chatbotIcon) {
+    chatbotWindow.classList.add('hidden');
+    chatbotIcon.style.display = 'flex';
+  }
+};
+
+// 메인 로직
 (function() {
   let currentLang = 'ko';
 
@@ -13,31 +34,19 @@
   function init() {
     renderFAQList();
     
-    // 이벤트 리스너
-    chatbotIcon.addEventListener('click', openChatbot);
-    closeChatbot.addEventListener('click', closeChatbotWindow);
+    // 이벤트 리스너 (백업용)
+    if (chatbotIcon) {
+      chatbotIcon.addEventListener('click', window.openChatbot);
+    }
+    if (closeChatbot) {
+      closeChatbot.addEventListener('click', window.closeChatbotWindow);
+    }
     
     // 검색 기능
     if (searchInput) {
       searchInput.addEventListener('input', handleSearch);
     }
   }
-
-  // 챗봇 열기
-  function openChatbot() {
-    chatbotWindow.classList.remove('hidden');
-    chatbotIcon.style.display = 'none';
-  }
-
-  // 챗봇 닫기
-  function closeChatbotWindow() {
-    chatbotWindow.classList.add('hidden');
-    chatbotIcon.style.display = 'flex';
-  }
-
-  // 전역 함수로 노출 (inline onclick을 위해)
-  window.openChatbot = openChatbot;
-  window.closeChatbotWindow = closeChatbotWindow;
 
   // FAQ 리스트 렌더링
   function renderFAQList(filterText = '') {
@@ -133,10 +142,16 @@
     const data = window.CHATBOT_DATA[currentLang];
     
     // 제목 업데이트
-    document.getElementById('chatbotTitle').textContent = data.title;
+    const titleEl = document.getElementById('chatbotTitle');
+    if (titleEl) {
+      titleEl.textContent = data.title;
+    }
     
     // 상태 텍스트 업데이트
-    document.getElementById('statusText').textContent = data.statusOnline;
+    const statusEl = document.getElementById('statusText');
+    if (statusEl) {
+      statusEl.textContent = data.statusOnline;
+    }
     
     // 부제목 업데이트
     const subtitleEl = document.getElementById('faqSubtitle');
@@ -145,6 +160,7 @@
     }
     
     // 검색창 placeholder 업데이트
+    const searchInput = document.getElementById('searchInput');
     if (searchInput) {
       searchInput.value = '';
       searchInput.placeholder = data.searchPlaceholder;

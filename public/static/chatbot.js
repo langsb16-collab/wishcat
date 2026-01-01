@@ -1,191 +1,218 @@
-// 챗봇 메인 로직 - FAQ 리스트 방식 (SSR 안전 버전)
+// 챗봇 - 완전 안전 버전 (null 체크 + DOMContentLoaded)
 
-// DOMContentLoaded 보장 및 중복 초기화 방지
-document.addEventListener("DOMContentLoaded", function() {
+(function() {
+  'use strict';
+  
+  console.log('[Chatbot] Script loaded at:', new Date().toISOString());
+
   // 중복 초기화 방지
   if (window.chatbotInitialized) {
-    console.log('Chatbot already initialized');
+    console.log('[Chatbot] Already initialized, skipping');
     return;
   }
   window.chatbotInitialized = true;
 
-  let currentLang = 'ko';
-
-  // DOM 요소 참조
-  const chatbotIcon = document.getElementById('chatbot-icon');
-  const chatbotContainer = document.getElementById('chatbot-container');
-  const closeBtn = document.getElementById('chatbot-close');
-  const faqContainer = document.getElementById('faqContainer');
-  const searchInput = document.getElementById('searchInput');
-
-  // DOM 요소 존재 확인
-  if (!chatbotIcon || !chatbotContainer || !closeBtn) {
-    console.error('Chatbot elements not found');
-    return;
-  }
-
-  console.log('Chatbot initialized successfully');
-
-  // 챗봇 열기
-  function openChatbot() {
-    chatbotContainer.style.display = 'flex';
+  // 전역 함수 먼저 정의
+  window.openChatbot = function() {
+    console.log('[Chatbot] Opening chatbot');
+    const container = document.getElementById('chatbot-container');
+    const icon = document.getElementById('chatbot-icon');
+    
+    if (!container || !icon) {
+      console.error('[Chatbot] Elements not found:', { container: !!container, icon: !!icon });
+      return;
+    }
+    
+    container.style.display = 'flex';
     setTimeout(() => {
-      chatbotContainer.style.opacity = '1';
-      chatbotContainer.style.transform = 'translateY(0)';
+      container.style.opacity = '1';
+      container.style.transform = 'translateY(0)';
     }, 10);
-    chatbotIcon.style.display = 'none';
-  }
-
-  // 챗봇 닫기
-  function closeChatbot() {
-    chatbotContainer.style.opacity = '0';
-    chatbotContainer.style.transform = 'translateY(20px)';
-    setTimeout(() => {
-      chatbotContainer.style.display = 'none';
-    }, 200);
-    chatbotIcon.style.display = 'flex';
-  }
-
-  // 이벤트 리스너 등록
-  chatbotIcon.addEventListener('click', openChatbot);
-  closeBtn.addEventListener('click', closeChatbot);
-
-  // 전역 함수로도 노출 (inline onclick 대비)
-  window.openChatbot = openChatbot;
-  window.closeChatbot = closeChatbot;
-
-  // FAQ 리스트 렌더링
-  function renderFAQList(filterText = '') {
-    const data = window.CHATBOT_DATA[currentLang];
-    if (!data || !faqContainer) return;
-
-    // 필터링
-    let filteredFaqs = data.faqs;
-    if (filterText) {
-      const lowerFilter = filterText.toLowerCase();
-      filteredFaqs = data.faqs.filter(faq => 
-        faq.q.toLowerCase().includes(lowerFilter) || 
-        faq.a.toLowerCase().includes(lowerFilter)
-      );
-    }
-
-    // FAQ 리스트 생성
-    faqContainer.innerHTML = filteredFaqs.map((faq, index) => `
-      <div class="faq-item" data-index="${index}">
-        <div class="faq-question" onclick="window.toggleFAQ(${index})">
-          <span class="faq-q-text">${faq.q}</span>
-          <i class="fas fa-chevron-down faq-icon"></i>
-        </div>
-        <div class="faq-answer">
-          <div class="faq-a-text">${faq.a}</div>
-        </div>
-      </div>
-    `).join('');
-
-    // 필터링 결과 없음 표시
-    if (filteredFaqs.length === 0) {
-      faqContainer.innerHTML = `
-        <div class="no-results">
-          <i class="fas fa-search" style="font-size: 48px; color: #9ca3af; margin-bottom: 12px;"></i>
-          <p style="color: #6b7280; font-size: 14px;">
-            ${currentLang === 'ko' ? '검색 결과가 없습니다.' :
-              currentLang === 'en' ? 'No results found.' :
-              currentLang === 'zh' ? '未找到结果。' :
-              '検索結果がありません。'}
-          </p>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ 토글 (전역 함수)
-  window.toggleFAQ = function(index) {
-    const faqItems = document.querySelectorAll('.faq-item');
-    const clickedItem = faqItems[index];
-    
-    if (!clickedItem) return;
-
-    const isActive = clickedItem.classList.contains('active');
-    
-    // 다른 모든 FAQ 닫기
-    faqItems.forEach(item => {
-      item.classList.remove('active');
-    });
-
-    // 클릭한 FAQ 토글
-    if (!isActive) {
-      clickedItem.classList.add('active');
-      
-      // 스크롤 애니메이션
-      setTimeout(() => {
-        const container = document.getElementById('faqContainer');
-        if (container) {
-          const itemTop = clickedItem.offsetTop;
-          container.scrollTo({
-            top: itemTop - 20,
-            behavior: 'smooth'
-          });
-        }
-      }, 100);
-    }
+    icon.style.display = 'none';
   };
 
-  // 검색 핸들러
-  function handleSearch(e) {
-    const searchText = e.target.value.trim();
-    renderFAQList(searchText);
-  }
+  window.closeChatbot = function() {
+    console.log('[Chatbot] Closing chatbot');
+    const container = document.getElementById('chatbot-container');
+    const icon = document.getElementById('chatbot-icon');
+    
+    if (!container || !icon) {
+      console.error('[Chatbot] Elements not found');
+      return;
+    }
+    
+    container.style.opacity = '0';
+    container.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      container.style.display = 'none';
+    }, 200);
+    icon.style.display = 'flex';
+  };
 
-  // 언어 변경 (전역 함수)
-  window.changeChatLanguage = function(lang) {
-    currentLang = lang;
+  // DOM 로드 후 초기화 (필수!)
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('[Chatbot] DOM Content Loaded, initializing...');
     
-    // 언어 버튼 active 상태 변경
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.remove('active');
+    // 요소 찾기
+    const icon = document.getElementById('chatbot-icon');
+    const closeBtn = document.getElementById('chatbot-close');
+    const faqContainer = document.getElementById('faqContainer');
+    const searchInput = document.getElementById('searchInput');
+    
+    // null 체크 (필수!)
+    if (!icon) {
+      console.error('[Chatbot] CRITICAL: Icon element not found!');
+      return;
+    }
+    
+    if (!closeBtn) {
+      console.error('[Chatbot] CRITICAL: Close button not found!');
+      return;
+    }
+    
+    console.log('[Chatbot] All elements found, attaching listeners');
+    
+    // 이벤트 리스너 등록 (안전하게)
+    icon.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[Chatbot] Icon clicked');
+      window.openChatbot();
     });
-    if (event && event.target) {
-      event.target.classList.add('active');
+    
+    closeBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[Chatbot] Close button clicked');
+      window.closeChatbot();
+    });
+    
+    console.log('[Chatbot] Event listeners attached successfully');
+    
+    // FAQ 기능
+    let currentLang = 'ko';
+    
+    function renderFAQList(filterText = '') {
+      if (!window.CHATBOT_DATA) {
+        console.error('[Chatbot] CHATBOT_DATA not loaded');
+        return;
+      }
+      
+      if (!faqContainer) {
+        console.error('[Chatbot] FAQ container not found');
+        return;
+      }
+      
+      const data = window.CHATBOT_DATA[currentLang];
+      if (!data) return;
+
+      let filteredFaqs = data.faqs;
+      if (filterText) {
+        const lowerFilter = filterText.toLowerCase();
+        filteredFaqs = data.faqs.filter(faq => 
+          faq.q.toLowerCase().includes(lowerFilter) || 
+          faq.a.toLowerCase().includes(lowerFilter)
+        );
+      }
+
+      faqContainer.innerHTML = filteredFaqs.map((faq, index) => `
+        <div class="faq-item" data-index="${index}">
+          <div class="faq-question" onclick="window.toggleFAQ(${index})">
+            <span class="faq-q-text">${faq.q}</span>
+            <i class="fas fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-a-text">${faq.a}</div>
+          </div>
+        </div>
+      `).join('');
+
+      if (filteredFaqs.length === 0) {
+        faqContainer.innerHTML = `
+          <div style="text-align: center; padding: 60px 20px;">
+            <i class="fas fa-search" style="font-size: 48px; color: #9ca3af; margin-bottom: 12px;"></i>
+            <p style="color: #6b7280; font-size: 14px;">
+              ${currentLang === 'ko' ? '검색 결과가 없습니다.' :
+                currentLang === 'en' ? 'No results found.' :
+                currentLang === 'zh' ? '未找到结果。' :
+                '検索結果がありません。'}
+            </p>
+          </div>
+        `;
+      }
     }
-    
-    // UI 업데이트
-    const data = window.CHATBOT_DATA[currentLang];
-    
-    // 제목 업데이트
-    const titleEl = document.getElementById('chatbotTitle');
-    if (titleEl) {
-      titleEl.textContent = data.title;
-    }
-    
-    // 상태 텍스트 업데이트
-    const statusEl = document.getElementById('statusText');
-    if (statusEl) {
-      statusEl.textContent = data.statusOnline;
-    }
-    
-    // 부제목 업데이트
-    const subtitleEl = document.getElementById('faqSubtitle');
-    if (subtitleEl) {
-      subtitleEl.textContent = data.subtitle;
-    }
-    
-    // 검색창 placeholder 업데이트
+
+    window.toggleFAQ = function(index) {
+      const faqItems = document.querySelectorAll('.faq-item');
+      const clickedItem = faqItems[index];
+      
+      if (!clickedItem) return;
+
+      const isActive = clickedItem.classList.contains('active');
+      
+      faqItems.forEach(item => item.classList.remove('active'));
+
+      if (!isActive) {
+        clickedItem.classList.add('active');
+        
+        setTimeout(() => {
+          const container = document.getElementById('faqContainer');
+          if (container) {
+            const itemTop = clickedItem.offsetTop;
+            container.scrollTo({
+              top: itemTop - 20,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
+    };
+
+    window.changeChatLanguage = function(lang) {
+      currentLang = lang;
+      
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+      
+      const data = window.CHATBOT_DATA[currentLang];
+      if (!data) return;
+      
+      const titleEl = document.getElementById('chatbotTitle');
+      if (titleEl) titleEl.textContent = data.title;
+      
+      const statusEl = document.getElementById('statusText');
+      if (statusEl) statusEl.textContent = data.statusOnline;
+      
+      const subtitleEl = document.getElementById('faqSubtitle');
+      if (subtitleEl) subtitleEl.textContent = data.subtitle;
+      
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.placeholder = data.searchPlaceholder;
+      }
+      
+      renderFAQList();
+      
+      console.log('[Chatbot] Language changed to:', lang);
+    };
+
+    // 검색 기능
     if (searchInput) {
-      searchInput.value = '';
-      searchInput.placeholder = data.searchPlaceholder;
+      searchInput.addEventListener('input', function(e) {
+        renderFAQList(e.target.value.trim());
+      });
     }
-    
-    // FAQ 리스트 다시 렌더링
+
+    // 초기 렌더링
     renderFAQList();
     
-    console.log('Language changed to:', lang);
-  };
-
-  // 검색 기능 등록
-  if (searchInput) {
-    searchInput.addEventListener('input', handleSearch);
-  }
-
-  // 초기 FAQ 리스트 렌더링
-  renderFAQList();
-});
+    console.log('[Chatbot] ✅ Initialization complete - All systems ready!');
+  });
+  
+  console.log('[Chatbot] Script setup complete, waiting for DOM...');
+})();
